@@ -103,6 +103,7 @@
                                             var tb = Ext.getCmp('catalog-navigator-<?php echo $alias ?>').getTopToolbar();
                                             var btn = tb.getComponent('add').menu.getComponent('add-sub');
                                             btn.setDisabled(true);
+                                            btn.node = null;
                                             App.msg('Готово', 'Раздел удален');
                                         }
                                         else
