@@ -715,7 +715,7 @@ class CatalogController_Cm extends Controller_Base
 
         try
         {
-            if($_FILES['file']['size'] > 1024)
+            if($_FILES['file']['size'] > 1048576)
             {
                 throw new Exception('Картинка размером больше 1000Кб');
             }
