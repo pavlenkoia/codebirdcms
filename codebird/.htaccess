@@ -1,0 +1,28 @@
+AddDefaultCharset utf-8
+php_flag register_globals on
+php_flag display_errors on
+php_flag allow_url_fopen on
+php_value max_execution_time 500
+php_value post_max_size "10M"
+php_value upload_max_filesize "10M"
+php_flag magic_quotes_gpc 0
+php_flag magic_quotes_runtime 0
+
+RewriteEngine On
+
+RewriteRule ^files/(.*)$ files/$1 [L]
+
+RewriteRule ^ajax/(.*)/(.*)$ ajax.php?mod=$1&mod_action=$2&%{QUERY_STRING} [L]
+
+RewriteRule ^ajax/(.*)$ ajax.php?mod_action=$1&%{QUERY_STRING} [L]
+
+RewriteRule ^admin$ cm/ [L]
+
+RewriteRule ^(.+)/$ index.php?uri=$1/&%{QUERY_STRING} [L]
+
+RewriteRule ^jscripts/(.*)$ jscripts/$1 [L]
+
+RewriteRule ^(.*)\.html$ index.php?uri=$1&%{QUERY_STRING} [L]
+
+
+

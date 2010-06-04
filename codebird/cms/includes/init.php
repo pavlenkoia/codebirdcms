@@ -1,0 +1,174 @@
+<?php
+
+/**
+ * Функция для загрузки классов «на лету»
+ */
+function __autoload($class_name)
+{
+    $filename = strtolower($class_name) . '.php';
+
+    $file = SITE_PATH . DS . 'cms' . DS . 'classes' . DS . $filename;
+
+    if (file_exists($file) == false)
+    {
+
+        return false;
+
+    }
+
+    require_once ($file);
+
+}
+
+ $registry = Registry::__instance();
+
+ // Создание глобального роутера
+
+$registry->router = new Router();
+
+/**
+ * Функция вывода глобальной переменной
+ *
+ * @param string $name имя переменной
+ */
+
+function out($name)
+{
+    $registry = Registry::__instance();
+
+    $val = $registry->__get($name);
+
+    echo $val;
+}
+
+function mod_content($name, $arg=null)
+{
+    $registry = Registry::__instance();
+
+    $names = explode(".", $name);
+
+    $names = array_pad($names, 3, null);
+
+    $module = $names[0];
+    $controller = $names[1];
+    $action = $names[2];
+
+    $registry->router->dispatch($module,$controller,$action,$arg);
+}
+
+function mod($name, $arg=null)
+{
+    mod_content($name, $arg);
+
+    out('mod_content');
+
+    Registry::__instance()->mod_content = "";
+}
+
+function val($name, $arg=null)
+{
+    mod_content($name, $arg);
+    
+    $mod_content = Registry::__instance()->mod_content;
+
+    Registry::__instance()->mod_content = "";
+
+    return $mod_content;
+}
+
+Registry::__instance()->tohead = "";
+
+function tohead($name)
+{
+    $registry = Registry::__instance();
+
+    $registry->tohead = $registry->tohead." ".val($name."_tohead");
+}
+
+function memo()
+{
+    return  time();
+}
+
+// Создание глобального объекта для работы с базой данных
+
+if(isset($db_host))
+{
+    try
+    {
+        $db = new PDO("mysql:host=$db_host;dbname=$db_name",
+            $db_user,
+            $db_user_pass,
+            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8") );
+        $registry->db = $db;
+    }
+    catch (PDOException $e)
+    {
+//        echo 'Ошибка соединения: ' . $e->getMessage();
+    }
+
+    $registry->site_name = $site_name;
+}
+
+
+/**
+* Escapes special characters
+* Function escapes ", \, /, \n and \r symbols so that not to cause JavaScript error or
+* data loss
+*
+* @param string $string
+* @return string
+*/
+function escapeJSON($string) {
+//    return str_replace(array("\\", "/", "\n", "\t", "\r", "\b", "\f", '"'), array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\"'), $string);
+    return json_encode($string);
+}
+
+class phpException extends exception {
+    public function __construct($errno, $errstr, $errfile, $errline) {
+        parent::__construct();
+        $this->code = $errno;
+        $this->message = $errstr;
+        $this->file = $errfile;
+        $this->line = $errline;
+    }
+}
+
+function err2exc($errno, $errstr, $errfile, $errline) {
+    throw new phpException($errno, $errstr, $errfile, $errline);
+}
+
+function offset()
+{
+    exit;
+}
+
+set_error_handler('err2exc', E_ERROR | E_NOTICE | E_WARNING);
+//error_reporting(E_ERROR);
+
+
+
+function get_cache_pic($photo, $w = 100, $h = 100, $orig_ratio=true)
+{
+	if ($photo == null || trim($photo)=='' || !is_file(SITE_PATH.$photo)) return '';
+
+	$p = str_replace('files/catalog/upload/', '', $photo);
+	$cache_url = "files/catalog/cache/" . $w . 'x' . $h . '_' . $p; 
+
+	if ($w > 0 && $h > 0) $t = 2;
+	else $t = 1;
+
+	if (!is_file(SITE_PATH.$cache_url))
+	{
+            Utils::img_resize(  SITE_PATH.$photo,
+                                SITE_PATH.$cache_url,
+                                $w,
+                                $h,
+                                $orig_ratio);
+	}
+
+	return $cache_url;
+}
+
+
+?>

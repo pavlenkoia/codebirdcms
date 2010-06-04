@@ -1,0 +1,80 @@
+#class .loading-indicator{
+	font-size:12px;
+	height:18px;
+}
+
+
+.loading-indicator {
+    font-size:8pt;
+    background-image:url('../../resources/images/grid/loading.gif');
+    background-repeat: no-repeat;
+    background-position:top left;
+    padding-left:20px;
+	height:18px;
+	text-align:left;
+}
+
+
+#loading{
+	position:absolute;
+	left:45%;
+	top:40%;
+	border:1px solid #6593cf;
+	padding:2px;
+	background:#c3daf9;
+	width:150px;
+	text-align:center;
+	z-index:20001;
+}
+
+#loading .loading-indicator{
+	border:1px solid #a3bad9;
+	background:white url(block-bg.gif) repeat-x;
+	color:#003366;
+	font:bold 13px tahoma,arial,helvetica;
+	padding:10px;
+	margin:0;
+}
+
+#classes{
+    overflow:auto;
+    padding:5px;
+}
+#classes a span {
+    font:normal 11px verdana,helvetica,tahoma,sans-serif;
+}
+#classes .cls a:hover span {
+    text-decoration:underline;
+    color:#003366;
+}
+
+#classes .x-tree-selected a span {
+    background:#c3daf9;
+    border:1px dashed #99bbe8;
+    color:#000;
+}
+#classes .x-tree-selected a:hover span {
+    text-decoration:none;
+    color:#000;
+}
+
+.install-icon {
+    background-image: url(../images/config.gif) !important;
+    background-repeat: no-repeat;
+}
+
+div.action_check{
+    background-image:url('../images/action_check.gif') !important;
+    background-repeat: no-repeat;
+    background-position:top left;
+    padding-left: 20px;
+}
+
+div.action_uncheck{
+    background-image:url('../images/action_delete.gif') !important;
+    background-repeat: no-repeat;
+    background-position:top left;
+    padding-left: 20px;
+}
+
+
