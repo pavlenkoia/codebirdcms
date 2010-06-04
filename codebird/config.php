@@ -1,6 +1,6 @@
 <?php
 // MySQL
-$db_user = " ";
+$db_user = "";
 $db_user_pass = "";
 $db_host = "";
 $db_name = "";
