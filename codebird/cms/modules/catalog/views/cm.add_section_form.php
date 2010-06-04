@@ -112,8 +112,15 @@ if($parent_section && $parent_section->leaf == 1){
                         waitMsg: 'Сохранение...',
                         success: function(form, action){
                                 <?php if($parent_section){ ?>
-                                var id = node.id;
-                                node.getOwnerTree().getLoader().load(node.parentNode, function(){tree.getNodeById(id).parentNode.expand();tree.getNodeById(id).expand();});
+                                if(node && node.getOwnerTree())
+                                {
+                                    var id = node.id;
+                                    node.getOwnerTree().getLoader().load(node.parentNode, function(){tree.getNodeById(id).parentNode.expand();tree.getNodeById(id).expand();});
+                                }
+                                else
+                                {
+                                    tree.getLoader().load(tree.root);
+                                }
                                 <? } else{ ?>
                                 tree.getLoader().load(tree.root);
                                 <?php }?>
