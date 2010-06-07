@@ -3,7 +3,7 @@
     xtype: 'panel',
     title: '<?php echo $args->title ?>',
     id: 'catalog-navigator-<?php echo $alias ?>',
-    layout: 'fit',
+    layout: 'auto',
     autoScroll: true,
     border: false,
     tbar:
