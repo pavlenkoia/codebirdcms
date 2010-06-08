@@ -119,7 +119,7 @@
                     value: <?php echo escapeJSON($section->children_tpl)?>
                 }
             ]
-        },
+        }
     ],
     listeners:
     {

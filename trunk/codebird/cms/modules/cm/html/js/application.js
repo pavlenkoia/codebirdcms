@@ -87,7 +87,7 @@ var App  = function(){
 
             contentPanel = new Ext.Panel({
                 id: 'content-panel',
-                region: 'center', // this is what makes this panel into a region within the containing layout
+                region: 'center', 
                 layout: 'card',
                 margins: '2 5 5 0',
                 activeItem: 0,
@@ -95,7 +95,7 @@ var App  = function(){
             });
 
             tabs = new Ext.TabPanel({
-                resizeTabs:true, // turn on tab resizing
+                resizeTabs:true, 
                 minTabWidth: 100,
                 tabWidth: 150,
                 enableTabScroll:true,
