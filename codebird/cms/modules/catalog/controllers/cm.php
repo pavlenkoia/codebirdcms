@@ -973,6 +973,7 @@ class CatalogController_Cm extends Controller_Base
 
             $table = new Table($table_meta['table']);
 
+            $object = $table->getEntity($id);
 
             $fields = $table_meta['fields'];
             $field = $fields[$field_id];
@@ -990,7 +991,7 @@ class CatalogController_Cm extends Controller_Base
 
             if($table->errorInfo)  throw new Exception($table->errorInfo);
 
-            $res['success'] = true;
+            $res['success'] = true; 
             $res['msg'] = 'Файл удален';
         }
         catch(Exception $e)
