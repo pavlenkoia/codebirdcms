@@ -22,7 +22,7 @@ var Editor  = function()
     return  {
         init : function()
         {
-            
+            Ext.QuickTips.init();
         },
         showEditor : function(options)
         {
