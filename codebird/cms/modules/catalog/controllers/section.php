@@ -12,6 +12,11 @@ class CatalogController_Section extends Controller_Base
 
         $section = $data->getSectionTable()->getEntityAlias($name);
 
+        if(!$section)
+        {
+            $section = $data->getSectionTable()->getEntity($name);
+        }
+
         $this->setContent($section);
 	
     }
@@ -23,6 +28,7 @@ class CatalogController_Section extends Controller_Base
 
     public function index()
     {
+        
     }
 
 }
