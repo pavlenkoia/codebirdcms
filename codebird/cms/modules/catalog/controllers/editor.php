@@ -133,4 +133,34 @@ class CatalogController_Editor extends Controller_Base
 
         $template->render();
     }
+
+    public function btn_section_add()
+    {
+        if(!$this->editor_access()) return;
+
+        $template = $this->createTemplate();
+
+        $template->section_id = $this->args->section_id;
+
+        $template->render();
+    }
+
+    public function section_add_form()
+    {
+        if(!$this->editor_access()) return;
+
+        $section_id = Utils::getPost('section_id');
+
+        $data = $this->getData();
+
+        $parent_section = $data->getSection($section_id);
+
+        if(!$parent_section) return;
+
+        $template = $this->createTemplate();
+
+        $template->parent_section = $parent_section;
+
+        $template->render();
+    }
 }
