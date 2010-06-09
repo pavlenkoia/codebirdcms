@@ -105,6 +105,37 @@ var Editor  = function()
                 });
 
         },
+        deleteSection : function(options)
+        {
+            Ext.MessageBox.confirm('Подтверждение', 'Вы действительно хотите удалить?',
+                function(btn)
+                {
+                    if(btn == 'yes')
+                    {
+                        Ext.Ajax.request({
+                            url : '/ajax/cm/catalog.cm.delete_section',
+                            method: 'POST',
+                            params:
+                            {
+                                id: options.section_id
+                            },
+                            success : function (response)
+                            {
+                                var obj = response.responseJSON;
+                                if(obj.success)
+                                {
+                                    window.location = window.location;
+                                }
+                                else
+                                {
+                                    Ext.MessageBox.alert('Ошибка', obj.msg);
+                                }
+                            }
+                        });
+                    }
+                });
+
+        },
         uploadWindow : function(option){
             var win = new Ext.Window({
                 title: option.title ? option.title : 'Загрузить картинку',
