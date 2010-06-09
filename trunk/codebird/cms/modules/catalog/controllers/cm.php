@@ -214,6 +214,23 @@ class CatalogController_Cm extends Controller_Base
                 throw new Exception($data->getSectionTable()->errorInfo);
             }
 
+            if($object->section_table)
+            {
+                $table_meta_section = $data->getTableMetaSection($object->section_table);
+
+                if($table_meta_section)
+                {
+                    $table_section = new Table($table_meta_section['table']);
+
+                    $section_data = $table_section->getEntity($id);
+
+                    if(!$section_data)
+                    {
+                        $table_section->execute('insert into '.$table_meta_section['table'].'(id) values(:id)', array('id'=>$id));
+                    }
+                }
+            }
+
             $res['success'] = true;
             $res['msg'] = 'Добавлено';
         }
