@@ -52,8 +52,21 @@ var Editor  = function()
                     section_id: options.section_id,
                     position_id: options.position_id
                 },
-                //maskEl : '',
-                //loadingMessage : 'Загрузка...',
+                success : function (response) {
+                    var win = new Ext.Window(response.responseJSON);
+                    win.show();
+                }
+            });
+        },
+        addSection : function(options)
+        {
+            Ext.Ajax.request({
+                url : '/ajax/cm/catalog.editor.section_add_form',
+                method: 'POST',
+                params:
+                {
+                    section_id: options.section_id
+                },
                 success : function (response) {
                     var win = new Ext.Window(response.responseJSON);
                     win.show();
