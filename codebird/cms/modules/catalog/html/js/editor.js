@@ -49,8 +49,7 @@ var Editor  = function()
                 method: 'POST',
                 params:
                 {
-                    section_id: options.section_id,
-                    position_id: options.position_id
+                    section_id: options.section_id
                 },
                 success : function (response) {
                     var win = new Ext.Window(response.responseJSON);

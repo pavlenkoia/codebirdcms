@@ -22,7 +22,7 @@
             [
                 {
                     xtype: 'hidden',
-                    name: 'id',
+                    name: 'section_id',
                     value: '<?php echo $section_id ?>'
                 },
                 {
@@ -288,7 +288,7 @@
                 } ?>
 
                 form.getForm().submit({
-                    url: '/ajax/cm/catalog.cm.save_position',
+                    url: '/ajax/cm/catalog.cm.save_table_section',
                     method: 'POST',
                     waitTitle: 'Подождите',
                     waitMsg: 'Сохранение...',
