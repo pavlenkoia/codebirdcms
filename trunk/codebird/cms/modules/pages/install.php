@@ -41,7 +41,7 @@ INSERT INTO `pages` (`title`, `content`, `position`, `visible`, `alias`, `templa
         if($rows[0]['count'] == 0)
         {
             $sql = "INSERT INTO `pages` (`title`, `content`, `position`, `visible`, `alias`, `template`, `mainpage`)
-  values('Главная','',1,0,'index','main_template.php',1) ";
+  values('Главная','',1,0,'index','main.tpl.php',1) ";
             $table->execute($sql);
             if($table->errorInfo)
             {
@@ -73,8 +73,8 @@ INSERT INTO `pages` (`title`, `content`, `position`, `visible`, `alias`, `templa
             <description>Шаблоны страниц</description>
             <name>templates</name>
             <items>
-                <item name="main_template.php">Главная страница</item>
-		<item name="page_template.php">Шаблон страницы</item>
+                <item name="main.tpl.php">Главная страница</item>
+		<item name="page.tpl.php">Шаблон страницы</item>
             </items>
         </param>
     </params>

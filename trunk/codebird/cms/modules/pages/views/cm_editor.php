@@ -202,43 +202,7 @@
             name: 'meta_description',
             anchor:'95%',
             value: <?php echo escapeJSON($page->meta_description)?>
-        },
-        {
-            fieldLabel: 'Картинка',
-            xtype: 'panel',
-            items:
-            [
-                {
-                    xtype: 'box',
-                    listeners:
-                    {   render: function()
-                        {
-                            var t = new Ext.Template('<img src="<?php echo $config->image_path?>/{src}" style="margin:5px 0px 10px 0px;"/>');
-                            t.compile();
-                            t.append(this.id, {src:'<?php echo $page->img_src ?>'});
-                        }
-                    }
-                },
-                {
-                    xtype: 'button',
-                    text: 'Загрузить',
-                    handler: function(btn)
-                    {
-                        App.uploadWindow({
-                            targetId: this.id,
-                            id: <?php echo $page->id?>,
-                            url: '/ajax/cm/pages.cm.uploadimage',
-                            success: function(result)
-                            {
-                                var t = new Ext.Template('<img src="{src}" style="margin:5px 0px 10px 0px;"/>');
-                                t.compile();
-                                t.overwrite(btn.ownerCt.getComponent(0).id, {src: result.src+'?sid=' + Math.random()});
-                            }
-                        });
-                    }
-                }
-            ]
-         }
+        }        
         <?php
         if(isset($plugins))
         {

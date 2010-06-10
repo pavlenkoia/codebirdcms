@@ -22,7 +22,7 @@ class PagesConfig extends Config_Base
      *
      * @var string
      */
-    public $default_template = "page_template.php";
+    public $default_template = "page.tpl.php";
 
     
     /**
