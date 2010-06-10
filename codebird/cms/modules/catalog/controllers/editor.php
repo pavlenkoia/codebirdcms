@@ -6,7 +6,7 @@ class CatalogController_Editor extends Controller_Base
 {
     private function editor_access()
     {
-        return $this->login();
+        return $this->config->front_editor && $this->login();
     }
 
     public function index()
