@@ -27,11 +27,13 @@ class CatalogController_Editor extends Controller_Base
 
         $template = $this->createTemplate();
 
-        $template->table_id = $this->args->table_id;
-
         $template->section_id = $this->args->section_id;
 
         $template->position_id = $this->args->position_id;
+
+        $section = $this->getData()->getSection($this->args->section_id);
+
+        $template->table_id = $section ? $section->position_table : null;
 
         $template->render();
     }
