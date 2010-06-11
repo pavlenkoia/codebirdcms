@@ -2,9 +2,7 @@
 
         <link rel="stylesheet" type="text/css" href="jscripts/ext/ux/css/CenterLayout.css" />
 
-        <link rel="stylesheet" type="text/css" href="cms/modules/cm/html/css/application.css" />
-
-        <link rel="stylesheet" type="text/css" href="cms/modules/cm/html/css/chooser.css" />
+        <link rel="stylesheet" type="text/css" href="cms/modules/cm/html/css/editor.css" />
 
         <script type="text/javascript" src="jscripts/ext/adapter/ext/ext-base.js"></script>
         <script type="text/javascript" src="jscripts/ext/ext-all.js"></script>

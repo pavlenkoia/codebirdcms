@@ -1,0 +1,100 @@
+#class .loading-indicator{
+	font-size:12px;
+	height:18px;
+}
+
+
+.loading-indicator {
+    font-size:8pt;
+    background-image:url('../images/loading.gif');
+    background-repeat: no-repeat;
+    background-position:top left;
+    padding-left:20px;
+	height:18px;
+	text-align:left;
+}
+
+
+#loading{
+	position:absolute;
+	left:45%;
+	top:40%;
+	border:1px solid #6593cf;
+	padding:2px;
+	background:#c3daf9;
+	width:150px;
+	text-align:center;
+	z-index:20001;
+}
+
+#loading .loading-indicator{
+	border:1px solid #a3bad9;
+	background:white url(block-bg.gif) repeat-x;
+	color:#003366;
+	font:bold 13px tahoma,arial,helvetica;
+	padding:10px;
+	margin:0;
+}
+
+#classes{
+    overflow:auto;
+    padding:5px;
+}
+#classes a span {
+    font:normal 11px verdana,helvetica,tahoma,sans-serif;
+}
+#classes .cls a:hover span {
+    text-decoration:underline;
+    color:#003366;
+}
+
+#classes .x-tree-selected a span {
+    background:#c3daf9;
+    border:1px dashed #99bbe8;
+    color:#000;
+}
+#classes .x-tree-selected a:hover span {
+    text-decoration:none;
+    color:#000;
+}
+
+.new-menu {
+    background-image: url(../images/new.gif) !important;
+}
+
+.add-menu {
+    background-image: url(../images/add.gif) !important;
+}
+
+.delete-menu {
+    background-image: url(../images/delete.gif) !important;
+}
+
+.edit-menu {
+    background-image: url(../images/edit.gif) !important;
+}
+
+.config-menu {
+    background-image: url(../images/cog.gif) !important;
+}
+
+.docs-menu {
+    background-image: url(../images/docs.gif) !important;
+}
+
+.refresh-menu {
+    background-image: url(../images/refresh.gif) !important;
+}
+
+.msg .x-box-mc {
+    font-size:14px;
+}
+#msg-div {
+    position:absolute;
+    left:35%;
+    top:10px;
+    width:250px;
+    z-index:20000;
+}
+
+
