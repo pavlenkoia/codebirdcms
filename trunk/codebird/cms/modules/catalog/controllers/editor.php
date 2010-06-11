@@ -172,8 +172,6 @@ class CatalogController_Editor extends Controller_Base
 
         $template = $this->createTemplate();
 
-//        $template->page_id = $this->args->page_id;
-
         $template->render();
     }
 
