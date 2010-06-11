@@ -147,6 +147,8 @@ class CatalogController_Cm extends Controller_Base
 
             $object = $data->getSection();
 
+            $object->section_table = null;
+
             $object->title = Utils::getPost("title");
 
             if($object->title === null || trim($object->title) == '')
