@@ -90,7 +90,7 @@ class CatalogController_Editor extends Controller_Base
         $template->render();
     }
 
-     public function btn_section()
+    public function btn_section()
     {
         if(!$this->editor_access()) return;
 
@@ -164,5 +164,79 @@ class CatalogController_Editor extends Controller_Base
         $template->parent_section = $parent_section;
 
         $template->render();
+    }
+
+    public function btn_page()
+    {
+        if(!$this->editor_access()) return;
+
+        $template = $this->createTemplate();
+
+//        $template->page_id = $this->args->page_id;
+
+        $template->render();
+    }
+
+    public function page_edit_form()
+    {
+        if(!$this->editor_access()) return;
+
+        $page_id = Utils::getPost('page_id');
+
+        $table = new Table('pages');
+
+        $page = $table->getEntityAlias($page_id);
+
+        if(!$page) return;
+
+        $template = $this->createTemplate();
+
+        $template->page = $page;
+
+        $template->render();
+    }
+
+    public function save_page()
+    {
+        if(!$this->editor_access()) return;
+
+        $res = array();
+
+        try
+        {
+            $id = Utils::getVar('id');
+
+            $title = Utils::getVar('title');
+
+            $content = Utils::getVar('content');
+
+            $table = new Table('pages');
+
+            $page = $table->getEntity($id);
+
+            if(!$page) throw new Exception('Объект уже удален');
+
+            $page->title = $title;
+
+            if($content !== null)
+            {
+                $page->content = $content;
+            }
+
+            $table->save($page);
+
+            if($table->errorInfo)  throw new Exception($table->errorInfo);
+
+            $res['success'] = true;
+            $res['msg'] = 'Готово';
+        }
+        catch(Exception $e)
+        {
+            $res['success'] = false;
+            $res['msg'] = $e->getMessage();
+        }
+
+
+        $this->setContent(json_encode($res));
     }
 }
