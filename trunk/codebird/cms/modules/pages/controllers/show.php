@@ -49,6 +49,21 @@ Class PagesController_Show Extends Controller_Base
     {
     }
 
+    public function id()
+    {
+        if(!$this->check())
+        {
+            return;
+        }
+
+        $page = $this->getPage();
+
+        if($page)
+        {
+            $this->registry->mod_content = $page->id;
+        }
+    }
+
     public function title()
     {
         if(!$this->check())

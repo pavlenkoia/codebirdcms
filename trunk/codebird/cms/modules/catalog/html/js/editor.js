@@ -57,6 +57,21 @@ var Editor  = function()
                 }
             });
         },
+        showEditorPage : function(options)
+        {
+            Ext.Ajax.request({
+                url : '/ajax/cm/catalog.editor.page_edit_form',
+                method: 'POST',
+                params:
+                {
+                    page_id: options.page_id
+                },
+                success : function (response) {
+                    var win = new Ext.Window(response.responseJSON);
+                    win.show();
+                }
+            });
+        },
         addSection : function(options)
         {
             Ext.Ajax.request({
