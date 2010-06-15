@@ -69,6 +69,7 @@ Class Router
 
             if (is_readable($file) == false)
             {
+                if($arg == 'quitcontroller') return;
                 die ('404  Controller '.$controller.' Not Found');
             }
 

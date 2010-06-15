@@ -38,7 +38,7 @@ else
 
         if(!$template)
         {
-            $template = val($_REQUEST['alias'].'.site.template');
+            $template = val($_REQUEST['alias'].'.site.template','quitcontroller');
         }
     }
     else
@@ -49,7 +49,7 @@ else
         $_REQUEST['id'] = $mainpage['id'];
     }
 
-    if(!isset($template))
+    if(!isset($template) || !$template)
     {
         $template = "404.tpl.php";
     }

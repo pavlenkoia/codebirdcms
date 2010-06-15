@@ -167,7 +167,14 @@ abstract class Controller_Base
     {
         $this->args = new Args();
 
-        parse_str($arg, $output);
+        if(is_array($arg))
+        {
+            $output = $arg;
+        }
+        else
+        {
+            parse_str($arg, $output);
+        }
 
         foreach($output as $name=>$var)
         {
