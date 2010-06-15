@@ -8,7 +8,7 @@ class CmConfig extends Config_Base
 
     public $title = "CMS";
 
-    public $version = "2.0.8";
+    public $version = "2.0.9";
 }
 
 ?>
