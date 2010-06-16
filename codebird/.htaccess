@@ -17,7 +17,7 @@ RewriteRule ^ajax/(.*)/(.*)$ ajax.php?mod=$1&mod_action=$2&%{QUERY_STRING} [L]
 
 RewriteRule ^ajax/(.*)$ ajax.php?mod_action=$1&%{QUERY_STRING} [L]
 
-RewriteRule ^admin$ cm/ [L]
+RewriteRule ^admin$ index.php?admin [L]
 
 RewriteRule ^(.+)/$ index.php?uri=$1/&%{QUERY_STRING} [L]
 
