@@ -604,8 +604,8 @@
                                     xtype: 'hidden',
                                     name: 'section_id',
                                     value: <?php echo $section->id ?>
-                                },
-                                {
+                                }
+                                ,{
                                     xtype: 'textfield',
                                     fieldLabel: 'Название раздела',
                                     name: '_section_title_',

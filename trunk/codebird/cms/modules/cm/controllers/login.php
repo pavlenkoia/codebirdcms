@@ -38,4 +38,11 @@ class CmController_Login Extends Controller_Base
 
         $this->setContent(json_encode($res));
     }
+
+    public function form()
+    {
+        $template = $this->createTemplate();
+
+        $template->render();
+    }
 }
