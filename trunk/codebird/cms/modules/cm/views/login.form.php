@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="jscripts/fancybox/jquery.fancybox-1.3.1.css" type="text/css" media="screen" />
 
 <?php if(!val('security.login')) { ?>
-<div style="display:none">
+<!--div style="display:none">
 	<form id="login_form" method="post" action="">
 	    	<div style="padding-top: 8px; color:#D2220E; font-style:italic;" id="login_error"></div>
                 <div style="padding: 16px">
@@ -21,7 +21,7 @@
 			<input type="submit" value="Войти" style="width: 80px;"/>
 		</div>
 	</form>
-</div>
+</div-->
 
 <script type="text/javascript">
     $().ready(function() {
@@ -32,11 +32,12 @@
             'titlePosition' : 'outside',
             'showCloseButton' : true,
             'title' : 'Вход в администрирование',
-            'onStart'		: function() {
-                $("#login_error").hide();
-            },
+//            'onStart'		: function() {
+//                $("#login_error").hide();
+//            },
 
-            'href' : '#login_form'
+//            'href' : '#login_form'
+            'href' : '/ajax/cm.login.form_login'
         });
 
         $("#login_form").bind("submit", function() {
