@@ -37,7 +37,8 @@
 //            },
 
 //            'href' : '#login_form'
-            'href' : '/ajax/cm.login.form_login'
+            'href' : '/ajax/cm.login.form_login',
+            'type' : 'ajax'
         });
 
         $("#login_form").bind("submit", function() {
