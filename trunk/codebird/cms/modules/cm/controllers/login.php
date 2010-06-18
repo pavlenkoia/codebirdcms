@@ -52,4 +52,11 @@ class CmController_Login Extends Controller_Base
 
         $template->render();
     }
+
+    public function form_logout()
+    {
+        $template = $this->createTemplate();
+
+        $template->render();
+    }
 }
