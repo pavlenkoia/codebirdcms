@@ -1,4 +1,4 @@
-<div style="display:none">
+<div>
 	<form id="login_form" method="post" action="">
 	    	<div style="display:none;padding-top: 8px; color:#D2220E; font-style:italic;" id="login_error"></div>
                 <div style="padding: 16px">
