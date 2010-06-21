@@ -4,13 +4,42 @@
  */
 class CatalogModel_Catalog extends Model_Base
 {
+    private $section_table_name  = 'catalog_section';
+
     private $section_table;
+
+    public function setSectionTableName($section)
+    {
+        $table = null;
+        $config = Config::__("catalog");
+        if(isset($config->sections) && $config->sections[$section])
+        {
+            $table = $config->sections[$section]['table'];
+        }
+        if(!$table)
+        {
+            $table = 'catalog_section';
+        }
+        $this->section_table_name = $table;
+        $this->section_table = null;
+    }
+
+    public function getSectionConfig($section)
+    {
+        $config = Config::__("catalog");
+        if(isset($config->sections) && $config->sections[$section])
+        {
+            return $config->sections[$section]['table'];
+        }
+
+        return null;
+    }    
 
     public function getSectionTable()
     {
         if(!$this->section_table)
         {
-            $this->section_table = new Table('catalog_section');
+            $this->section_table = new Table($this->section_table_name);
         }
         return $this->section_table;
     }
@@ -19,11 +48,11 @@ class CatalogModel_Catalog extends Model_Base
     {
         if($parent_id === null)
         {
-            $rows = $this->getSectionTable()->select("select p1.*, count(p1.id) as count, p2.id as id2 from catalog_section p1 left outer join catalog_section p2 on ( p2.parent_id=p1.id) where p1.parent_id is null group by p1.id order by p1.position");
+            $rows = $this->getSectionTable()->select("select p1.*, count(p1.id) as count, p2.id as id2 from ".$this->section_table_name." p1 left outer join ".$this->section_table_name." p2 on ( p2.parent_id=p1.id) where p1.parent_id is null group by p1.id order by p1.position");
         }
         else
         {
-            $rows = $this->getSectionTable()->select("select p1.*, count(p1.id) as count, p2.id as id2 from catalog_section p1 left outer join catalog_section p2 on ( p2.parent_id=p1.id) where p1.parent_id=:parent_id group by p1.id order by p1.position",array("parent_id"=>$parent_id));
+            $rows = $this->getSectionTable()->select("select p1.*, count(p1.id) as count, p2.id as id2 from ".$this->section_table_name." p1 left outer join ".$this->section_table_name." p2 on ( p2.parent_id=p1.id) where p1.parent_id=:parent_id group by p1.id order by p1.position",array("parent_id"=>$parent_id));
         }
         return $rows;
     }
@@ -39,7 +68,7 @@ class CatalogModel_Catalog extends Model_Base
     {
         $rows = $this->getSections($item->parent_id);
 
-        $this->reorder("catalog_section", $rows, $item->id, $index);
+        $this->reorder($this->section_table_name, $rows, $item->id, $index);
     }
 
     //---- интерфейс для работы с таблицами ----
