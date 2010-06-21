@@ -34,9 +34,10 @@ class CatalogController_Cm extends Controller_Base
 
         if($alias && !$parent_id)
         {
+            $data->setSectionTableName($alias);
             $table = $data->getSectionTable();
             $section = $table->getEntityAlias($alias);
-            $sections = $data->getSections($section->id);
+            $sections = $data->getSections($section ? $section->id : null);
         }
         else
         {
@@ -53,6 +54,17 @@ class CatalogController_Cm extends Controller_Base
         $id = Utils::getVar('id');
 
         $data = $this->getData();
+
+        $alias = Utils::getVar('alias');
+
+        if($alias)
+        {
+            $section_table_name = $data->getSectionConfig($alias);
+            if($section_table_name)
+            {
+                $data->setSectionTableName($alias);
+            }
+        }
 
         $object = $data->getSection($id);
 
@@ -114,6 +126,16 @@ class CatalogController_Cm extends Controller_Base
         $parent_id = Utils::getVar("parent_id");
 
         $alias = Utils::getPost('alias');
+
+        if($alias)
+        {
+            $section_table_name = $data->getSectionConfig($alias);
+            if($section_table_name)
+            {
+                $data->setSectionTableName($alias);
+                $alias = null;
+            }
+        }
         
         if(!$parent_id && $alias)
         {
@@ -144,6 +166,18 @@ class CatalogController_Cm extends Controller_Base
         try
         {
             $data = $this->getData();
+            
+            $alias = Utils::getPost('alias');
+
+            if($alias)
+            {
+                $section_table_name = $data->getSectionConfig($alias);
+                if($section_table_name)
+                {
+                    $data->setSectionTableName($alias);
+                    $alias = null;
+                }
+            }
 
             $object = $data->getSection();
 
@@ -158,9 +192,7 @@ class CatalogController_Cm extends Controller_Base
 
             $parent_id = Utils::getPost('parent_id');
 
-            $parent_id = is_numeric($parent_id) ? $parent_id : null;
-            
-            $alias = Utils::getPost('alias');
+            $parent_id = is_numeric($parent_id) ? $parent_id : null; 
 
             if(!$parent_id && $alias)
             {
@@ -374,13 +406,15 @@ class CatalogController_Cm extends Controller_Base
 
         $table = new Table($table_meta['table']);
 
+        $order = isset($table_meta['order']) ?  $table_meta['order'] : null;
+
         if(isset($table_meta['sql']))
         {
             $tsql = $table_meta['sql'];
         }
         else
         {
-            $tsql = "select * from ".$table_meta['table'].' where section_id=:section_id';
+            $tsql = "select * from ".$table_meta['table'].' where section_id=:section_id '.$order;
         }
 
         if($start != null)

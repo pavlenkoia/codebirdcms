@@ -150,7 +150,7 @@
                         click: function(node)
                         {
                             App.showEditor({
-                                url: '/ajax/cm/catalog.cm.editor?id='+node.id,
+                                url: '/ajax/cm/catalog.cm.editor?id='+node.id+'<?php if($alias) echo '&alias='.$alias ?>',
                                 id : 'catalog-section-edit-'+node.id,
                                 caption: node.text
                                 });
