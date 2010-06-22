@@ -34,7 +34,6 @@ class CatalogController_Cm extends Controller_Base
 
         if($alias && !$parent_id)
         {
-            $data->setSectionTableName($alias);
             $table = $data->getSectionTable();
             $section = $table->getEntityAlias($alias);
             $sections = $data->getSections($section ? $section->id : null);
@@ -57,15 +56,6 @@ class CatalogController_Cm extends Controller_Base
 
         $alias = Utils::getVar('alias');
 
-        if($alias)
-        {
-            $section_table_name = $data->getSectionConfig($alias);
-            if($section_table_name)
-            {
-                $data->setSectionTableName($alias);
-            }
-        }
-
         $object = $data->getSection($id);
 
         if($object)
@@ -73,6 +63,8 @@ class CatalogController_Cm extends Controller_Base
             $template = $this->createTemplate();
             
             $template->section = $object;
+
+            $template->alias = $alias;
             
             $table_meta = $data->getTableMeta($object->position_table);
             
@@ -126,16 +118,6 @@ class CatalogController_Cm extends Controller_Base
         $parent_id = Utils::getVar("parent_id");
 
         $alias = Utils::getPost('alias');
-
-        if($alias)
-        {
-            $section_table_name = $data->getSectionConfig($alias);
-            if($section_table_name)
-            {
-                $data->setSectionTableName($alias);
-                $alias = null;
-            }
-        }
         
         if(!$parent_id && $alias)
         {
@@ -169,15 +151,6 @@ class CatalogController_Cm extends Controller_Base
             
             $alias = Utils::getPost('alias');
 
-            if($alias)
-            {
-                $section_table_name = $data->getSectionConfig($alias);
-                if($section_table_name)
-                {
-                    $data->setSectionTableName($alias);
-                    $alias = null;
-                }
-            }
 
             $object = $data->getSection();
 
