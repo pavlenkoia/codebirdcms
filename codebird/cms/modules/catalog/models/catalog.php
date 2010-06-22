@@ -8,33 +8,12 @@ class CatalogModel_Catalog extends Model_Base
 
     private $section_table;
 
-    public function setSectionTableName($section)
+    public function setSectionTableName($section_table_name = null)
     {
-        $table = null;
-        $config = Config::__("catalog");
-        if(isset($config->sections) && $config->sections[$section])
-        {
-            $table = $config->sections[$section]['table'];
-        }
-        if(!$table)
-        {
-            $table = 'catalog_section';
-        }
-        $this->section_table_name = $table;
+        $this->section_table_name = $section_table_name ? $section_table_name :  'catalog_section';
         $this->section_table = null;
     }
-
-    public function getSectionConfig($section)
-    {
-        $config = Config::__("catalog");
-        if(isset($config->sections) && $config->sections[$section])
-        {
-            return $config->sections[$section]['table'];
-        }
-
-        return null;
-    }    
-
+ 
     public function getSectionTable()
     {
         if(!$this->section_table)
