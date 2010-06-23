@@ -2,7 +2,7 @@
 if($source && !$inner)
 {
 
-    $content = file_get_contents($source.'/manual/tree/');
+    $content = file_get_contents($source.'/manual/tree/?node='.Utils::getVar("node"));
 
     echo $content;
 
