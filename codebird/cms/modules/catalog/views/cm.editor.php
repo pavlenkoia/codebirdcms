@@ -224,12 +224,6 @@
                                             name: 'section_id',
                                             value: <?php echo $section->id ?>
 
-                                        },
-                                        {
-                                            xtype: 'hidden',
-                                            name: '_alias_',
-                                            value: <?php echo $alias ?>
-
                                         }
                                         <?php
                                         foreach($fields as $name=>$field)
