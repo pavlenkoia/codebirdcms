@@ -115,11 +115,14 @@ class CatalogController_Editor extends Controller_Base
 
         $table_meta = $data->getTableMetaSection($section->section_table);
 
-        if(!$table_meta) return;
+        $section_data = null;
+        if($table_meta)
+        {
 
-        $table = new Table($table_meta['table']);
+            $table = new Table($table_meta['table']);
 
-        $section_data = $table->getEntity($section_id);
+            $section_data = $table->getEntity($section_id);
+        }
 
         $template = $this->createTemplate();
 
@@ -127,7 +130,7 @@ class CatalogController_Editor extends Controller_Base
 
         $template->section_id = $section_id;
 
-        $template->fields = $table_meta['fields'];
+        $template->fields = $table_meta ? $table_meta['fields'] : array();
 
         $template->section = $section;
 
