@@ -191,56 +191,86 @@ class Utils
    * @return boolean 
    */
   public static function img_resize($src, $dest, $width, $height, $orig_ratio=true, $rgb=0xFFFFFF, $quality=100)
-    {
-        if (!is_file($src)) return false;
+  {
+      if (!is_file($src)) return false;
 
-        $size = getimagesize($src);
+      $size = getimagesize($src);
 
-        if ($size === false) return false;
+      if ($size === false) return false;
 
-        // Определяем исходный формат по MIME-информации, предоставленной
-        // функцией getimagesize, и выбираем соответствующую формату
-        // imagecreatefrom-функцию.
-        $format = strtolower(substr($size['mime'], strpos($size['mime'], '/')+1));
-        $icfunc = "imagecreatefrom" . $format;
-        if (!function_exists($icfunc)) return false;
+      // Определяем исходный формат по MIME-информации, предоставленной
+      // функцией getimagesize, и выбираем соответствующую формату
+      // imagecreatefrom-функцию.
+      $format = strtolower(substr($size['mime'], strpos($size['mime'], '/')+1));
+      $icfunc = "imagecreatefrom" . $format;
+      if (!function_exists($icfunc)) return false;
 
-        $x_ratio = $width / $size[0];
-        $y_ratio = $height / $size[1];
+      $x_ratio = $width / $size[0];
+      $y_ratio = $height / $size[1];
 
-        $ratio       = min($x_ratio, $y_ratio);
-        $use_x_ratio = ($x_ratio == $ratio);
+      $ratio       = min($x_ratio, $y_ratio);
+      $use_x_ratio = ($x_ratio == $ratio);
 
-        $new_width   = $use_x_ratio  ? $width  : floor($size[0] * $ratio);
-        $new_height  = !$use_x_ratio ? $height : floor($size[1] * $ratio);
-        $new_left    = $use_x_ratio  ? 0 : floor(($width - $new_width) / 2);
-        $new_top     = !$use_x_ratio ? 0 : floor(($height - $new_height) / 2);
+      $new_width   = $use_x_ratio  ? $width  : floor($size[0] * $ratio);
+      $new_height  = !$use_x_ratio ? $height : floor($size[1] * $ratio);
+      $new_left    = $use_x_ratio  ? 0 : floor(($width - $new_width) / 2);
+      $new_top     = !$use_x_ratio ? 0 : floor(($height - $new_height) / 2);
 
-        $isrc = $icfunc($src);
+      $isrc = $icfunc($src);
 
-        if(!$orig_ratio)
-        {
-            $idest = imagecreatetruecolor($width, $height);
-        }
-        else
-        {
-            $idest = imagecreatetruecolor($new_width , $new_height);
-            $new_left = 0;
-            $new_top = 0;
-        }
+      if(!$orig_ratio)
+      {
+          $idest = imagecreatetruecolor($width, $height);
+          imagefill($idest, 0, 0, $rgb);
 
-        imagefill($idest, 0, 0, $rgb);
-        imagecopyresampled($idest, $isrc, $new_left, $new_top, 0, 0,
-            $new_width, $new_height, $size[0], $size[1]);
+          $sourceWidth = $size[0];
+          $sourceHeight = $size[1];
 
-        imagejpeg($idest, $dest, $quality);
+          $X = 0;
+          $Y = 0;
 
-        imagedestroy($isrc);
-        imagedestroy($idest);
+          $W = $sourceWidth;
+          $H = $sourceHeight;
 
-        return true;
 
-    }
+          $Ww = $W / $width;
+          $Hh = $H / $height;
+          if ( $Ww > $Hh )
+          {
+              $W = floor($width * $Hh);
+              $X = $sourceWidth -  $W;
+          } else
+          {
+              $H = floor($height * $Ww);
+              $Y = $sourceHeight - $H;
+          }
+
+          imagecopyresampled(
+                  $idest, $isrc,
+                  0, 0,
+                  $X, $Y,
+                  $width, $height,
+                  $W, $H
+          );
+      }
+      else
+      {
+          $idest = imagecreatetruecolor($new_width , $new_height);
+          $new_left = 0;
+          $new_top = 0;
+          imagefill($idest, 0, 0, $rgb);
+          imagecopyresampled($idest, $isrc, $new_left, $new_top, 0, 0,
+                  $new_width, $new_height, $size[0], $size[1]);
+      }
+
+      imagejpeg($idest, $dest, $quality);
+
+      imagedestroy($isrc);
+      imagedestroy($idest);
+
+      return true;
+
+  }
 
     /**
      * Наложение водяного знака на изображение
