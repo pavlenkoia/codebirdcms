@@ -47,6 +47,7 @@ else
         $template = $mainpage['template'];
         $_REQUEST['mod'] = "pages";
         $_REQUEST['id'] = $mainpage['id'];
+        $registry->mainpage = true;
     }
 
     if(!isset($template) || !$template)
