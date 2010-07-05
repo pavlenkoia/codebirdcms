@@ -39,7 +39,7 @@ class CatalogModel_Action extends Model_Base
     {
         if(is_numeric($name))
         {
-            $rows = $this->getSectionTable()->select('select * from catalog_section where parent_id order by position',array('id'=>$name));
+            $rows = $this->getSectionTable()->select('select * from catalog_section where parent_id=:id order by position',array('id'=>$name));
         }
         else
         {
