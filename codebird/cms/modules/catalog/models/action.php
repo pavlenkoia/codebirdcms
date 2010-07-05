@@ -34,6 +34,20 @@ class CatalogModel_Action extends Model_Base
 
         return  $section;
     }
+
+    public function getSections($name)
+    {
+        if(is_numeric($name))
+        {
+            $rows = $this->getSectionTable()->select('select * from catalog_section where parent_id order by position',array('id'=>$name));
+        }
+        else
+        {
+            $rows = $this->getSectionTable()->select('select s1.* from catalog_section s1 left join catalog_section s2 on s1.parent_id=s2.id where s2.alias=:alias order by position',array('alias'=>$name));
+        }
+
+        return $rows;
+    }
 }
 
 ?>
