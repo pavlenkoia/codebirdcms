@@ -72,6 +72,21 @@ var Editor  = function()
                 }
             });
         },
+        showEditorBanner : function(options)
+        {
+            Ext.Ajax.request({
+                url : '/ajax/cm/catalog.editor.banner_edit_form',
+                method: 'POST',
+                params:
+                {
+                    alias: options.alias
+                },
+                success : function (response) {
+                    var win = new Ext.Window(response.responseJSON);
+                    win.show();
+                }
+            });
+        },
         addSection : function(options)
         {
             Ext.Ajax.request({
