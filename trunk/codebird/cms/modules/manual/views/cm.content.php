@@ -113,6 +113,7 @@
                 y: 8,
                 anchor: '98% 98%',
                 bodyStyle: 'padding: 8px',
+                autoScroll: true,
                 html: 'Добро пожаловать!!!'
             });
             
