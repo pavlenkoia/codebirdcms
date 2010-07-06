@@ -240,4 +240,75 @@ class CatalogController_Editor extends Controller_Base
 
         $this->setContent(json_encode($res));
     }
+
+    public function btn_banner()
+    {
+        if(!$this->editor_access()) return;
+
+        $template = $this->createTemplate();
+
+        $template->render();
+    }
+
+    public function banner_edit_form()
+    {
+        if(!$this->editor_access()) return;
+
+        $alias = Utils::getPost('alias');
+
+        $table = new Table('banner');
+
+        $banner = $table->getEntityAlias($alias);
+
+        if(!$banner) return;
+
+        $template = $this->createTemplate();
+
+        $template->banner = $banner;
+
+        $template->render();
+    }
+
+    public function save_banner()
+    {
+        if(!$this->editor_access()) return;
+
+        $res = array();
+
+        try
+        {
+            $id = Utils::getVar('id');
+
+            $html = Utils::getVar('html');
+
+            $table = new Table('banner');
+
+            $banner = $table->getEntity($id);
+
+            if(!$banner) throw new Exception('Объект уже удален');
+
+            $banner->html = $html;
+
+            $table->save($banner);
+
+            if($table->errorInfo)  throw new Exception($table->errorInfo);
+
+            $cache = SITE_PATH.'files'.DS.'banner'.DS.$banner->alias;
+            if(is_file($cache))
+            {
+                unlink($cache);
+            }
+
+            $res['success'] = true;
+            $res['msg'] = 'Готово';
+        }
+        catch(Exception $e)
+        {
+            $res['success'] = false;
+            $res['msg'] = $e->getMessage();
+        }
+
+
+        $this->setContent(json_encode($res));
+    }
 }
