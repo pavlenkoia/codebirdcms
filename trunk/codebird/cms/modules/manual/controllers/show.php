@@ -8,13 +8,23 @@ class ManualController_Show Extends Controller_Base
 
      private function show($name, $args)
     {
-        $table = new Table('section_manual');
+        if($this->config->source)
+        {
+            $content = file_get_contents($this->config->source.'/manual/content/'.$name.'/');
+            
+            $this->setContent($content);
+        }
+        else
+        {
+            $table = new Table('section_manual');
+            
+            $section = $table->getEntity($name);
+            
+            if(!$section) return;
+            
+            $this->setContent($section->content);
+        }
 
-        $section = $table->getEntity($name);
-
-        if(!$section) return;
-        
-        $this->setContent($section->content);
 
     }
 
