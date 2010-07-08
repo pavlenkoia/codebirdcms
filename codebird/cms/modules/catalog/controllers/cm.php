@@ -206,6 +206,10 @@ class CatalogController_Cm extends Controller_Base
                         {
                             $object->children_tpl = $xml->children->tpl->asXML();
                         }
+                        if($xml->subs)
+                        {
+                            $subs = $xml->subs;
+                        }
                     }
                 }
             }
@@ -234,6 +238,40 @@ class CatalogController_Cm extends Controller_Base
                     if(!$section_data)
                     {
                         $table_section->execute('insert into '.$table_meta_section['table'].'(id) values(:id)', array('id'=>$id));
+                    }
+                }
+            }
+
+            if(isset($subs))
+            {
+                foreach($subs->sub as $sub)
+                {                    
+                    $object = $data->getSection();
+                    $object->parent_id = $id;
+                    $object->position = count($data->getSections($id))+1;
+                    $object->title = $sub->title;
+                    if($sub->section)
+                    {
+                        $object->section_table = $sub->section;
+                    }
+                    if($sub->position)
+                    {
+                        $object->position_table = $sub->position;
+                    }
+                    if($sub->leaf)
+                    {
+                        $object->leaf = $sub->leaf;
+                    }
+                    if($sub->children && $sub->children->tpl)
+                    {
+                        $object->children_tpl = $sub->children->tpl->asXML();
+                    }
+                    
+                    $data->getSectionTable()->save($object);
+
+                    if($data->getSectionTable()->errorInfo)
+                    {
+                        throw new Exception($data->getSectionTable()->errorInfo);
                     }
                 }
             }
