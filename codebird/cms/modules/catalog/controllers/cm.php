@@ -560,6 +560,22 @@ class CatalogController_Cm extends Controller_Base
 
             $table = new Table($table_meta['table']);
 
+            $rows = $table->select("select * from ".$table_meta['table']." where id in($id)");
+
+            foreach($rows as $row)
+            {
+                foreach($fields as $field)
+                {
+                    if($field['type'] == 'image' || $field['type'] == 'file')
+                    {
+                        if($row[$field['field']] && is_file(SITE_PATH.$row[$field['field']]))
+                        {
+                            unlink(SITE_PATH.$row[$field['field']]);
+                        }
+                    }
+                }
+            }
+
             $table->select("delete from ".$table_meta['table']." where id in($id)");
 
             $errorInfo = $table->errorInfo;
