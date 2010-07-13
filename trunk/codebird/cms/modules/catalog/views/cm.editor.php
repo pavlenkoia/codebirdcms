@@ -297,7 +297,7 @@
                                                                 {
                                                                     App.uploadWindow({
                                                                         targetId: this.id,
-                                                                        id: '<?php echo $section->id?>/position/<?php echo $name?>/'+(option.action == 'edit' ? sels[0].id : 0),
+                                                                        id: '<?php echo $section->id?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue(),
                                                                         url: '/ajax/cm/catalog.cm.uploadimage',
                                                                         success: function(result)
                                                                         {
@@ -341,7 +341,7 @@
                                                                 {
                                                                     App.uploadWindow({
                                                                         targetId: this.id,
-                                                                        id: '<?php echo $section->id ?>/position/<?php echo $name?>/'+(option.action == 'edit' ? sels[0].id : 0),
+                                                                        id: '<?php echo $section->id ?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue(),
                                                                         url: '/ajax/cm/catalog.cm.uploadfile',
                                                                         title: 'Загрузить файл',
                                                                         emptyText: 'Выберите файл...',
