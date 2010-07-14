@@ -13,6 +13,8 @@ RewriteEngine On
 
 RewriteRule ^files/(.*)$ files/$1 [L]
 
+RewriteRule ^google(.*).html$ google$1.html [L]
+
 RewriteRule ^ajax/(.*)/(.*)$ ajax.php?mod=$1&mod_action=$2&%{QUERY_STRING} [L]
 
 RewriteRule ^ajax/(.*)$ ajax.php?mod_action=$1&%{QUERY_STRING} [L]
