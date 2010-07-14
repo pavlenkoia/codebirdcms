@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `section_form_feedback` (
                 <item name="position_news" type="array">
                     <value name="title">Новости</value>
                     <value name="table">position_news</value>
-                    <value name="sql">SELECT * FROM position_news ORDER BY datestamp DESC</value>
+                    <value name="order">ORDER BY datestamp DESC</value>
                 </item>
             </items>
         </param>
