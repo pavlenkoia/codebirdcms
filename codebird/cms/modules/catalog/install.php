@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `position_news` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 
 CREATE TABLE IF NOT EXISTS `section_form_feedback` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL,
   `section_id` int(11) NOT NULL,
   `email` varchar(250) collate utf8_unicode_ci default NULL,
   `efrom` varchar(500) collate utf8_unicode_ci default NULL,
@@ -48,6 +48,13 @@ CREATE TABLE IF NOT EXISTS `section_form_feedback` (
   `esubject` varchar(500) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+
+CREATE TABLE IF NOT EXISTS `section_page` (
+  `id` int(11) NOT NULL,
+  `content` text collate utf8_unicode_ci,
+  `visible` smallint(6) default '1',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ";
 
             public $config =
@@ -65,6 +72,10 @@ CREATE TABLE IF NOT EXISTS `section_form_feedback` (
                 <item name="section_form_feedback" type="array">
                     <value name="title">Форма обратной связи</value>
                     <value name="table">section_form_feedback</value>
+                </item>
+                <item name="section_page" type="array">
+                    <value name="title">Страница</value>
+                    <value name="table">section_page</value>
                 </item>
             </items>
         </param>
@@ -144,6 +155,21 @@ CREATE TABLE IF NOT EXISTS `section_form_feedback` (
                     <value name="field">esubject</value>
                     <value name="title">Заголовок письма отправителя</value>
                     <value name="type">text</value>
+                </item>
+            </items>
+        </param>
+        <param type="array">
+            <name>section_page</name>
+            <items>
+                <item name="contenet" type="array">
+                    <value name="field">content</value>
+                    <value name="title">Содержание</value>
+                    <value name="type">richtext</value>
+                </item>
+                <item name="visible" type="array">
+                    <value name="field">visible</value>
+                    <value name="title">Доступна</value>
+                    <value name="type">check</value>
                 </item>
             </items>
         </param>
