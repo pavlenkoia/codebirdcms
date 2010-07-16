@@ -20,8 +20,8 @@ class SecurityInstall extends Install_Base
             <name>users</name>
             <items>
                 <item name="admin" type="array">
-                    <value name="name">admin</value>
-                    <value name="password">123</value>
+                    <value name="name">root</value>
+                    <value name="password">397</value>
                 </item>
             </items>
         </param>
