@@ -48,6 +48,73 @@ class CatalogModel_Action extends Model_Base
 
         return $rows;
     }
+
+
+    //---- интерфейс для работы с таблицами ----
+
+    public function getTableMeta($name)
+    {
+        $config = Config::__("catalog");
+
+        if(isset($config->tables[$name]))
+        {
+            $res = $config->tables[$name];
+
+            $res['fields'] = $config->$name;
+
+            foreach($res['fields'] as $key=>$field)
+            {
+                if(isset($field['mode']))
+                {
+                    $modes = explode(",", $field['mode']);
+                    $res['fields'][$key]['edit'] = in_array("edit", $modes);
+                    $res['fields'][$key]['browse'] = in_array("browse", $modes);
+                }
+                else
+                {
+                    $res['fields'][$key]['edit'] = true;
+                    $res['fields'][$key]['browse'] = true;
+                }
+            }
+
+            return $res;
+        }
+
+        return null;
+    }
+
+    public function getTableMetaSection($name)
+    {
+        $config = Config::__("catalog");
+
+        if(isset($config->tables_section[$name]))
+        {
+            $res = $config->tables_section[$name];
+
+            $res['fields'] = $config->$name;
+
+            foreach($res['fields'] as $key=>$field)
+            {
+                if(isset($field['mode']))
+                {
+                    $modes = explode(",", $field['mode']);
+                    $res['fields'][$key]['edit'] = in_array("edit", $modes);
+                    $res['fields'][$key]['browse'] = in_array("browse", $modes);
+                }
+                else
+                {
+                    $res['fields'][$key]['edit'] = true;
+                    $res['fields'][$key]['browse'] = true;
+                }
+            }
+
+            return $res;
+        }
+
+        return null;
+    }
+
+    //---- end ----
 }
 
 ?>
