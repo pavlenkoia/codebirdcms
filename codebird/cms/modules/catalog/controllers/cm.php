@@ -523,6 +523,11 @@ class CatalogController_Cm extends Controller_Base
                 throw new Exception($errorInfo);
             }
 
+            if(isset($table_meta['onsave']) && $table_meta['onsave'])
+            {
+                val($table_meta['onsave']);
+            }
+
             $res['success'] = true;
             $res['msg'] = 'Готово';
         }
