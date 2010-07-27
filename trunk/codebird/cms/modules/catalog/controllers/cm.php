@@ -510,7 +510,18 @@ class CatalogController_Cm extends Controller_Base
                 }
                 else
                 {
-                    $object->$fn = Utils::getVar($fn);
+                    if($field['type'] == 'richtext')
+                    {
+                        $content = Utils::getVar($fn);
+                        if($content !== null)
+                        {
+                            $object->$fn = $content;
+                        }
+                    }
+                    else
+                    {
+                        $object->$fn = Utils::getVar($fn);
+                    }
                 }
             }
 
