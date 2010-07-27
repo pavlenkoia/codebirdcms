@@ -170,5 +170,9 @@ function get_cache_pic($photo, $w = 100, $h = 100, $orig_ratio=true)
 	return $cache_url;
 }
 
+if (!isset($_SERVER['SCRIPT_URL']) && isset($_SERVER['SCRIPT_NAME']))
+{
+    $_SERVER['SCRIPT_URL'] = $_SERVER['SCRIPT_NAME'];
+}
 
 ?>
