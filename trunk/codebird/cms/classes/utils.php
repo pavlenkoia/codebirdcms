@@ -238,11 +238,11 @@ class Utils
           if ( $Ww > $Hh )
           {
               $W = floor($width * $Hh);
-              $X = $sourceWidth -  $W;
+              $X = floor(($sourceWidth -  $W)*0.5);
           } else
           {
               $H = floor($height * $Ww);
-              $Y = $sourceHeight - $H;
+              $Y = floor(($sourceHeight - $H)*0.5);
           }
 
           imagecopyresampled(
