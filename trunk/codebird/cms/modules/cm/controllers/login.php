@@ -12,7 +12,7 @@ class CmController_Login Extends Controller_Base
         $name = Utils::getPost('name');
         $password = Utils::getPost('password');
 
-        $login = val("security.login.login","name=$name&password=$password");
+        $login = val("security.login.login", array("name"=>$name,"password"=>$password)) && (val("security.inrole.admin") || val("security.inrole.user"));
 
         if($login)
         {

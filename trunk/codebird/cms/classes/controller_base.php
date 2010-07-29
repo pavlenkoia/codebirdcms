@@ -246,7 +246,14 @@ abstract class Controller_Base
      */
     protected function login()
     {
-         return val("security.login");
+        $res =  val("security.login");
+
+        if($res)
+        {
+            $res = val("security.inrole.admin") || val("security.inrole.user");
+        }
+
+        return $res;
     }
     
 }
