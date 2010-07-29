@@ -11,7 +11,7 @@ class CmController_Site Extends Controller_Base
 
     public function template()
     {
-        $is_login = val("security.login");
+        $is_login = val("security.login") && (val("security.inrole.admin") || val("security.inrole.user"));
         
         if($is_login)
         {
