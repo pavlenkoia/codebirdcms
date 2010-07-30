@@ -272,6 +272,15 @@
                                                         format:"d.m.Y"
                                                     }
                                                     <?php break;
+                                                case "check" :?>
+                                                    ,{
+                                                        xtype: 'checkbox',
+                                                        fieldLabel: '<?php echo $field['title']?>',
+                                                        name: '<?php echo $field['field']?>',
+                                                        inputValue: 1,
+                                                        checked: option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') == 1 ? true : false : ''
+                                                    }
+                                                    <?php break;
                                                 case "image" :?>
                                                     ,{
                                                         xtype: 'panel',
