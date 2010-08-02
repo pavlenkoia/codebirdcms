@@ -74,6 +74,15 @@
                                 height : 60
                             }
                             <?php break;
+                        case "check":?>
+                            ,{
+                                xtype: 'checkbox',
+                                fieldLabel: '<?php echo $field['title']?>',
+                                name: '<?php echo $field['field']?>',
+                                inputValue: 1,
+                                checked: <?php if($value == 1) echo 'true'; else echo 'false'?>
+                            }
+                            <?php break;
                         case "date" :?>
                             ,{
                                 xtype: 'datefield',

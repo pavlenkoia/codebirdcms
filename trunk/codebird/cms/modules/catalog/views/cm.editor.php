@@ -259,7 +259,7 @@
                                                         name: '<?php echo $field['field']?>',
                                                         value: option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') : '',
                                                         anchor: '95%',
-                                                        height : 60
+                                                        height : <?php if(isset($field['editor_height'])) echo $field['editor_height']; else echo '60'; ?>
                                                     }
                                                     <?php break;
                                                 case "date" :?>
