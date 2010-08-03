@@ -506,9 +506,9 @@
                                 itemId: 'grid',
                                 frame: true,
                                 store: ds,
-                                stateId: 'panel-catalog-editor-<?php echo $section->id ?>-grid-position',
-                                stateful: true,
-                                stateEvents: ['columnmove', 'columnresize', 'sortchange'],
+                                //stateId: 'panel-catalog-editor-<?php echo $section->id ?>-grid-position',
+                                //stateful: true,
+                                //stateEvents: ['columnmove', 'columnresize', 'sortchange'],
                                 colModel: new Ext.grid.ColumnModel
                                 ({
                                     defaults:
