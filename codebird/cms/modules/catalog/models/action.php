@@ -115,6 +115,60 @@ class CatalogModel_Action extends Model_Base
     }
 
     //---- end ----
+
+    /**
+     * Функция получения пэджинга для разделов
+     *
+     * @param integer $section_id идентификатор родительского раздела
+     * @param integer $page_size размер страницы
+     * @return array массив, где индекс 'count' - количество дочерних элементов, 'limit' - подстрока limit sql запроса
+     */
+    public function getSectionPagerArray($section_id, $page_size)
+    {
+        $page = Utils::getGET("page") ? Utils::getGET("page") : 1;
+        $page = $page < 1 ? 1 : $page;
+        $rows = $this->getSectionTable()->select('select count(*) as count from catalog_section where parent_id=:id',
+                array('id'=>$section_id));
+        $total = $rows[0]['count'];
+        $count = ceil((int)$total / (int)$page_size);
+
+        $limit = '  limit '.$page_size*($page-1).','.$page_size;
+
+        $res = array();
+
+        $res['count'] = $count;
+        $res['limit'] = $limit;
+
+        return $res;
+    }
+
+    /**
+     * Функция получения пэджинга для разделов
+     *
+     * @param string $table_name имя таблицы позиций
+     * @param integer $section_id идентификатор раздела
+     * @param integer $page_size размер страницы
+     * @return array массив, где индекс 'count' - количество дочерних элементов, 'limit' - подстрока limit sql запроса
+     */
+    public function getPositionPagerArray($table_name, $section_id, $page_size, $where=null)
+    {
+        $page = Utils::getGET("page") ? Utils::getGET("page") : 1;
+        $page = $page < 1 ? 1 : $page;
+        $where = $where ? ' and '.$where : '';
+        $rows = $this->getSectionTable()->select('select count(*) as count from '.$table_name.' where section_id=:id '.$where,
+                array('id'=>$section_id));
+        $total = $rows[0]['count'];
+        $count = ceil((int)$total / (int)$page_size);
+
+        $limit = '  limit '.$page_size*($page-1).','.$page_size;
+
+        $res = array();
+
+        $res['count'] = $count;
+        $res['limit'] = $limit;
+
+        return $res;
+    }
 }
 
 ?>
