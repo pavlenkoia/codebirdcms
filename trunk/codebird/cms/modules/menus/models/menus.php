@@ -87,6 +87,28 @@ class MenusModel_Menus extends Model_Base
 
         $this->reorder("menus_item", $rows, $item->id, $index);
     }
+
+    public function getPages($alias=null)
+    {
+        $pages[] = array();
+        $alias = $alias ? $alias : Utils::getVar('alias');
+        if($alias)
+        {
+            $table = new Table("pages");
+            $page = $table->getEntityAlias($alias);
+            if($page)
+            {
+                $parent_id = $page->parent_id;
+                while($parent_id)
+                {
+                    $parent_page = $table->getEntity($parent_id);
+                    $parent_id = $parent_page->parent_id;
+                    $pages[] = '/'.$parent_page->alias.'.html';
+                }
+            }
+        }
+        return $pages;
+    }
 }
 
 ?>
