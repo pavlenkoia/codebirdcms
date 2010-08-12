@@ -158,6 +158,50 @@ class FeedController_Cm extends Controller_Base
 
         $this->setContent(json_encode($res));
     }
+
+    public function refresh()
+    {
+        $res = array();
+
+        try
+        {
+            $data = $this->getData();
+
+            $id = Utils::getVar('id');
+
+            $object = $data->getObject($id);
+
+            if($object)
+            {
+                $data->table->execute("delete from feed_item where feed_id=:feed_id", array("feed_id"=>$object->id));
+                $errorInfo = $data->table->errorInfo;
+                if($errorInfo)
+                {
+                    throw new Exception($errorInfo);
+                }
+                $object->datestamp_update = null;
+                $data->save($object);
+                $errorInfo = $data->table->errorInfo;
+                if($errorInfo)
+                {
+                    throw new Exception($errorInfo);
+                }
+            }
+            else
+            {
+                throw new Exception('Объект уже удален');
+            }
+            $res['success'] = true;
+            $res['msg'] = 'Готово';
+        }
+        catch(Exception $e)
+        {
+            $res['success'] = false;
+            $res['msg'] = $e->getMessage();
+        }
+
+        $this->setContent(json_encode($res));
+    }
 }
 
 ?>

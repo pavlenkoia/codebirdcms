@@ -42,6 +42,41 @@
             width: 80,
             name: 'interval_update',
             value: <?php echo escapeJSON($feed->interval_update)?>
+        },
+        {
+            xtype: 'panel',
+            style: {marginTop: '20px'},
+            items:
+            [
+                {
+                    xtype: 'button',
+                    text: 'Обновить канал',
+                    handler: function()
+                    {
+                        Ext.Ajax.request(
+                        {
+                            url : '/ajax/cm/feed.cm.refresh',
+                            method: 'POST',
+                            params:
+                            {
+                                id: <?=$feed->id ?>
+                            },
+                            success : function (response)
+                            {
+                                var obj = response.responseJSON;
+                                if(obj.success)
+                                {
+                                    App.msg('Готово', 'Канал обновлен');
+                                }
+                                else
+                                {
+                                    Ext.MessageBox.alert('Ошибка', obj.msg);
+                                }
+                            }
+                        });
+                    }
+                }
+            ]
         }
     ],
     labelAlign: 'top',

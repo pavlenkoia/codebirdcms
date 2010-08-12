@@ -15,9 +15,9 @@ class FeedModel_Feed extends Model_Base
         return $this->getTable()->getEntityAlias($alias);
     }
 
-    public function getFeed_items($feed)
+    public function getFeed_items($feed, $limit=null)
     {
-        return $this->getTable()->select("select * from feed_item where feed_id=:feed_id order by position", array("feed_id"=>$feed->id));
+        return $this->getTable()->select("select * from feed_item where feed_id=:feed_id order by position".($limit ? ' limit '.$limit : ''), array("feed_id"=>$feed->id));
     }
 
     public function import($feed)
