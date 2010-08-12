@@ -20,7 +20,7 @@ class FeedController_Show extends Controller_Base
 
             $template->data = $data;
             $template->feed = $feed;
-            $template->feed_items = $data->getFeed_items($feed);
+            $template->feed_items = $data->getFeed_items($feed, $this->args->limit);
 
             $template->render("show");
         }
