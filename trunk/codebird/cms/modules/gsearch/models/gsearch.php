@@ -6,7 +6,7 @@
 class GsearchModel_Gsearch extends Model_Base
 {
     
-    public function getResults($searchquery)
+    public function getResult($searchquery)
     {
         $site = Config::__('gsearch')->site;
         
