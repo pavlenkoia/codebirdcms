@@ -23,13 +23,15 @@ class GsearchController_Show extends Controller_Base
 
     public function result()
     {
-        $searchquery = Utils::getVar('q') ? urldecode(Utils::getVar('q')) : null;
+        $searchquery = Utils::getVar('q') ? Utils::getVar('q') : null;
 
         $data = $this->getData();
 
-        $result = $data->getResult();
+        $result = $data->getResult($searchquery);
 
         $template = $this->createTemplate();
+
+        $template->searchresult = $result;
 
         $template->results = $result->responseData->results;
 
@@ -40,6 +42,8 @@ class GsearchController_Show extends Controller_Base
         $template->currentPageIndex = $result->responseData->cursor->currentPageIndex;
 
         $template->searchquery = $searchquery;
+
+        $template->alias = Utils::getVar('alias');
 
         $template->render();
     }
