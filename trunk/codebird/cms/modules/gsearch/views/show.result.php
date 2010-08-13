@@ -1,5 +1,11 @@
 <?php
 
+    if(!$searchresult)
+    {
+        echo '<div class="searchresultcount">По вашему запросу ничего не найдено.</div>';
+        return;
+    }
+
     echo '<div class="searchresultcount">Всего найдено: '.$resultCount.'</div>';
 
     $formattedresults = '';

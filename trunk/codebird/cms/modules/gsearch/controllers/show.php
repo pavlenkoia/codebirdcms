@@ -27,19 +27,28 @@ class GsearchController_Show extends Controller_Base
 
         $data = $this->getData();
 
+        $result = null;
+
         $result = $data->getResult($searchquery);
 
         $template = $this->createTemplate();
+        
+        if($result && $result->responseStatus == 200)
+        {
+            $template->searchresult = $result;
 
-        $template->searchresult = $result;
+            $template->results = $result->responseData->results;
 
-        $template->results = $result->responseData->results;
+            $template->resultCount = $result->responseData->cursor->estimatedResultCount;
 
-        $template->resultCount = $result->responseData->cursor->estimatedResultCount;
+            $template->pages = $result->responseData->cursor->pages;
 
-        $template->pages = $result->responseData->cursor->pages;
-
-        $template->currentPageIndex = $result->responseData->cursor->currentPageIndex;
+            $template->currentPageIndex = $result->responseData->cursor->currentPageIndex;
+        }
+        else
+        {
+            $template->searchresult = null;
+        }
 
         $template->searchquery = $searchquery;
 
