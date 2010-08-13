@@ -17,8 +17,15 @@ class GsearchModel_Gsearch extends Model_Base
         $start = Utils::getGet('start') ? '&start='.Utils::getGet('start') : '';
         
         $url = 'http://ajax.googleapis.com/ajax/services/search/web?rsz=large&v=1.0&q='.$q.$start;
-        
-        $handle = fopen($url, 'rb');
+
+        try
+        {
+            $handle = fopen($url, 'rb');
+        }
+        catch (Exception $e)
+        {
+            return null;
+        }
         
         $body = '';
         
