@@ -39,11 +39,11 @@ class GsearchController_Show extends Controller_Base
 
             $template->results = $result->responseData->results;
 
-            $template->resultCount = $result->responseData->cursor->estimatedResultCount;
+            $template->resultCount = isset($result->responseData->cursor->estimatedResultCount) ? $result->responseData->cursor->estimatedResultCount : 0;
 
-            $template->pages = $result->responseData->cursor->pages;
+            $template->pages = isset($result->responseData->cursor->pages) ? $result->responseData->cursor->pages : array();
 
-            $template->currentPageIndex = $result->responseData->cursor->currentPageIndex;
+            $template->currentPageIndex = isset($result->responseData->cursor->currentPageIndex) ? $result->responseData->cursor->currentPageIndex : 0;
         }
         else
         {
