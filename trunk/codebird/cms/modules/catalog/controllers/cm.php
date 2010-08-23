@@ -1004,7 +1004,19 @@ class CatalogController_Cm extends Controller_Base
 
             $ext = strrchr($name,'.');
 
-            $file_src = 'files/catalog/upload/'.md5(uniqid(rand(0, 1000000))).$ext;
+            if($object->$fn && is_file(SITE_PATH.$object->$fn))
+            {
+                unlink(SITE_PATH.$object->$fn);
+            }
+
+            if(is_file(SITE_PATH.'files/catalog/upload/'.$name))
+            {
+                $file_src = 'files/catalog/upload/'.md5(uniqid(rand(0, 1000000))).$ext;
+            }
+            else
+            {
+                $file_src = 'files/catalog/upload/'.$name;
+            }
 
             $file_file = SITE_PATH.$file_src;
 
@@ -1012,10 +1024,7 @@ class CatalogController_Cm extends Controller_Base
 
             if(!$f) throw new Exception('Ошибка при загрузке файла');
             
-            if($object->$fn)
-            {
-                unlink(SITE_PATH.$object->$fn);
-            }
+            
 
             $object->$fn = $file_src;
 
