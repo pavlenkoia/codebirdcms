@@ -774,7 +774,7 @@
                                                                             if(btn2 == 'yes')
                                                                             {
                                                                                 Ext.Ajax.request({
-                                                                                    url : '/ajax/cm/uploadfile_delete',
+                                                                                    url : '/ajax/cm/catalog.cm.uploadfile_delete',
                                                                                     method: 'POST',
                                                                                     params:
                                                                                     {
