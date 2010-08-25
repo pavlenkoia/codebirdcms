@@ -123,12 +123,15 @@ class CatalogModel_Action extends Model_Base
      * @param integer $page_size размер страницы
      * @return array массив, где индекс 'count' - количество дочерних элементов, 'limit' - подстрока limit sql запроса
      */
-    public function getSectionPagerArray($section_id, $page_size)
+    public function getSectionPagerArray($section_id, $page_size, $rows=null)
     {
         $page = Utils::getGET("page") ? Utils::getGET("page") : 1;
         $page = $page < 1 ? 1 : $page;
-        $rows = $this->getSectionTable()->select('select count(*) as count from catalog_section where parent_id=:id',
-                array('id'=>$section_id));
+        if($rows == null)
+        {
+            $rows = $this->getSectionTable()->select('select count(*) as count from catalog_section where parent_id=:id',
+                    array('id'=>$section_id));
+        }
         $total = $rows[0]['count'];
         $count = ceil((int)$total / (int)$page_size);
 
