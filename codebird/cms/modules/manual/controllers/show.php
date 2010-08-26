@@ -18,7 +18,7 @@ class ManualController_Show Extends Controller_Base
 
 //            $content2 = preg_replace('/(href=")(.*)(")/#/Ui', "$1$domain$2$3", $content);
 
-            $content = preg_replace('/(src=")(.*)(")/Ui', "$1$domain$2$3", $content);
+            $content = preg_replace('/(<img.*src=")(.*)(")/Ui', "$1$domain$2$3", $content);
             
             $this->setContent($content);
         }
