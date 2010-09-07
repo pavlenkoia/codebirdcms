@@ -36,11 +36,20 @@ class CatalogController_Cm extends Controller_Base
         {
             $table = $data->getSectionTable();
             $section = $table->getEntityAlias($alias);
+
             $sections = $data->getSections($section ? $section->id : null);
         }
         else
         {
-            $sections = $data->getSections($parent_id);
+            $section = $data->getSection($parent_id);
+
+            $order = null;
+            if(isset($section->order_child))
+            {
+                $order = $section->order_child;
+            }
+
+            $sections = $data->getSections($parent_id, $order);
         }
 
         $template->sections = $sections;
