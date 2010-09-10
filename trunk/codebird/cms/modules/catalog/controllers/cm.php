@@ -911,7 +911,12 @@ class CatalogController_Cm extends Controller_Base
                             break;
 
                     default:
-                            $ext = '.jpg';
+                            $ext = '.';
+            }
+
+            if($ext == '.bmp' || $ext == '.')
+            {
+                throw new Exception('Картинка такого формата не поддерживается');
             }
 
             $tmp_name = $_FILES['file']['tmp_name'];
