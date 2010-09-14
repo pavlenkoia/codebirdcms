@@ -121,6 +121,10 @@
     background-image: url(../images/refresh.gif) !important;
 }
 
+.import-menu {
+    background-image: url(../images/import.png) !important;
+}
+
 .msg .x-box-mc {
     font-size:14px;
 }

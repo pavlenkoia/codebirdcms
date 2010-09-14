@@ -95,6 +95,11 @@
                                         });
                                 }
                             }
+                            ,{
+                                text: 'Импорт',
+                                iconCls: 'import-menu',
+                                itemId: 'import'
+                            }
                         ]
                     },
                     listeners:
