@@ -88,6 +88,8 @@ class CatalogController_Cm extends Controller_Base
                 $template->page_size = isset($table_meta['page_size']) ? $table_meta['page_size'] : 100;
 
                 $template->fields = $table_meta['fields'];
+
+                $template->import = isset($table_meta['import']) ? true : null;
             }
             else
             {
@@ -1130,6 +1132,93 @@ class CatalogController_Cm extends Controller_Base
             $res['msg'] = $e->getMessage();
         }
 
+
+        $this->setContent(json_encode($res));
+    }
+
+    public function  import_form()
+    {
+        $template = $this->createTemplate();
+
+        $id = Utils::getVar('section_id');
+
+        $data = $this->getData();
+
+        $object = $data->getSection($id);
+
+        
+
+        $template->render();
+    }
+
+    public function import()
+    {
+        $res = array();
+        try
+        {
+            if(!isset($_FILES["file"]))
+            {
+                throw new Exception('Нет файла для загрузки');
+            }
+
+            $file = $_FILES['file']['tmp_name'];
+
+            $msg = '';
+
+            $row = 0;
+            $handle = fopen($file, "r");
+
+            if(!$handle) throw new Exception('Нет файла');
+
+            //throw new Exception($msg);
+
+            setlocale(LC_ALL, 'ru_RU.UTF-8');
+
+            while (($data = fgetcsv($handle, 1000, ";")) !== FALSE)
+            {
+                $num = count($data);
+                $msg .= "$num полей в строке $row: ";
+                $row++;
+                for ($c=0; $c < $num; $c++)
+                {
+                    $msg .=  $data[$c] . "; ";
+                }
+                if ($row > 1) break;
+            }
+
+            if($row == 0)
+            {
+                fclose($handle);
+
+                $handle = fopen($file, "r");
+
+                setlocale (LC_ALL, array ('ru_RU.CP1251', 'rus_RUS.1251'));
+
+                while (($data = fgetcsv($handle, 1000, ";")) !== FALSE)
+                {
+                    $num = count($data);
+                    $msg .= "$num полей в строке $row: ";
+                    $row++;
+                    for ($c=0; $c < $num; $c++)
+                    {
+                        $msg .=  $data[$c] . "; ";
+                    }
+                    if ($row > 1) break;
+                }
+            }
+
+            fclose($handle);
+
+            throw new Exception($msg);
+
+            $res['success'] = true;
+            $res['msg'] = 'Готово';
+        }
+        catch(Exception $e)
+        {
+            $res['success'] = false;
+            $res['msg'] = $e->getMessage();
+        }
 
         $this->setContent(json_encode($res));
     }

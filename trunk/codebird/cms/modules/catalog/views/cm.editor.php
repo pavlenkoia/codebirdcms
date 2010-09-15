@@ -95,11 +95,31 @@
                                         });
                                 }
                             }
+                            <?php if($import) { ?>
                             ,{
                                 text: 'Импорт',
                                 iconCls: 'import-menu',
-                                itemId: 'import'
+                                itemId: 'import',
+                                handler: function(item)
+                                {
+                                    Ext.Ajax.request({
+                                        url : '/ajax/cm/catalog.cm.import_form',
+                                        method: 'POST',
+                                        params:
+                                        {
+                                            section_id: <?php echo $section->id ?>,
+                                            table_name: '<?=$table_name?>'
+                                        },
+                                        maskEl : 'panel-catalog-editor-<?php echo $section->id?>',
+                                        loadingMessage : 'Загрузка...',
+                                        success : function (response) {
+                                            var win = new Ext.Window(response.responseJSON);
+                                            win.show(item.id);
+                                        }
+                                    });
+                                }
                             }
+                            <?php } ?>
                         ]
                     },
                     listeners:
