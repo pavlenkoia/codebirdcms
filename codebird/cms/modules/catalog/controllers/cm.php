@@ -1165,6 +1165,8 @@ class CatalogController_Cm extends Controller_Base
 
             $msg = '';
 
+//            setlocale(LC_ALL, 'rus_RUS.1251');
+
             $row = 0;
             $handle = fopen($file, "r");
 
@@ -1174,28 +1176,50 @@ class CatalogController_Cm extends Controller_Base
 
             setlocale(LC_ALL, 'ru_RU.UTF-8');
 
-            while (($data = fgetcsv($handle, 1000, ";")) !== FALSE)
-            {
-                $num = count($data);
-                $msg .= "$num полей в строке $row: ";
-                $row++;
-                for ($c=0; $c < $num; $c++)
+            
+
+//            while (($output = fgetcsv($handle, 1000, ";")) !== FALSE)
+//            {
+//                $data=array();
+//                foreach ($output as $head)
+//                {
+//                    $data[]=iconv("CP1251", "UTF-8",$head);
+//                }
+//
+//                $num = count($data);
+//                $msg .= "$num полей в строке $row: ";
+//                $row++;
+//                for ($c=0; $c < $num; $c++)
+//                {
+//                    $msg .=  $data[$c] . "; ";
+//                }
+//                if ($row > 1) break;
+//            }
+
+//            if($row == 0)
+//            {
+//                fclose($handle);
+//
+//                $handle = fopen($file, "r");
+//
+//                //setlocale (LC_ALL, array ('ru_RU.CP1251', 'rus_RUS.1251'));
+//
+
+//            $convert = false;
+//            $data = $this->xfgetcsv($handle, 1000, ";");
+//
+//            if($data === FALSE)
+//            {
+//                $convert = true;
+//            }
+//
+//            fclose($handle);
+//            $handle = fopen($file, "r");
+
+
+                while (($data = $this->xfgetcsv($handle, 1000, ";")) !== FALSE)
                 {
-                    $msg .=  $data[$c] . "; ";
-                }
-                if ($row > 1) break;
-            }
-
-            if($row == 0)
-            {
-                fclose($handle);
-
-                $handle = fopen($file, "r");
-
-                setlocale (LC_ALL, array ('ru_RU.CP1251', 'rus_RUS.1251'));
-
-                while (($data = fgetcsv($handle, 1000, ";")) !== FALSE)
-                {
+                    //print_r($data);
                     $num = count($data);
                     $msg .= "$num полей в строке $row: ";
                     $row++;
@@ -1205,11 +1229,13 @@ class CatalogController_Cm extends Controller_Base
                     }
                     if ($row > 1) break;
                 }
-            }
+//            }
+
+//                echo '123321';
 
             fclose($handle);
 
-            throw new Exception($msg);
+            throw new Exception($msg.$row);
 
             $res['success'] = true;
             $res['msg'] = 'Готово';
@@ -1221,6 +1247,24 @@ class CatalogController_Cm extends Controller_Base
         }
 
         $this->setContent(json_encode($res));
+    }
+
+    private function xfgetcsv($f='', $x='', $s=';', $convert=false)
+    {
+        $str = fgets($f);
+        if($str)
+        {
+            if(json_encode($str) == 'null' /*|| json_encode($str) === null*/)
+            {
+                $str = iconv("CP1251", "UTF-8",$str);
+            }
+            $data=split($s, trim($str));
+
+            return $data;
+        }else
+        {
+            return FALSE;
+        }
     }
 
 }
