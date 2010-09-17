@@ -138,6 +138,39 @@
                             tb.getComponent('add').setHandler(add);
 
                             
+                            <?php foreach($fields as $name=>$field)
+                            {
+                                if($field['type'] == 'select')
+                                {
+                            ?>
+                                var store_<?php echo $field['field']?> = new Ext.data.Store({
+                                    url: '/ajax/cm/catalog.cm.select',
+                                    baseParams:
+                                    {
+                                        table_id: '<?php echo $table_id?>',
+                                        field: '<?php echo $name?>'
+                                    },
+                                    //maskEl : this,
+                                    //autoLoad: true,
+                                    reader: new Ext.data.JsonReader
+                                    ({
+                                        totalProperty: 'results',
+                                        autoDestroy: true,
+                                        idProperty: 'value',
+                                        root: 'rows',
+                                        fields:
+                                        [
+                                            'id',
+                                            'display'
+                                        ]
+                                    })
+                                });
+                                store_<?php echo $field['field']?>.load();
+                            <?php
+                                }
+                            }
+                            ?>
+
 
                             var editor = function(option){
                                 var win = new Ext.Window({
@@ -306,6 +339,22 @@
                                                         checked: option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') == 1 ? true : false : ''
                                                     }
                                                     <?php break;
+                                                case "select" :?>
+                                                ,{
+                                                    xtype: 'combo',
+                                                    fieldLabel: '<?php echo $field['title']?>',
+                                                    hiddenName: '<?php echo $field['field']?>',
+                                                    anchor: '95%',
+                                                    mode: 'local',
+                                                    editable: false,
+                                                    resizable: false,
+                                                    valueField: 'id',
+                                                    displayField: 'display',
+                                                    triggerAction: 'all',
+                                                    value: option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') : '',
+                                                    store: store_<?php echo $field['field']?>
+                                                }
+                                                <?php break;
                                                 case "image" :?>
                                                     ,{
                                                         xtype: 'panel',
