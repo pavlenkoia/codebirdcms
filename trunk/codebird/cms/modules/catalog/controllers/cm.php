@@ -1249,7 +1249,7 @@ class CatalogController_Cm extends Controller_Base
         $this->setContent(json_encode($res));
     }
 
-    private xencode = '';
+    private $xencode = '';
 
     private function xfgetcsv($f='', $x='', $s=';', $convert=false)
     {
