@@ -1269,5 +1269,33 @@ class CatalogController_Cm extends Controller_Base
         }
     }
 
+
+    public function select()
+    {
+        $data = $this->getData();
+
+        $table_id = Utils::getVar('table_id');
+
+        $field = Utils::getVar('field');
+
+        $table_meta = $data->getTableMeta($table_id);
+
+        $fields = $table_meta['fields'];
+
+        $select = $fields[$field]['select'];
+
+        $table = new Table($table_meta['table']);
+
+        $rows = $table->select($select);
+
+        $template = $this->createTemplate();
+
+        $template->rows = $rows;
+
+        $template->table_meta = $table_meta;
+
+        $template->render();
+    }
+
 }
 ?>
