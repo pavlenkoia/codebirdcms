@@ -310,6 +310,16 @@
                                                         width: 100
                                                     }
                                                     <?php break;
+                                                case "dec" :?>
+                                                    ,{
+                                                        xtype: 'numberfield',
+                                                        fieldLabel: '<?php echo $field['title']?>',
+                                                        name: '<?php echo $field['field']?>',
+                                                        value: option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') : '',
+                                                        width: 100,
+                                                        allowDecimals: true
+                                                    }
+                                                    <?php break;
                                                 case "memo" :?>
                                                     ,{
                                                         xtype: 'textarea',
