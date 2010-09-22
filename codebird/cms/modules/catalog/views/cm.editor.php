@@ -384,25 +384,64 @@
                                                                 }
                                                             },
                                                             {
-                                                                xtype: 'button',
-                                                                text: 'Загрузить',
-                                                                handler: function(btn)
-                                                                {
-                                                                    App.uploadWindow({
-                                                                        targetId: this.id,
-                                                                        id: '<?php echo $section->id?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue(),
-                                                                        url: '/ajax/cm/catalog.cm.uploadimage',
-                                                                        success: function(result)
+                                                                xtype: 'panel',
+                                                                layout:'hbox',
+                                                                items:
+                                                                [
+                                                                    {
+                                                                        xtype: 'button',
+                                                                        text: 'Загрузить',
+                                                                        handler: function(btn)
                                                                         {
-                                                                            var id_f = form.getForm().findField('id');
-                                                                            id_f.setValue(result.id);
-                                                                            var t = new Ext.Template('<img src="{src}" style="margin:5px 0px 10px 0px;"/>');
-                                                                            t.compile();
-                                                                            t.overwrite(btn.ownerCt.getComponent(0).id, {src: result.src+'?sid=' + Math.random()});
+                                                                            App.uploadWindow({
+                                                                                targetId: this.id,
+                                                                                id: '<?php echo $section->id?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue(),
+                                                                                url: '/ajax/cm/catalog.cm.uploadimage',
+                                                                                success: function(result)
+                                                                                {
+                                                                                    var id_f = form.getForm().findField('id');
+                                                                                    id_f.setValue(result.id);
+                                                                                    var t = new Ext.Template('<img src="{src}" style="margin:5px 0px 10px 0px;"/>');
+                                                                                    t.compile();
+                                                                                    t.overwrite(btn.ownerCt.ownerCt.getComponent(0).id, {src: result.src+'?sid=' + Math.random()});
+                                                                                }
+                                                                            });
                                                                         }
-                                                                    });
-                                                                }
-                                                            }
+                                                                    },
+                                                                    {
+                                                                        xtype: 'button',
+                                                                        text: 'Удалить',
+                                                                        handler: function(btn)
+                                                                        {
+                                                                            Ext.MessageBox.confirm('Подтверждение', 'Вы действительно хотите удалить картинку?',
+                                                                                function(btn2)
+                                                                                {
+                                                                                    if(btn2 == 'yes')
+                                                                                    {
+                                                                                        Ext.Ajax.request({
+                                                                                            url : '/ajax/cm/catalog.cm.uploadfile_delete',
+                                                                                            method: 'POST',
+                                                                                            params:
+                                                                                            {
+                                                                                                id: '<?php echo $section->id ?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue()
+                                                                                            },
+                                                                                            maskEl : 'panel-catalog-editor-<?php echo $section->id?>',
+                                                                                            loadingMessage : 'Удаление...',
+                                                                                            success : function (response) {
+                                                                                                var t = new Ext.Template('<div style="margin:5px 0px 10px 0px;"></div>');
+                                                                                                t.compile();
+                                                                                                t.overwrite(btn.ownerCt.ownerCt.getComponent(0).id);
+                                                                                            },
+                                                                                                failure: function(form, action){
+                                                                                                Ext.MessageBox.alert('Ошибка', action.result.msg);
+                                                                                            }
+                                                                                        });
+                                                                                    }
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                 ]
+                                                             }
                                                         ]
                                                     }                                                    
                                                     <?php break;
