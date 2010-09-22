@@ -501,6 +501,8 @@ class CatalogController_Cm extends Controller_Base
             {
                 if($field['type'] == "image") continue;
 
+                if($field['type'] == "images") continue;
+
                 if($field['type'] == "file") continue;
 
                 if(!$field['edit']) continue;
@@ -953,6 +955,7 @@ class CatalogController_Cm extends Controller_Base
 
         $this->setContent(json_encode($res));
     }
+    
 
     public function uploadfile()
     {
@@ -1293,6 +1296,17 @@ class CatalogController_Cm extends Controller_Base
         $template->rows = $rows;
 
         $template->table_meta = $table_meta;
+
+        $template->render();
+    }
+
+    public function images_form()
+    {
+        $template = $this->createTemplate();
+
+        $template->page_size = 20;
+
+        $template->images_id = Utils::getVar('id');
 
         $template->render();
     }
