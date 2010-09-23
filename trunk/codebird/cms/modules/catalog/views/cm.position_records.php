@@ -27,6 +27,18 @@
 
                continue;
             }
+            elseif ($field['type'] == 'check')
+            {
+                if($row[$field['field']] == 1)
+                {
+                    $res_row[$field['field']] = 'да';
+                }
+                else
+                {
+                    $res_row[$field['field']] = '';
+                }
+                continue;
+            }
             $res_row[$field['field']] = $row[$field['field']];
             if(isset($field['display']))
             {
