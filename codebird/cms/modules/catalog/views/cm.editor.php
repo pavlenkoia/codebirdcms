@@ -365,6 +365,43 @@
                                                     store: store_<?php echo $field['field']?>
                                                 }
                                                 <?php break;
+                                                case "selecttext" :?>
+                                                ,{
+                                                    xtype: 'combo',
+                                                    fieldLabel: '<?php echo $field['title']?>',
+                                                    hiddenName: '<?php echo $field['field']?>',
+                                                    anchor: '95%',
+                                                    mode: 'local',
+                                                    editable: true,
+                                                    resizable: false,
+                                                    valueField: 'id',
+                                                    displayField: 'display',
+                                                    triggerAction: 'all',
+                                                    value: option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') : '',
+                                                    store: new Ext.data.ArrayStore({
+                                                            id: 0,
+                                                            fields:
+                                                            [
+                                                                'id',
+                                                                'display'
+                                                            ],
+                                                            data: 
+                                                            [
+                                                            <?php
+                                                                $rows = explode(';', $field['select']);
+                                                                $res = '';
+                                                                foreach($rows as $row)
+                                                                {
+                                                                    if($res) $res .= ',';
+                                                                    $res .= '['.escapeJSON($row).','.escapeJSON($row).']';
+                                                                }
+                                                                echo $res;
+                                                            ?>
+                                                                
+                                                            ]
+                                                        })
+                                                }
+                                                <?php break;
                                                 case "image" :?>
                                                     ,{
                                                         xtype: 'panel',
