@@ -346,7 +346,7 @@
                                                         fieldLabel: '<?php echo $field['title']?>',
                                                         name: '<?php echo $field['field']?>',
                                                         inputValue: 1,
-                                                        checked: option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') == 1 ? true : false : ''
+                                                        checked: option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') == 'да' ? true : false : ''
                                                     }
                                                     <?php break;
                                                 case "select" :?>
