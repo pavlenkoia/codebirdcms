@@ -285,7 +285,8 @@ class Utils
         $foto_hw = getimagesize($image_file);
 
         $znak = imagecreatefrompng  ($watermark_file);
-        $foto = imagecreatefromjpeg ($image_file);
+        //$foto = imagecreatefromjpeg ($image_file);
+        $foto = imageCreateTrueColor($foto_hw[0],$foto_hw[1]);
 
         imagecopy ($foto,
             $znak,
@@ -296,7 +297,20 @@ class Utils
             $znak_hw[0],
             $znak_hw[1]);
 
-        imagejpeg ($foto, $out_file, "100");
+        switch ($foto_hw[2])
+        {
+            case 1:
+                imageGIF($foto,$out_file);
+                break;
+            case 2:
+                imageJPEG($foto,$out_file);
+                break;
+            case 3:
+                imagePNG($foto,$out_file);
+                break;
+        }
+
+        //imagejpeg ($foto, $out_file, "100");
 
         imagedestroy ($znak);
         imagedestroy ($foto);
