@@ -148,7 +148,7 @@ set_error_handler('err2exc', E_ERROR | E_NOTICE | E_WARNING);
 
 
 
-function get_cache_pic($photo, $w = 100, $h = 100, $orig_ratio=true)
+function get_cache_pic($photo, $w = 100, $h = 100, $orig_ratio=true, $watermark='')
 {
 	if ($photo == null || trim($photo)=='' || !is_file(SITE_PATH.$photo)) return '';
 
@@ -165,6 +165,10 @@ function get_cache_pic($photo, $w = 100, $h = 100, $orig_ratio=true)
                                 $w,
                                 $h,
                                 $orig_ratio);
+            if($watermark)
+            {
+                Utils::img_watermark(SITE_PATH.$watermark, SITE_PATH.$cache_url,SITE_PATH.$cache_url);
+            }
 	}
 
 	return $cache_url;
