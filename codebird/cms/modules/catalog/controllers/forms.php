@@ -61,6 +61,62 @@ class CatalogController_Forms extends Controller_Base
         $field_rows = $table->select('select * from position_forms where section_id=:id order by position',
                 array('id'=>$form->id));
 
+        $error_message = '';
+        $success_message = '';
+        if(Utils::getPost('submit'))
+        {
+            $check = true;
+            if($form->captcha == 1)
+            {
+                $captcha_code = Utils::getPost('number_'.$form->id);
+
+                $securimage = Utils::createSecurimage('number_'.$form->id);
+
+                if(!$securimage->check($captcha_code))
+                {
+                    $check = false;
+                    $error_message = 'Введите верный код с картинки';
+                }
+            }
+            if($check)
+            {
+                $email = $form->email;
+                $mails = explode(',',$email);
+                foreach($mails as $mail)
+                {
+
+                    $mailer = new Mailer();
+
+                    $mailer->From = $form->efrom;
+
+                    $mailer->FromName = $form->efromname;
+
+                    $mailer->Subject = $form->esubject;
+
+                    $body = '';
+
+                    foreach($field_rows as $row)
+                    {
+                        $body .= $row['name'].': '.Utils::getPost('field_'.$row['id'])."\n\n";
+                    }
+
+                    $mailer->Body = $body;
+
+                    $mailer->AddAddress(trim($mail));
+
+                    if($mailer->Send())
+                    {
+                        $success_message = $form->success_message;
+                    }
+                    else
+                    {
+                        $error_message = 'Ошибка, попробуйте отправить снова.';
+                    }
+                }
+            }
+        }
+
+
         $template = $this->createTemplate();
 
         $template->data = $data;
@@ -80,6 +136,9 @@ class CatalogController_Forms extends Controller_Base
         $template->form = $form;
 
         $template->field_rows = $field_rows;
+
+        $template->error_message = $error_message;
+        $template->success_message = $success_message;
 
         $template->render();
     }
