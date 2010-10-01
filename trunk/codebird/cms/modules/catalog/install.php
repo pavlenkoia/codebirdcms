@@ -287,5 +287,29 @@ INSERT INTO `forms_field_type` (`id`, `name`, `position`) VALUES
     </params>
 </config>';
 
+    public function exec_sql()
+    {
+        $res = '';
+        $table = new Table("catalog_section");
+        $section = $table->getEntityAlias("forms_section");
+        if(!$section)
+        {
+            $section = $table->getEntity();
+            $section->alias = 'forms_section';
+            $section->children_tpl =
+'<tpl>
+  <section>section_forms</section>
+  <position>position_forms</position>
+  <leaf>1</leaf>
+</tpl>';
+            $table->save($section);
+            if($table->errorInfo)
+            {
+                return $table->errorInfo;
+            }
+        }
+        return $res;
+    }
+
 }
 ?>
