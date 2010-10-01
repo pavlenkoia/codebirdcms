@@ -55,6 +55,45 @@ CREATE TABLE IF NOT EXISTS `section_page` (
   `visible` smallint(6) default '1',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `position_forms` (
+  `id` int(11) NOT NULL auto_increment,
+  `section_id` int(11) NOT NULL,
+  `name` varchar(250) collate utf8_unicode_ci default NULL,
+  `position` int(11) default NULL,
+  `type_id` varchar(15) collate utf8_unicode_ci default NULL,
+  `valid_empty` smallint(6) default '0',
+  `valid_email` smallint(6) default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+
+CREATE TABLE IF NOT EXISTS `section_forms` (
+  `id` int(11) NOT NULL,
+  `section_id` int(11) NOT NULL,
+  `email` varchar(250) collate utf8_unicode_ci default NULL,
+  `efrom` varchar(500) collate utf8_unicode_ci default NULL,
+  `efromname` varchar(500) collate utf8_unicode_ci default NULL,
+  `esubject` varchar(500) collate utf8_unicode_ci default NULL,
+  `captcha` smallint(6) default '0',
+  `header_mail` text collate utf8_unicode_ci,
+  `title_form` varchar(250) collate utf8_unicode_ci default NULL,
+  `success_message` text collate utf8_unicode_ci,
+  `html` text collate utf8_unicode_ci,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `forms_field_type` (
+  `id` varchar(15) collate utf8_unicode_ci NOT NULL,
+  `name` varchar(250) collate utf8_unicode_ci NOT NULL,
+  `position` smallint(6) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `forms_field_type` (`id`, `name`, `position`) VALUES
+('text', 'Текстовая строка', 1),
+('memo', 'Многострочный текст', 2),
+('select', 'Выпадающий список', 3);
 ";
 
             public $config =
@@ -69,9 +108,9 @@ CREATE TABLE IF NOT EXISTS `section_page` (
                     <value name="title">Новости</value>
                     <value name="table">section_news</value>
                 </item>
-                <item name="section_form_feedback" type="array">
-                    <value name="title">Форма обратной связи</value>
-                    <value name="table">section_form_feedback</value>
+                <item name="section_forms" type="array">
+                    <value name="title">Форма</value>
+                    <value name="table">section_forms</value>
                 </item>
                 <item name="section_page" type="array">
                     <value name="title">Страница</value>
@@ -87,6 +126,17 @@ CREATE TABLE IF NOT EXISTS `section_page` (
                     <value name="title">Новости</value>
                     <value name="table">position_news</value>
                     <value name="order">ORDER BY datestamp DESC</value>
+                </item>
+                <item name="position_forms" type="array">
+                    <value name="title">Поля формы</value>
+                    <value name="table">position_forms</value>
+                    <value name="sql">
+                        select p1.*, p2.name as type_name
+                        from position_forms p1
+                        left outer join forms_field_type p2 on p1.type_id=p2.id
+                        where section_id=:section_id
+                        ORDER BY position
+                    </value>
                 </item>
             </items>
         </param>
@@ -133,8 +183,43 @@ CREATE TABLE IF NOT EXISTS `section_page` (
                 </item>
             </items>
         </param>
+
         <param type="array">
-            <name>section_form_feedback</name>
+            <name>position_forms</name>
+            <items>
+                <item name="position" type="array">
+                    <value name="field">position</value>
+                    <value name="title">Порядок</value>
+                    <value name="type">int</value>
+                </item>
+                <item name="name" type="array">
+                    <value name="field">name</value>
+                    <value name="title">Название поля</value>
+                    <value name="type">text</value>
+                </item>
+                <item name="type_id" type="array">
+                    <value name="field">type_id</value>
+                    <value name="display">type_name</value>
+                    <value name="title">Тип поля</value>
+                    <value name="type">select</value>
+                    <value name="select">SELECT id, name AS display FROM forms_field_type ORDER BY position ASC</value>
+                </item>
+                <item name="valid_empty" type="array">
+                    <value name="field">valid_empty</value>
+                    <value name="title">Обязательно для заполнения</value>
+                    <value name="type">check</value>
+                    <value name="mode">edit</value>
+                </item>
+                <item name="valid_email" type="array">
+                    <value name="field">valid_email</value>
+                    <value name="title">Проверка Email</value>
+                    <value name="type">check</value>
+                    <value name="mode">edit</value>
+                </item>
+            </items>
+        </param>
+        <param type="array">
+            <name>section_forms</name>
             <items>
                 <item name="email" type="array">
                     <value name="field">email</value>
@@ -153,11 +238,37 @@ CREATE TABLE IF NOT EXISTS `section_page` (
                 </item>
                 <item name="subject" type="array">
                     <value name="field">esubject</value>
-                    <value name="title">Заголовок письма отправителя</value>
+                    <value name="title">Заголовок письма</value>
                     <value name="type">text</value>
+                </item>
+                <item name="header_mail" type="array">
+                    <value name="field">header_mail</value>
+                    <value name="title">Вступительный текст письма</value>
+                    <value name="type">memo</value>
+                </item>
+                <item name="captcha" type="array">
+                    <value name="field">captcha</value>
+                    <value name="title">Показывать CAPTCHA формы</value>
+                    <value name="type">check</value>
+                </item>
+                <item name="title_form" type="array">
+                    <value name="field">title_form</value>
+                    <value name="title">Заголовок формы</value>
+                    <value name="type">text</value>
+                </item>
+                <item name="success_message" type="array">
+                    <value name="field">success_message</value>
+                    <value name="title">Сообщение после успешной отправки</value>
+                    <value name="type">memo</value>
+                </item>
+                <item name="html" type="array">
+                    <value name="field">html</value>
+                    <value name="title">html код для вставки на страницу</value>
+                    <value name="type">memo</value>
                 </item>
             </items>
         </param>
+
         <param type="array">
             <name>section_page</name>
             <items>
