@@ -11,6 +11,9 @@ class GsearchConfig extends Config_Base
      */
 
     public $site = '';
+
+
+    public $template = "gsearch.tpl.php";
 }
 
 ?>
