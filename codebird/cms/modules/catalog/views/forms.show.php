@@ -14,7 +14,7 @@
 
         $("#form_<?=$form->id?>").validate({
             invalidHandler: function(e, validator) {
-                    var errors = validator.numberOfInvalids();alert(errors);
+                    var errors = validator.numberOfInvalids();
                     if (errors) {
                             var message = errors == 1
                                     ? 'You missed 1 field. It has been highlighted below'
@@ -67,13 +67,13 @@
                         echo '"field_'.$row['id'].'" : { ';
                         if($row['valid_empty'] == 1)
                         {
-                           echo 'requiredCF: "введите"';
+                           echo 'requiredCF: ""';
                            $sep2 = true;
                         }
                         if($row['valid_email'] == 1)
                         {
                            echo $sep2 ? ',' : '';
-                           echo 'email: "некорректный e-mail"';
+                           echo 'email: ""';
                            $sep2 = true;
                         }
                         echo '}';
