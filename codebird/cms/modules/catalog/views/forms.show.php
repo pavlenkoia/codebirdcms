@@ -1,10 +1,3 @@
-<?php
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-?>
 <script type="text/javascript" src="jscripts/jquery.validate.js"></script>
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function(){
