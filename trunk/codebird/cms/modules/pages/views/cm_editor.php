@@ -95,7 +95,7 @@
                             hideLabel: true,
                             name: 'visible',
                             inputValue: 1,
-                            boxLabel: 'видимый в меню',
+                            boxLabel: 'видимый в карте сайта',
                             checked: <?php if($page->visible == 1) echo 'true'; else echo 'false'; ?>
                         },
                         {
