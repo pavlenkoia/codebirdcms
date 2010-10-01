@@ -4,6 +4,8 @@
  */
 class CatalogInstall extends Install_Base
 {
+    public $required = true;
+
     public $title = "Разделы";
 
     public $dirs = array('catalog/cache','catalog/upload');
@@ -295,6 +297,7 @@ INSERT INTO `forms_field_type` (`id`, `name`, `position`) VALUES
         if(!$section)
         {
             $section = $table->getEntity();
+            $section->title = 'Формы';
             $section->alias = 'forms_section';
             $section->children_tpl =
 '<tpl>
@@ -308,6 +311,18 @@ INSERT INTO `forms_field_type` (`id`, `name`, `position`) VALUES
                 return $table->errorInfo;
             }
         }
+
+        $rows = $table->select('select * from forms_field_type');
+
+        if(count($rows) == 0)
+        {
+            $sql = "INSERT INTO `forms_field_type` (`id`, `name`, `position`) VALUES
+('text', 'Текстовая строка', 1),
+('memo', 'Многострочный текст', 2),
+('select', 'Выпадающий список', 3);";
+            $table->execute($sql);
+        }
+
         return $res;
     }
 
