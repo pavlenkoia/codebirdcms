@@ -10,8 +10,8 @@
                     var errors = validator.numberOfInvalids();
                     if (errors) {
                             var message = errors == 1
-                                    ? 'You missed 1 field. It has been highlighted below'
-                                    : 'You missed ' + errors + ' fields.  They have been highlighted below';
+                                    ? 'Не заполнено или неверно заполнено выделенное поле.'
+                                    : 'Не заполнены или неверно заполнены выделенные поля';
                             $("div.error").html(message);
                             $("div.error").show();
                     } else {
@@ -19,7 +19,7 @@
                     }
                     return false;
             },
-            onkeyup: false,
+            //onkeyup: false,
             rules:{
             <?php
                 $sep = false;
@@ -103,15 +103,19 @@
     </div>
     <?php } ?>
 
+
+    <?php if(!$success_message) { ?>
+
+
     <?php foreach($field_rows as $row) { ?>
     <?php if($row['type_id'] == 'text') { ?>
     <div class="form-field">
-        <label for="field_<?=$row['id']?>"><?=$row['name']?>:</label>
+        <label for="field_<?=$row['id']?>"><?=$row['name']?><?=$row['valid_empty'] ? ' * ' : ''?>:</label>
         <input id="field_<?=$row['id']?>" name="field_<?=$row['id']?>" type="text" value="<?=$error_message ? htmlspecialchars(Utils::getPost('field_'.$row['id'])) : ''?>"/>
     </div>
     <?php } elseif($row['type_id'] == 'memo') { ?>
     <div class="form-field">
-        <label for="field_<?=$row['id']?>"><?=$row['name']?>:</label>
+        <label for="field_<?=$row['id']?>"><?=$row['name']?><?=$row['valid_empty'] ? ' * ' : ''?>:</label>
         <textarea class="textarea" id="field_<?=$row['id']?>" name="field_<?=$row['id']?>" rows="5"><?=$error_message ? htmlspecialchars(Utils::getPost('field_'.$row['id'])) : ''?></textarea>
     </div>
     <?php } ?>
@@ -127,5 +131,8 @@
     <div class="form-submit">
         <input value="Отправить" name="submit" type="submit">
     </div>
+
+    <?php } ?>
+
 </form>
 </div>
