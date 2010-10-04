@@ -113,6 +113,10 @@ class CatalogController_Forms extends Controller_Base
                         $error_message = 'Ошибка, попробуйте отправить снова.';
                     }
                 }
+                if(isset($form->mod))
+                {
+                    val($form->mod,array('form_id'=>$form->id));
+                }
             }
         }
 
