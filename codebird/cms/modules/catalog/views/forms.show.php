@@ -118,6 +118,8 @@
         <label for="field_<?=$row['id']?>"><?=$row['name']?><?=$row['valid_empty'] ? ' * ' : ''?>:</label>
         <textarea class="textarea" id="field_<?=$row['id']?>" name="field_<?=$row['id']?>" rows="5"><?=$error_message ? htmlspecialchars(Utils::getPost('field_'.$row['id'])) : ''?></textarea>
     </div>
+    <?php } elseif($row['type_id'] == 'select') { ?>
+
     <?php } ?>
     <?php } ?>
 
