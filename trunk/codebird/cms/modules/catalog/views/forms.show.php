@@ -119,7 +119,19 @@
         <textarea class="textarea" id="field_<?=$row['id']?>" name="field_<?=$row['id']?>" rows="5"><?=$error_message ? htmlspecialchars(Utils::getPost('field_'.$row['id'])) : ''?></textarea>
     </div>
     <?php } elseif($row['type_id'] == 'select') { ?>
-
+    <div class="form-field">
+        <label for="field_<?=$row['id']?>"><?=$row['name']?><?=$row['valid_empty'] ? ' * ' : ''?>:</label>
+        <select id="field_<?=$row['id']?>" name="field_<?=$row['id']?>">
+            <?php
+            $options = explode("\n", $row['select_options']);
+            foreach($options as $option) {
+                $opt = explode(';',$option);
+                $opt = array_pad($opt,2,null);
+            ?>
+            <option <?=($error_message && Utils::getPost('field_'.$row['id']) == $opt[0]) ? 'selected' : ''?> value="<?=htmlspecialchars($opt[0])?>"><?=htmlspecialchars($opt[1])?></option>
+            <?php } ?>
+        </select>
+    </div>
     <?php } ?>
     <?php } ?>
 
