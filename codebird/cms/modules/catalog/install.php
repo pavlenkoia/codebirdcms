@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `position_forms` (
   `type_id` varchar(15) collate utf8_unicode_ci default NULL,
   `valid_empty` smallint(6) default '0',
   `valid_email` smallint(6) default '0',
+  `select_options` text collate utf8_unicode_ci,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 
@@ -206,6 +207,12 @@ INSERT INTO `forms_field_type` (`id`, `name`, `position`) VALUES
                     <value name="type">select</value>
                     <value name="select">SELECT id, name AS display FROM forms_field_type ORDER BY position ASC</value>
                 </item>
+                <item name="select_options" type="array">
+                    <value name="field">select_options</value>
+                    <value name="title">Значения для выпадающего списка</value>
+                    <value name="type">memo</value>
+                    <value name="mode">edit</value>
+                </item>
                 <item name="valid_empty" type="array">
                     <value name="field">valid_empty</value>
                     <value name="title">Обязательно для заполнения</value>
@@ -217,6 +224,12 @@ INSERT INTO `forms_field_type` (`id`, `name`, `position`) VALUES
                     <value name="title">Проверка Email</value>
                     <value name="type">check</value>
                     <value name="mode">edit</value>
+                </item>
+                <item name="id" type="array">
+                    <value name="field">id</value>
+                    <value name="title">ID</value>
+                    <value name="type">text</value>
+                    <value name="mode">browse</value>
                 </item>
             </items>
         </param>
