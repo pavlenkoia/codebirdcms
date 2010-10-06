@@ -4,7 +4,7 @@ $nodes = array();
 
 if(Utils::getVar('node') == 'root')
 {
-    $node['text'] = 'Файлы';
+    $node['text'] = 'Загруженные файлы';
     $node['id'] = '/';
     $node['leaf'] = false;
     //$node['icon'] = "/cms/modules/feed/html/images/rss.gif";
