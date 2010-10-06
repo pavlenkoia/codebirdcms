@@ -152,7 +152,13 @@ function get_cache_pic($photo, $w = 100, $h = 100, $orig_ratio=true, $watermark=
 {
 	if ($photo == null || trim($photo)=='' || !is_file(SITE_PATH.$photo)) return '';
 
-	$p = str_replace('files/catalog/upload/', '', $photo);
+        $ps = explode('/', $photo);
+        $p = $ps[count($ps)-1];
+        if(count($ps) > 2 && $ps[1] != 'catalog')
+        {
+            $p = str_replace('/', '_', $photo);
+        }
+	//$p = str_replace('files/catalog/upload/', '', $photo);
 	$cache_url = "files/catalog/cache/" . $w . 'x' . $h . '_' . $p; 
 
 	if ($w > 0 && $h > 0) $t = 2;
