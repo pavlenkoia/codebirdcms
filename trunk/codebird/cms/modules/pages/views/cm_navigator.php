@@ -122,7 +122,7 @@
                         });
                 }
             },
-            {
+            /*{
                 iconCls: 'config-menu',
                 tooltip: 'Настройки модуля',
                 handler: function(event, toolEl, panel)
@@ -132,6 +132,19 @@
                         id : '<?php echo $args->module ?>-config',
                         caption: 'Настройки модуля: <?php echo $args->title ?>',
                         iconCls: 'config-menu'
+                    });
+                }
+            },*/
+            {
+                iconCls: 'filemanager-menu',
+                tooltip: 'Загруженные файлы',
+                handler: function(event, toolEl, panel)
+                {
+                    App.showEditor({
+                        url: '/ajax/cm/filemanager.cm.editor',
+                        id : 'filemanager',
+                        caption: 'Загруженные файлы',
+                        iconCls: 'filemanager-menu'
                     });
                 }
             }

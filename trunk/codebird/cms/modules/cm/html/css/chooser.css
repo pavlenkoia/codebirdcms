@@ -11,21 +11,27 @@
 .img-chooser-view .thumb{
     background: #dddddd;
     padding: 3px;
+    text-align:center;
+    min-height: 63px;
 }
 .img-chooser-view .thumb img{
-    height: 60px;
-    width: 80px;
+    max-height: 60px;
+    max-width: 80px;
 }
 .img-chooser-view .thumb-wrap{
     float: left;
     margin: 4px;
     margin-right: 0;
     padding: 5px;
+    max-width: 87px;
+    min-width: 87px;
+    max-height:83px;
 }
 .img-chooser-view .thumb-wrap span{
     display: block;
     overflow: hidden;
     text-align: center;
+    max-height: 15px;
 }
 .img-chooser-view .x-view-over{
     border:1px solid #dddddd;
