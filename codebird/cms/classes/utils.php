@@ -285,32 +285,35 @@ class Utils
         $foto_hw = getimagesize($image_file);
 
         $znak = imagecreatefrompng  ($watermark_file);
-        //$foto = imagecreatefromjpeg ($image_file);
-        $foto = imageCreateTrueColor($foto_hw[0],$foto_hw[1]);
+        $foto = imagecreatefromjpeg ($image_file);
+
+        //echo $znak_hw[0].'x'.$znak_hw[1];return;
 
         imagecopy ($foto,
             $znak,
-            $foto_hw[0] - $znak_hw[0],
-            $foto_hw[1] - $znak_hw[1],
+//            $foto_hw[0] - $znak_hw[0],
+//            $foto_hw[1] - $znak_hw[1],
+            floor($foto_hw[0] / 2) - floor($znak_hw[0] / 2),
+            floor($foto_hw[1] / 2) - floor($znak_hw[1] / 2),
             0,
             0,
             $znak_hw[0],
             $znak_hw[1]);
 
-        switch ($foto_hw[2])
-        {
-            case 1:
-                imageGIF($foto,$out_file);
-                break;
-            case 2:
-                imageJPEG($foto,$out_file);
-                break;
-            case 3:
-                imagePNG($foto,$out_file);
-                break;
-        }
+//        switch ($foto_hw[2])
+//        {
+//            case 1:
+//                imageGIF($foto,$out_file);
+//                break;
+//            case 2:
+//                imageJPEG($foto,$out_file);
+//                break;
+//            case 3:
+//                imagePNG($foto,$out_file);
+//                break;
+//        }
 
-        //imagejpeg ($foto, $out_file, "100");
+        imagejpeg ($foto, $out_file, "100");
 
         imagedestroy ($znak);
         imagedestroy ($foto);
