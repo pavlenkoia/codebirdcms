@@ -9,7 +9,7 @@ foreach($files as $file)
 
     $ext = mb_strtolower(strrchr($file['name'],'.'));
 
-    if($ext == '.jpg' || $ext == '.gif' || $ext == '.png')
+    if($ext == '.jpg' || $ext == '.gif' || $ext == '.png' || $ext == '.jpeg')
     {
         $res_row['src'] = get_cache_pic($file['url'],80,60);
         $res_row['url'] = $file['url'];

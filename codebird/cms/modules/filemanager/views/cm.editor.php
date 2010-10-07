@@ -118,10 +118,11 @@
                                     'src'
                                 ]
                             });
-                            store.load();
+                            //store.load();
 
                             var dv = this.ownerCt.ownerCt.getComponent('item').getComponent('files');
                             dv.setStore(store);
+                            store.load();
                         }
                     }
                 }
@@ -161,6 +162,12 @@
                             tb.getComponent('delete').setDisabled(view.getSelectionCount() == 0);
                             tb.getComponent('delete').selections = view.getSelectedRecords();
                             tb.getComponent('delete').view = view;
+                        },
+                        dblclick : function(view,index,node)
+                        {
+                            var url = view.getRecord(node).data.url;
+                            document.open(url, "",
+                                "width=500,height=400,status=yes,toolbar=no,menubar=no");
                         }
                     }
                 }
