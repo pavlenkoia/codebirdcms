@@ -108,7 +108,8 @@
                                         params:
                                         {
                                             section_id: <?php echo $section->id ?>,
-                                            table_name: '<?=$table_name?>'
+                                            table_name: '<?=$table_name?>',
+                                            table_id: '<?=$table_id?>'
                                         },
                                         maskEl : 'panel-catalog-editor-<?php echo $section->id?>',
                                         loadingMessage : 'Загрузка...',
