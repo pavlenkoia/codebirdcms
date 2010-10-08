@@ -63,10 +63,19 @@
                     form.getForm().submit({
                         url: '/ajax/cm/catalog.cm.import',
                         method: 'POST',
+                        params:
+                        {
+                            table_id: '<?=$table_id?>',
+                            section_id: '<?=$section_id?>'
+                        },
                         waitTitle: 'Подождите',
                         waitMsg: 'Сохранение...',
                         success: function(form, action){
                                 btn.ownerCt.ownerCt.hide();
+                                var grid = Ext.getCmp('panel-catalog-editor-<?=$section_id?>-tab-position').getComponent('grid');
+                                var paging = grid.getBottomToolbar();
+                                grid.getStore().load({params:{start:paging.cursor, limit:paging.pageSize}});
+                                grid.getSelectionModel().clearSelections();
                             },
                         failure: function(form, action){
                                 Ext.MessageBox.alert('Ошибка', action.result.msg);

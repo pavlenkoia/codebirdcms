@@ -1143,13 +1143,17 @@ class CatalogController_Cm extends Controller_Base
     {
         $template = $this->createTemplate();
 
-        $id = Utils::getVar('section_id');
+        $section_id = Utils::getVar('section_id');
 
-        $data = $this->getData();
+//        $data = $this->getData();
+//
+//        $object = $data->getSection($id);
 
-        $object = $data->getSection($id);
+        $table_id = Utils::getVar('table_id');
 
-        
+        $template->table_id = $table_id;
+
+        $template->section_id = $section_id;
 
         $template->render();
     }
@@ -1159,86 +1163,101 @@ class CatalogController_Cm extends Controller_Base
         $res = array();
         try
         {
+            $data = $this->getData();
+
             if(!isset($_FILES["file"]))
             {
                 throw new Exception('Нет файла для загрузки');
             }
 
             $file = $_FILES['file']['tmp_name'];
-
-            $msg = '';
-
-//            setlocale(LC_ALL, 'rus_RUS.1251');
-
-            $row = 0;
+            
             $handle = fopen($file, "r");
 
             if(!$handle) throw new Exception('Нет файла');
 
-            //throw new Exception($msg);
+            $section_id = Utils::getVar('section_id');
+
+            $table_meta = $data->getTableMeta(Utils::getVar('table_id'));
+
+            if(!$table_meta || !isset($table_meta['import']))
+            {
+                throw new Exception('Ошибка конфигурации');
+            }
+
+            $name = $table_meta['import'];
+            
+            $imports = $this->config->$name;
 
             setlocale(LC_ALL, 'ru_RU.UTF-8');
 
+            $row = 0;
+
+            $maping = array();
             
+            $values = array();
 
-//            while (($output = fgetcsv($handle, 1000, ";")) !== FALSE)
-//            {
-//                $data=array();
-//                foreach ($output as $head)
-//                {
-//                    $data[]=iconv("CP1251", "UTF-8",$head);
-//                }
-//
-//                $num = count($data);
-//                $msg .= "$num полей в строке $row: ";
-//                $row++;
-//                for ($c=0; $c < $num; $c++)
-//                {
-//                    $msg .=  $data[$c] . "; ";
-//                }
-//                if ($row > 1) break;
-//            }
+            $table = new Table($table_meta['table']);
 
-//            if($row == 0)
-//            {
-//                fclose($handle);
-//
-//                $handle = fopen($file, "r");
-//
-//                //setlocale (LC_ALL, array ('ru_RU.CP1251', 'rus_RUS.1251'));
-//
-
-//            $convert = false;
-//            $data = $this->xfgetcsv($handle, 1000, ";");
-//
-//            if($data === FALSE)
-//            {
-//                $convert = true;
-//            }
-//
-//            fclose($handle);
-//            $handle = fopen($file, "r");
-
-
-                while (($data = $this->xfgetcsv($handle, 1000, ";")) !== FALSE)
+            while (($data = $this->xfgetcsv($handle, 1000, ";")) !== FALSE)
+            {
+                if($row == 0)
                 {
-                    //print_r($data);
-                    $num = count($data);
-                    $msg .= "$num полей в строке $row: ";
-                    $row++;
-                    for ($c=0; $c < $num; $c++)
+                    for($i = 0; $i < count($data); $i++)
                     {
-                        $msg .=  $data[$c] . "; ";
+                        foreach($imports as $import)
+                        {
+                            if(isset($import['value']))
+                            {
+                                $map = array();
+                                $map['value'] = $import['value'];
+                                $map['field'] = $import['field'];
+                                $values[] = $map;
+                                continue;
+                            }
+                            if(isset($data[$i]) && trim(mb_strtolower($data[$i])) == trim(mb_strtolower($import['import'])))
+                            {
+                                $map = array();
+                                $map['index'] = $i;
+                                $map['field'] = $import['field'];
+                                $maping[] = $map;
+                            }
+                        }
                     }
-                    if ($row > 1) break;
                 }
-//            }
+                else
+                {
+                    $object = $table->getEntity();
+                    $object->section_id = $section_id;
+                    foreach($values as $value)
+                    {
+                        $field = $value['field'];
+                        
+                        if($value['value'] == 'time()')
+                        {
+                            $object->$field = time();
+                        }
+                    }
+                    foreach($maping as $map)
+                    {
+                        if(!isset($data[$map['index']])) continue;
+                        
+                        $field = $map['field'];
+                        
+                        $object->$field = $data[$map['index']];
+                    }
+                    $table->save($object);
+                    if($table->errorInfo)
+                    {
+                        throw new Exception($table->errorInfo);
+                    }
+                }
 
-//                echo '123321';
+                $row++;
+            }
+
 
             fclose($handle);
-
-            throw new Exception($msg.$row);
 
             $res['success'] = true;
             $res['msg'] = 'Готово';
@@ -1251,8 +1270,6 @@ class CatalogController_Cm extends Controller_Base
 
         $this->setContent(json_encode($res));
     }
-
-    private $xencode = '';
 
     private function xfgetcsv($f='', $x='', $s=';', $convert=false)
     {
