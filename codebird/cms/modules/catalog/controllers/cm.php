@@ -1199,7 +1199,23 @@ class CatalogController_Cm extends Controller_Base
 
             $table = new Table($table_meta['table']);
 
-            while (($data = $this->xfgetcsv($handle, 1000, ";")) !== FALSE)
+            $delim = Utils::getVar('delim');
+            switch($delim)
+            {
+                case 1:
+                    $delim = ";";
+                    break;
+                case 2:
+                    $delim = ",";
+                    break;
+                case 3:
+                    $delim = "\t";
+                    break;
+                default:
+                    $delim = ';';
+            }
+
+            while (($data = $this->xfgetcsv($handle, 1000, $delim)) !== FALSE)
             {
                 if($row == 0)
                 {

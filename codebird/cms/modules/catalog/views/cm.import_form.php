@@ -43,7 +43,29 @@
                         fields: ['value','display'],
                         data:
                         [
-                            [1,'заменить все'],[2,'добавить'],[3,'заменить существующие']
+                            [1,'добавить'],[2,'заменить все'],[3,'заменить существующие']
+                        ]
+                    }
+                },
+                {
+                    xtype: 'combo',
+                    fieldLabel: 'Разделитель',
+                    anchor: '95%',
+                    hiddenName: 'delim',
+                    mode: 'local',
+                    editable: false,
+                    resizable: false,
+                    valueField: 'value',
+                    displayField: 'display',
+                    value: 1,
+                    triggerAction: 'all',
+                    store:
+                    {
+                        xtype: 'arraystore',
+                        fields: ['value','display'],
+                        data:
+                        [
+                            [1,';'],[2,','],[3,'табуляция']
                         ]
                     }
                 }
