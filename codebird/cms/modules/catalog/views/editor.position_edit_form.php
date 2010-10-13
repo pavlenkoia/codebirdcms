@@ -93,6 +93,87 @@
                                 format:"d.m.Y"
                             }
                             <?php break;
+                        case "select" :?>
+                            ,{
+                                xtype: 'combo',
+                                fieldLabel: '<?php echo $field['title']?>',
+                                hiddenName: '<?php echo $field['field']?>',
+                                anchor: '95%',
+                                mode: 'local',
+                                editable: false,
+                                resizable: false,
+                                valueField: 'id',
+                                displayField: 'display',
+                                triggerAction: 'all',
+                                value: <?php echo escapeJSON($value) ?>,
+                                listeners:
+                                {
+                                    render: function(comp)
+                                    {
+                                        
+                                    }
+                                },
+                                store: new Ext.data.Store({
+                                    url: '/ajax/cm/catalog.cm.select',
+                                    baseParams:
+                                    {
+                                        table_id: '<?php echo $table_id?>',
+                                        field: '<?php echo $name?>'
+                                    },
+                                    //maskEl : this,
+                                    autoLoad: true,
+                                    reader: new Ext.data.JsonReader
+                                    ({
+                                        totalProperty: 'results',
+                                        autoDestroy: true,
+                                        idProperty: 'value',
+                                        root: 'rows',
+                                        fields:
+                                        [
+                                            'id',
+                                            'display'
+                                        ]
+                                    })
+                                })
+                            }
+                            <?php break;
+                            case "selecttext" :?>
+                            ,{
+                                xtype: 'combo',
+                                fieldLabel: '<?php echo $field['title']?>',
+                                hiddenName: '<?php echo $field['field']?>',
+                                anchor: '95%',
+                                mode: 'local',
+                                editable: true,
+                                resizable: false,
+                                valueField: 'id',
+                                displayField: 'display',
+                                triggerAction: 'all',
+                                value: <?php echo escapeJSON($value) ?>,
+                                store: new Ext.data.ArrayStore({
+                                        id: 0,
+                                        fields:
+                                        [
+                                            'id',
+                                            'display'
+                                        ],
+                                        data:
+                                        [
+                                        <?php
+                                            $rows = explode(';', $field['select']);
+                                            $res = '';
+                                            foreach($rows as $row)
+                                            {
+                                                if($res) $res .= ',';
+                                                $res .= '['.escapeJSON($row).','.escapeJSON($row).']';
+                                            }
+                                            echo $res;
+                                        ?>
+
+                                        ]
+                                    })
+                            }
+                            <?php break;
                         case "image" :?>
                             ,{
                                 xtype: 'panel',
