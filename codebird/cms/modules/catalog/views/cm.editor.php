@@ -505,26 +505,71 @@
                                                                 }
                                                             },
                                                             {
-                                                                xtype: 'button',
-                                                                text: 'Загрузить',
-                                                                handler: function(btn)
-                                                                {
-                                                                    App.uploadWindow({
-                                                                        targetId: this.id,
-                                                                        id: '<?php echo $section->id ?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue(),
-                                                                        url: '/ajax/cm/catalog.cm.uploadfile',
-                                                                        title: 'Загрузить файл',
-                                                                        emptyText: 'Выберите файл...',
-                                                                        success: function(result)
+                                                                xtype: 'panel',
+                                                                layout:'hbox',
+                                                                items:
+                                                                [
+                                                                    {
+                                                                        xtype: 'button',
+                                                                        text: 'Загрузить',
+                                                                        handler: function(btn)
                                                                         {
-                                                                            var id_f = form.getForm().findField('id');
-                                                                            id_f.setValue(result.id);
-                                                                            var t = new Ext.Template('<div style="margin:5px 0px 10px 0px;"><a href="{src}" target="_blank"/>{name}</a></div>');
-                                                                            t.compile();
-                                                                            t.overwrite(btn.ownerCt.getComponent(0).id, {src: result.src+'?sid=' + Math.random(), name: result.src});
+                                                                            App.uploadWindow({
+                                                                                targetId: this.id,
+                                                                                id: '<?php echo $section->id ?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue(),
+                                                                                url: '/ajax/cm/catalog.cm.uploadfile',
+                                                                                title: 'Загрузить файл',
+                                                                                emptyText: 'Выберите файл...',
+                                                                                success: function(result)
+                                                                                {
+                                                                                    var id_f = form.getForm().findField('id');
+                                                                                    id_f.setValue(result.id);
+                                                                                    var t = new Ext.Template('<div style="margin:5px 0px 10px 0px;"><a href="{src}" target="_blank"/>{name}</a></div>');
+                                                                                    t.compile();
+                                                                                    t.overwrite(btn.ownerCt.getComponent(0).id, {src: result.src+'?sid=' + Math.random(), name: result.src});
+                                                                                }
+                                                                            });
                                                                         }
-                                                                    });
-                                                                }
+                                                                    },
+                                                                    {
+                                                                        xtype: 'button',
+                                                                        text: 'Удалить',
+                                                                        handler: function(btn)
+                                                                        {
+                                                                            Ext.MessageBox.confirm('Подтверждение', 'Вы действительно хотите удалить файл?',
+                                                                                function(btn2)
+                                                                                {
+                                                                                    if(btn2 == 'yes')
+                                                                                    {
+                                                                                        Ext.Ajax.request({
+                                                                                            url : '/ajax/cm/catalog.cm.uploadfile_delete',
+                                                                                            method: 'POST',
+                                                                                            params:
+                                                                                            {
+                                                                                                id: '<?php echo $section->id ?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue()
+                                                                                            },
+                                                                                            success : function (response) {
+                                                                                                var obj = response.responseJSON;
+                                                                                                if(obj.success)
+                                                                                                {
+                                                                                                    var t = new Ext.Template('<div style="margin:5px 0px 10px 0px;"></div>');
+                                                                                                    t.compile();
+                                                                                                    t.overwrite(btn.ownerCt.ownerCt.getComponent(0).id);
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    Ext.MessageBox.alert('Ошибка', obj.msg);
+                                                                                                }
+                                                                                            },
+                                                                                                failure: function(form, action){
+                                                                                                Ext.MessageBox.alert('Ошибка', action.result.msg);
+                                                                                            }
+                                                                                        });
+                                                                                    }
+                                                                            });
+                                                                        }
+                                                                    }
+                                                               ]
                                                             }
                                                         ]
                                                     }
