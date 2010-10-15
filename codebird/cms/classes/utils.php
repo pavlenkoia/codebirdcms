@@ -198,6 +198,9 @@ class Utils
 
       if ($size === false) return false;
 
+      if($width == 0) $width = $size[0];
+      if($height == 0) $height = $size[1];
+
       // Определяем исходный формат по MIME-информации, предоставленной
       // функцией getimagesize, и выбираем соответствующую формату
       // imagecreatefrom-функцию.
