@@ -513,8 +513,12 @@ class CatalogController_Cm extends Controller_Base
                 {
                     if(Utils::getVar($fn))
                     {
+                        $getdate = getdate(time());
+                        $hours = $getdate['hours'];
+                        $minutes = $getdate['minutes'];
+
                         $times = explode(".",Utils::getVar($fn));
-                        $object->$fn = $times ?  mktime(0,0,0,$times[1],$times[0],$times[2]) : null;
+                        $object->$fn = $times ?  mktime($hours,$minutes,0,$times[1],$times[0],$times[2]) : null;
                     }
                     else
                     {
