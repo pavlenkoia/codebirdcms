@@ -389,14 +389,28 @@
                                                             data: 
                                                             [
                                                             <?php
-                                                                $rows = explode(';', $field['select']);
-                                                                $res = '';
-                                                                foreach($rows as $row)
+                                                                if(isset($field['sql']))
                                                                 {
-                                                                    if($res) $res .= ',';
-                                                                    $res .= '['.escapeJSON($row).','.escapeJSON($row).']';
+                                                                    $rows = $data->getSectionTable()->select($field['sql']);
+                                                                    $res = '';
+                                                                    foreach($rows as $row)
+                                                                    {
+                                                                        if($res) $res .= ',';
+                                                                        $res .= '['.escapeJSON($row['display']).','.escapeJSON($row['display']).']';
+                                                                    }
+                                                                    echo $res;
                                                                 }
-                                                                echo $res;
+                                                                else
+                                                                {
+                                                                    $rows = explode(';', $field['select']);
+                                                                    $res = '';
+                                                                    foreach($rows as $row)
+                                                                    {
+                                                                        if($res) $res .= ',';
+                                                                        $res .= '['.escapeJSON($row).','.escapeJSON($row).']';
+                                                                    }
+                                                                    echo $res;
+                                                                }
                                                             ?>
                                                                 
                                                             ]
@@ -1005,6 +1019,58 @@
                                                         ]
                                                     }
                                                 ]
+                                            }
+                                            <?php break;
+                                        case "selecttext" :?>
+                                            ,{
+                                                xtype: 'combo',
+                                                fieldLabel: '<?php echo $field['title']?>',
+                                                hiddenName: '<?php echo $field['field']?>',
+                                                //anchor: '95%',
+                                                mode: 'local',
+                                                editable: true,
+                                                resizable: false,
+                                                valueField: 'id',
+                                                displayField: 'display',
+                                                triggerAction: 'all',
+                                                value: <?php echo escapeJSON($section_data->$field['field']) ?>,
+                                                store: new Ext.data.ArrayStore({
+                                                        id: 0,
+                                                        fields:
+                                                        [
+                                                            'id',
+                                                            'display'
+                                                        ],
+                                                        data:
+                                                        [
+                                                        <?php
+                                                            if(isset($field['sql']))
+                                                            {
+                                                                $table = new Table('catalog_section');
+                                                                $rows = $table->select($field['sql']);
+                                                                $res = '';
+                                                                foreach($rows as $row)
+                                                                {
+                                                                    if($res) $res .= ',';
+                                                                    $res .= '['.escapeJSON($row['display']).','.escapeJSON($row['display']).']';
+                                                                }
+                                                                echo $res;
+                                                            }
+                                                            else
+                                                            {
+                                                                $rows = explode(';', $field['select']);
+                                                                $res = '';
+                                                                foreach($rows as $row)
+                                                                {
+                                                                    if($res) $res .= ',';
+                                                                    $res .= '['.escapeJSON($row).','.escapeJSON($row).']';
+                                                                }
+                                                                echo $res;
+                                                            }
+                                                        ?>
+
+                                                        ]
+                                                    })
                                             }
                                             <?php break;
                                         case "richtext" :?>
