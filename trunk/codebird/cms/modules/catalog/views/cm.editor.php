@@ -302,6 +302,16 @@
                                                         value: option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') : ''
                                                     }
                                                     <?php break;
+                                                case "labeltext" : ?>
+                                                    ,{
+                                                        xtype: 'textfield',
+                                                        fieldLabel: '<?php echo $field['title']?>',
+                                                        name: '<?php echo $field['field']?>',
+                                                        anchor: '95%',
+                                                        readOnly: true,
+                                                        value: option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') : ''
+                                                    }
+                                                    <?php break;
                                                 case "int" :?>
                                                     ,{
                                                         xtype: 'numberfield',
