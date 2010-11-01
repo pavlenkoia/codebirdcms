@@ -104,7 +104,8 @@ if(isset($db_host))
     }
     catch (PDOException $e)
     {
-//        echo 'Ошибка соединения: ' . $e->getMessage();
+        echo 'Ошибка соединения: ' . $e->getMessage();
+        exit;
     }
 
     $registry->site_name = $site_name;
