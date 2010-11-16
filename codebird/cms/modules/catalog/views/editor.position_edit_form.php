@@ -311,7 +311,7 @@
                         case "richtext" :?>
                             ,{
                                 xtype: 'panel',
-                                itemId: 'panel-content',
+                                itemId: 'panel-content-<?=$name?>',
                                 fieldLabel: '<?php echo $field['title']?>',
                                 height: 180,
                                 width: '99%',
