@@ -542,7 +542,7 @@ class CatalogController_Cm extends Controller_Base
                 }
             }
 
-            $table->save($object);
+            $id = $table->save($object);
 
             $errorInfo = $table->errorInfo;
 
@@ -550,10 +550,12 @@ class CatalogController_Cm extends Controller_Base
             {
                 throw new Exception($errorInfo);
             }
+          
 
             if(isset($table_meta['onsave']) && $table_meta['onsave'])
             {
-                val($table_meta['onsave']);
+                if(!isset($object->id)) $object = $table->getEntity($id);
+                val($table_meta['onsave'],array('object'=>$object));
             }
 
             $res['success'] = true;
