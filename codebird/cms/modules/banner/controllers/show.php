@@ -8,7 +8,8 @@ class BannerController_Show extends Controller_Base
 
     private function show($alias)
     {
-        $cache = SITE_PATH.'files'.DS.'banner'.DS.$alias;
+        $cache_path = Registry::__instance()->banner_cache_path ? DS.Registry::__instance()->banner_cache_path : '';
+        $cache = SITE_PATH.'files'.DS.'banner'.$cache_path.DS.$alias;
         if(is_file($cache))
         {
             $this->setContent(file_get_contents($cache));

@@ -100,7 +100,8 @@ class BannerController_Cm extends Controller_Base
                 {
                     throw new Exception($errorInfo);
                 }
-                $cache = SITE_PATH.'files'.DS.'banner'.DS.$object->alias;
+                $cache_path = Registry::__instance()->banner_cache_path ? DS.Registry::__instance()->banner_cache_path : '';
+                $cache = SITE_PATH.'files'.DS.'banner'.$cache_path.DS.$object->alias;
                 if(is_file($cache))
                 {
                     unlink($cache);
