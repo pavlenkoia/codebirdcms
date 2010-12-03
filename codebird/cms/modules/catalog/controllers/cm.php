@@ -921,7 +921,7 @@ class CatalogController_Cm extends Controller_Base
                             break;
 
                     default:
-                            $ext = '.';
+                            //$ext = '.';
             }
 
             if($ext == '.bmp' || $ext == '.')
