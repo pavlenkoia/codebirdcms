@@ -219,7 +219,14 @@ class Utils
       $new_left    = $use_x_ratio  ? 0 : floor(($width - $new_width) / 2);
       $new_top     = !$use_x_ratio ? 0 : floor(($height - $new_height) / 2);
 
-      $isrc = $icfunc($src);
+        try
+        {
+            $isrc = $icfunc($src);
+        }
+        catch(Exception $e)
+        {
+            return;
+        }
 
       if(!$orig_ratio)
       {

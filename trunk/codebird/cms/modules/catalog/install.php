@@ -8,7 +8,7 @@ class CatalogInstall extends Install_Base
 
     public $title = "Разделы";
 
-    public $dirs = array('catalog/cache','catalog/upload');
+    public $dirs = array('catalog/cache','catalog/upload','catalog/modcache');
 
         public $sql =
 "CREATE TABLE IF NOT EXISTS `catalog_section` (
