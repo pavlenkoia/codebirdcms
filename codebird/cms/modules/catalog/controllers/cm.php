@@ -703,7 +703,7 @@ class CatalogController_Cm extends Controller_Base
             {
                 throw new Exception($data->getSectionTable()->errorInfo);
             }
-
+            
             $res['success'] = true;
             $res['msg'] = 'Готово';
         }
@@ -820,6 +820,12 @@ class CatalogController_Cm extends Controller_Base
                 if($errorInfo)
                 {
                     throw new Exception($errorInfo);
+                }
+
+                if(isset($table_meta_section['onsave']) && $table_meta_section['onsave'])
+                {
+                    if(!isset($object->id)) $object = $table->getEntity($id);
+                    val($table_meta_section['onsave'],array('object'=>$object));
                 }
             }
 
