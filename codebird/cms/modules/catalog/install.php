@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `position_forms` (
   `valid_empty` smallint(6) default '0',
   `valid_email` smallint(6) default '0',
   `select_options` text collate utf8_unicode_ci,
+  `nameid` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 
@@ -230,6 +231,11 @@ INSERT INTO `forms_field_type` (`id`, `name`, `position`) VALUES
                     <value name="title">ID</value>
                     <value name="type">text</value>
                     <value name="mode">browse</value>
+                </item>
+                <item name="nameid" type="array">
+                    <value name="field">nameid</value>
+                    <value name="title">Имя поля</value>
+                    <value name="type">text</value>
                 </item>
             </items>
         </param>

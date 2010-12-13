@@ -97,7 +97,15 @@ class CatalogController_Forms extends Controller_Base
 
                     foreach($field_rows as $row)
                     {
-                        $body .= $row['name'].': '.Utils::getPost('field_'.$row['id'])."\n\n";
+                        if(isset($row['nameid']) && $row['nameid'])
+                        {
+                            $value = Utils::getPost($row['nameid']);
+                        }
+                        else
+                        {
+                            $value = Utils::getPost('field_'.$row['id']);
+                        }
+                        $body .= $row['name'].': '.$value."\n\n";
                     }
 
                     $mailer->Body = $body;
