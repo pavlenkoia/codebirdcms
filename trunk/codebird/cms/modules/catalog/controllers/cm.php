@@ -513,7 +513,14 @@ class CatalogController_Cm extends Controller_Base
                 {
                     if(Utils::getVar($fn))
                     {
-                        $getdate = getdate(time());
+                        if($id != 0 && $object->$fn)
+                        {
+                            $getdate = getdate($object->$fn);
+                        }
+                        else
+                        {
+                            $getdate = getdate(time());
+                        }
                         $hours = $getdate['hours'];
                         $minutes = $getdate['minutes'];
 
