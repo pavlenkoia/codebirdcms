@@ -63,7 +63,7 @@ class CatalogController_Forms extends Controller_Base
 
         $error_message = '';
         $success_message = '';
-        if(Utils::getPost('submit'))
+        if(Utils::getPost('submit_'.$form->id))
         {
             $check = true;
             if($form->captcha == 1)
