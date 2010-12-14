@@ -1279,7 +1279,7 @@ class CatalogController_Cm extends Controller_Base
                         
                         $field = $map['field'];
                         
-                        $object->$field = $data[$map['index']];
+                        $object->$field = trim($data[$map['index']]);
                     }
                     $table->save($object);
                     if($table->errorInfo)
