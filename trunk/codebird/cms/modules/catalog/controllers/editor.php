@@ -293,7 +293,8 @@ class CatalogController_Editor extends Controller_Base
 
             if($table->errorInfo)  throw new Exception($table->errorInfo);
 
-            $cache = SITE_PATH.'files'.DS.'banner'.DS.$banner->alias;
+            $cache_path = Registry::__instance()->banner_cache_path ? DS.Registry::__instance()->banner_cache_path : '';
+            $cache = SITE_PATH.'files'.DS.'banner'.$cache_path.DS.$banner->alias;
             if(is_file($cache))
             {
                 unlink($cache);
