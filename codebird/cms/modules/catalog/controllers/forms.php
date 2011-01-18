@@ -95,6 +95,11 @@ class CatalogController_Forms extends Controller_Base
 
                     $body = '';
 
+                    if($form->header_form)
+                    {
+                        $body .= $form->header_form."\n\n";
+                    }
+
                     foreach($field_rows as $row)
                     {
                         if(isset($row['nameid']) && $row['nameid'])
