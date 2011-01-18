@@ -95,9 +95,9 @@ class CatalogController_Forms extends Controller_Base
 
                     $body = '';
 
-                    if($form->header_form)
+                    if($form->header_mail)
                     {
-                        $body .= $form->header_form."\n\n";
+                        $body .= $form->header_mail."\n\n";
                     }
 
                     foreach($field_rows as $row)
