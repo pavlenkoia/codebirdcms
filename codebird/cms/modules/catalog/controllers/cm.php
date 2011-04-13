@@ -1218,6 +1218,15 @@ class CatalogController_Cm extends Controller_Base
 
             $table = new Table($table_meta['table']);
 
+            $mode = Utils::getVar('mode');
+
+            if($mode == 2)
+            {
+                $table->execute('delete from '.$table_meta['table'].' where section_id=:id',
+                        array('id'=>$section_id));
+            }
+
+
             $delim = Utils::getVar('delim');
             switch($delim)
             {
