@@ -40,7 +40,7 @@ Class PagesController_Site Extends Controller_Base
         {
             if($page->redirect == 1)
             {
-                $objects = $table->selectObj('select * from pages where parent_id=:id order by position',
+                $objects = $table->selectObj('select * from pages where parent_id=:id order by position limit 1',
                         array('id'=>$page->id));
                 if(count($objects) > 0)
                 {
