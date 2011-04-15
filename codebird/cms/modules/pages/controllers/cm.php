@@ -93,6 +93,7 @@ class PagesController_Cm Extends Controller_Base
             $announcement = Utils::getPost('announcement');
             $head_title = Utils::getPost('head_title');
             $redirect = Utils::getPost('redirect');
+            $tag = Utils::getPost('tag');
 
             $page->title = $title;
             $page->title2 = $title2;
@@ -105,6 +106,7 @@ class PagesController_Cm Extends Controller_Base
             $page->head_title = $head_title;
 
             $page->redirect = $redirect;
+            $page->tag = $tag;
 
             if(!$alias or trim($alias) == "")
             {
