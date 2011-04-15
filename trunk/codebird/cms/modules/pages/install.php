@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `img_src` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
   `head_title` varchar(500) collate utf8_unicode_ci default NULL,
   `redirect` smallint(6) DEFAULT NULL,
+  `tag` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 INSERT INTO `pages` (`title`, `content`, `position`, `visible`, `alias`, `template`, `mainpage`)

@@ -223,6 +223,18 @@ Class PagesController_Show Extends Controller_Base
             $template->render();
         }
     }
+
+    public function tag()
+    {
+        if(!$this->check())
+        {
+            return;
+        }
+
+        $page = $this->getPage();
+
+        $this->registry->mod_content = $page->tag;
+    }
 }
 
 ?>

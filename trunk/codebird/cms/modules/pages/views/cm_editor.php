@@ -210,7 +210,14 @@
             name: 'meta_description',
             anchor:'95%',
             value: <?php echo escapeJSON($page->meta_description)?>
-        }        
+        },
+        {
+            xtype: 'textfield',
+            fieldLabel: 'тэг',
+            name: 'tag',
+            anchor:'95%',
+            value: <?php echo escapeJSON($page->tag)?>
+        }
         <?php
         if(isset($plugins))
         {
