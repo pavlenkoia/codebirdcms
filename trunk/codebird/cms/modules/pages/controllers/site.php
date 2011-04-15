@@ -38,6 +38,17 @@ Class PagesController_Site Extends Controller_Base
 
         if($page)
         {
+            if($page->redirect == 1)
+            {
+                $objects = $table->selectObj('select * from pages where parent_id=:id order by position',
+                        array('id'=>$page->id));
+                if(count($objects) > 0)
+                {
+                    $page = $objects[0];
+                    $_REQUEST['alias'] = $page->alias;
+                }
+            }
+
             $this->registry->mod_content = $page->template;
             $head_title = $page->head_title;
             $this->registry->title = (!$head_title || $head_title == '') ? $page->title : $head_title;

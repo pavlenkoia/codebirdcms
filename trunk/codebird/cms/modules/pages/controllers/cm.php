@@ -92,6 +92,7 @@ class PagesController_Cm Extends Controller_Base
             $meta_description = Utils::getPost('meta_description');
             $announcement = Utils::getPost('announcement');
             $head_title = Utils::getPost('head_title');
+            $redirect = Utils::getPost('redirect');
 
             $page->title = $title;
             $page->title2 = $title2;
@@ -102,6 +103,8 @@ class PagesController_Cm Extends Controller_Base
             $page->announcement = $announcement;
 
             $page->head_title = $head_title;
+
+            $page->redirect = $redirect;
 
             if(!$alias or trim($alias) == "")
             {
