@@ -106,6 +106,14 @@
                             boxLabel: 'главная страница',
                             disabled: <?php if($page->mainpage == 1) echo 'true'; else echo 'false'; ?>,
                             checked: <?php if($page->mainpage == 1) echo 'true'; else echo 'false'; ?>
+                        },
+                        {
+                            xtype: 'checkbox',
+                            hideLabel: true,
+                            name: 'redirect',
+                            inputValue: 1,
+                            boxLabel: 'перенаправлять на первую страницу нижнего уровня',
+                            checked: <?php if($page->redirect == 1) echo 'true'; else echo 'false'; ?>
                         }
                     ]
                 }
