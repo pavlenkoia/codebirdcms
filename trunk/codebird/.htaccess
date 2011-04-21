@@ -9,6 +9,8 @@ php_flag magic_quotes_gpc 0
 php_flag magic_quotes_runtime 0
 php_value memory_limit 64M
 
+Options -MultiViews
+
 RewriteEngine On
 
 RewriteRule ^files/(.*)$ files/$1 [L]
