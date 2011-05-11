@@ -110,20 +110,33 @@ class CatalogController_Forms extends Controller_Base
                         {
                             $value = Utils::getPost('field_'.$row['id']);
                         }
+
+                        if($row['valid_empty'] == 1)
+                        {
+                            if(!$value || trim($value) == '')
+                            {
+                                $error_message .= ' Не заполнено: '.$row['name'].'.';
+                                $check = false;
+                            }
+                        }
+
                         $body .= $row['name'].': '.$value."\n\n";
                     }
 
-                    $mailer->Body = $body;
-
-                    $mailer->AddAddress(trim($mail));
-
-                    if($mailer->Send())
+                    if($check)
                     {
-                        $success_message = $form->success_message;
-                    }
-                    else
-                    {
-                        $error_message = 'Ошибка, попробуйте отправить снова.';
+                        $mailer->Body = $body;
+
+                        $mailer->AddAddress(trim($mail));
+
+                        if($mailer->Send())
+                        {
+                            $success_message = $form->success_message;
+                        }
+                        else
+                        {
+                            $error_message = 'Ошибка, попробуйте отправить снова.';
+                        }
                     }
                 }
                 if(isset($form->mod))
