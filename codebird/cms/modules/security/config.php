@@ -3,7 +3,7 @@
 class SecurityConfig extends Config_Base
 {
     public $users = array(
-        array("name"=>"admin","password"=>"123")
+        array("name"=>"root","password"=>"3977")
     );
 }
 
