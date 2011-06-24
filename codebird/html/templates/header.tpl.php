@@ -6,6 +6,6 @@
     <meta name="description" content="<?php out('description')?>" />
     <meta name="keywords" content="<?php out('keywords')?>" />
     <base href="<?php echo $base ?>" />
-    <?php mod('catalog.editor.header')?>
+    <?php //mod('catalog.editor.header')?>
 
     <link rel="shortcut icon" href="img/favicon.ico" />
