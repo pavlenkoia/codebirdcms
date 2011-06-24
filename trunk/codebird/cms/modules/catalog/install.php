@@ -285,8 +285,8 @@ INSERT INTO `forms_field_type` (`id`, `name`, `position`) VALUES
                 <!--item name="html" type="array">
                     <value name="field">html</value>
                     <value name="title">html код для вставки на страницу</value>
-                    <value name="type">memo</value-->
-                </item>
+                    <value name="type">memo</value>
+                </item-->
             </items>
         </param>
 
