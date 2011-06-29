@@ -710,7 +710,7 @@ class CatalogController_Cm extends Controller_Base
             {
                 throw new Exception($data->getSectionTable()->errorInfo);
             }
-            
+
             $res['success'] = true;
             $res['msg'] = 'Готово';
         }
