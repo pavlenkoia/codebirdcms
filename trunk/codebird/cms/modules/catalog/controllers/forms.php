@@ -102,6 +102,16 @@ class CatalogController_Forms extends Controller_Base
 
                     foreach($field_rows as $row)
                     {
+                        if($row['type_id'] == 'file')
+                        {
+                            $nameid = $row['nameid'];
+                            if(isset($_FILES[$nameid]))
+                            {
+                                $mailer->AddAttachment($_FILES[$nameid]['tmp_name'],$_FILES[$nameid]['name']);
+                            }
+                            continue;
+                        }
+
                         if(isset($row['nameid']) && $row['nameid'])
                         {
                             $value = Utils::getPost($row['nameid']);
