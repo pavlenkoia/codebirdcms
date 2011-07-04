@@ -97,7 +97,8 @@ CREATE TABLE IF NOT EXISTS `forms_field_type` (
 INSERT INTO `forms_field_type` (`id`, `name`, `position`) VALUES
 ('text', 'Текстовая строка', 1),
 ('memo', 'Многострочный текст', 2),
-('select', 'Выпадающий список', 3);
+('select', 'Выпадающий список', 3),
+('file', 'Файл', 4);
 ";
 
             public $config =
