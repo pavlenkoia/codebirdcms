@@ -24,7 +24,7 @@
             <?php
                 $sep = false;
                 foreach($field_rows as $row)
-                {                    
+                {
                     if($row['valid_empty'] == 1 || $row['valid_email'] == 1)
                     {
                         $sep2 = false;
@@ -51,7 +51,7 @@
             <?php
                 $sep = false;
                 foreach($field_rows as $row)
-                {                    
+                {
                     if($row['valid_empty'] == 1 || $row['valid_email'] == 1)
                     {
                         $sep2 = false;
@@ -144,6 +144,7 @@
     <?php } ?>
     <div class="form-submit">
         <input value="Отправить" name="submit" type="submit">
+		<input type="hidden" name="submit_<?=$form->id?>" value="submit" />
     </div>
 
     <?php } ?>
