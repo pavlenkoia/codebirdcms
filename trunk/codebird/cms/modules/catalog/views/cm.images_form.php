@@ -4,7 +4,7 @@
     height:400,
     plain: true,
     border: false,
-    title: <?php echo escapeJSON('Фотографии')?>,
+    title: <?php echo $title ? escapeJSON($title) :  escapeJSON('Фотографии')?>,
     items:
     [
         {
@@ -23,6 +23,20 @@
                         itemId: 'add',
                         handler: function(item)
                         {
+                            var grid =item.ownerCt.ownerCt.getComponent('grid');
+                            App.uploadWindow({
+                                targetId: this.id,
+                                id: '<?=$id?>',
+                                url: '/ajax/cm/catalog.cm.uploadimages',
+                                success: function(result)
+                                {
+                                    var paging = grid.getBottomToolbar();
+                                    grid.getStore().load({params:{start:paging.cursor, limit:paging.pageSize}});
+                                    grid.getSelectionModel().clearSelections();
+                                    //alert(result);
+                                    //item.ownerCt.ownerCt.ownerCt.t = result.src;
+                                }
+                            });
                         }
                     },
                     {
@@ -32,6 +46,20 @@
                         itemId: 'edit',
                         handler: function(item)
                         {
+                            var grid =item.ownerCt.ownerCt.getComponent('grid');
+                            var s = grid.getSelectionModel().getSelections();
+                            App.uploadWindow({
+                                targetId: this.id,
+                                id: '<?=$id?>/'+s[0].id.replace(/\//g,'\\'),
+                                url: '/ajax/cm/catalog.cm.uploadimages',
+                                success: function(result)
+                                {
+                                    var paging = grid.getBottomToolbar();
+                                    grid.getStore().load({params:{start:paging.cursor, limit:paging.pageSize}});
+                                    grid.getSelectionModel().clearSelections();
+                                    item.ownerCt.ownerCt.ownerCt.t = result.src;
+                                }
+                            });
                         }
                     },
                     {
@@ -41,6 +69,47 @@
                         itemId: 'delete',
                         handler: function(item)
                         {
+                            
+                             Ext.MessageBox.confirm('Подтверждение', 'Вы действительно хотите удалить выбранные строки?',
+                                function(btn)
+                                {
+                                    if(btn == 'yes')
+                                    {
+                                        var grid =item.ownerCt.ownerCt.getComponent('grid');
+                                        var s = grid.getSelectionModel().getSelections();
+                                        var images = "";
+                                        for(var i = 0; i < s.length; i++)
+                                        {
+                                            images += s[i].id+',';
+                                        }
+                                        Ext.Ajax.request(
+                                            {
+                                                url : '/ajax/cm/catalog.cm.deleteimages',
+                                                method: 'POST',
+                                                params:
+                                                {
+                                                    images: images,
+                                                    id: '<?=$id?>'
+                                                },
+                                                loadingMessage : 'Удаление...',
+                                                success : function (response)
+                                                {
+                                                    var obj = response.responseJSON;
+                                                    if(obj.success)
+                                                    {
+                                                        var paging = grid.getBottomToolbar();
+                                                        grid.getStore().load({params:{start:paging.cursor, limit:paging.pageSize}});
+                                                        grid.getSelectionModel().clearSelections();
+
+                                                    }
+                                                    else
+                                                    {
+                                                        Ext.MessageBox.alert('Ошибка', obj.msg);
+                                                    }
+                                                }
+                                            });
+                                    }
+                                });
                         }
                     }
                 ]
@@ -56,7 +125,7 @@
                         url: '/ajax/cm/catalog.cm.images_records',
                         baseParams:
                         {
-                            id: '<?php echo $images_id ?>'
+                            id: '<?php echo $id ?>'
                         },
                         maskEl : this,
                         reader: new Ext.data.JsonReader
@@ -84,10 +153,9 @@
                         listeners:
                         {
                             selectionchange: function(sm){
-                                var tb = this.getTopToolbar();
+                                var tb = cmp.getTopToolbar();
                                 var dis = (sm.getCount() == 0);
                                 tb.getComponent('edit').setDisabled(dis);
-                                tb.getComponent('edit').setHandler(edit);
                                 tb.getComponent('delete').setDisabled(dis);
                             }
                         }
@@ -119,7 +187,21 @@
                         bbar: paging,
                         listeners:
                         {
-                            //dblclick: edit
+                            dblclick: function(){
+                                var grid = this;
+                                var s = grid.getSelectionModel().getSelections();
+                                App.uploadWindow({
+                                    targetId: this.id,
+                                    id: '<?=$id?>/'+s[0].id.replace(/\//g,'\\'),
+                                    url: '/ajax/cm/catalog.cm.uploadimages',
+                                    success: function(result)
+                                    {
+                                        var paging = grid.getBottomToolbar();
+                                        grid.getStore().load({params:{start:paging.cursor, limit:paging.pageSize}});
+                                        grid.getSelectionModel().clearSelections();
+                                    }
+                                });
+                            }
                         }
                     });
 
@@ -138,7 +220,9 @@
             text: 'Закрыть',
             handler: function()
             {
+            
                 this.ownerCt.ownerCt.close();
+                
             }
         }
     ]

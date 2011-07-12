@@ -1367,9 +1367,355 @@ class CatalogController_Cm extends Controller_Base
 
         $template->page_size = 20;
 
-        $template->images_id = Utils::getVar('id');
+        $template->id = Utils::getVar('id');
+
+        $template->title = Utils::getVar('title');
 
         $template->render();
+    }
+
+    public function images_records()
+    {
+
+        $template = $this->createTemplate();
+
+        $id = Utils::getVar('id');
+
+        $ids = explode("/", $id);
+
+        $section_id = $ids[0];
+        $type_id = $ids[1];
+        $field_id = $ids[2];
+        $id = $ids[3];
+
+        $data = $this->getData();
+
+        $section = $data->getSection($section_id);
+
+        if(!$section)
+        {
+            throw new Exception('Объект уже удален');
+        }
+
+        if($type_id == 'position')
+        {
+            $table_id = $section->position_table;
+            $table_meta = $data->getTableMeta($table_id);
+        }
+        else
+        {
+            $table_id = $section->section_table;
+            $table_meta = $data->getTableMetaSection($table_id);
+        }
+
+        if($table_meta == null)
+        {
+            throw new Exception('Не найдена исходная таблица');
+        }
+
+        $table = new Table($table_meta['table']);
+
+        $object = $table->getEntity($id);
+
+        $fields = $table_meta['fields'];
+        $field = $fields[$field_id];
+
+        $fn = $field['field']; 
+
+        $images = $object->$fn;
+
+        if(!$images)
+        {
+            $xml = simplexml_load_string(
+'<?xml version="1.0" encoding="UTF-8"?>
+<images>
+</images>');
+        }
+        else
+        {
+            $xml = simplexml_load_string($images);
+        }
+
+
+
+        $template->xml = $xml;
+
+        $template->render();
+    }
+
+    public function uploadimages()
+    {
+        $res = array();
+
+        try
+        {
+            if($_FILES['file']['size'] > 1048576)
+            {
+                throw new Exception('Картинка размером больше 1000Кб');
+            }
+
+            $id = Utils::getVar('id');
+
+        $ids = explode("/", $id);
+
+        $section_id = $ids[0];
+        $type_id = $ids[1];
+        $field_id = $ids[2];
+        $id = $ids[3];
+
+        $data = $this->getData();
+
+        $section = $data->getSection($section_id);
+
+        if(!$section)
+        {
+            throw new Exception('Объект уже удален');
+        }
+
+        if($type_id == 'position')
+        {
+            $table_id = $section->position_table;
+            $table_meta = $data->getTableMeta($table_id);
+        }
+        else
+        {
+            $table_id = $section->section_table;
+            $table_meta = $data->getTableMetaSection($table_id);
+        }
+
+        if($table_meta == null)
+        {
+            throw new Exception('Не найдена исходная таблица');
+        }
+
+        $table = new Table($table_meta['table']);
+
+        $object = $table->getEntity($id);
+
+        $fields = $table_meta['fields'];
+        $field = $fields[$field_id];
+
+        $fn = $field['field'];
+
+        $images = $object->$fn;
+
+        if(!$images)
+        {
+            $xml = simplexml_load_string(
+'<?xml version="1.0" encoding="UTF-8"?>
+<images>
+</images>');
+        }
+        else
+        {
+            $xml = simplexml_load_string($images);
+        }
+
+            $ext = '.jpg';
+            switch ($_FILES['file']['type'])
+            {
+                    case 'image/jpeg':
+                            $ext = '.jpg';
+                            break;
+
+                    case 'image/bmp':
+                            $ext = '.bmp';
+                            break;
+
+                    case 'image/png':
+                            $ext = '.png';
+                            break;
+
+                    case 'image/jpg':
+                            $ext = '.jpg';
+                            break;
+
+                    case 'image/gif':
+                            $ext = '.gif';
+                            break;
+
+                    default:
+                            //$ext = '.';
+            }
+
+            if($ext == '.bmp' || $ext == '.')
+            {
+                throw new Exception('Картинка такого формата не поддерживается');
+            }
+
+            $tmp_name = $_FILES['file']['tmp_name'];
+            $name = 'files/catalog/upload/'.md5(uniqid(rand(0, 1000000))).$ext;
+
+            $f = move_uploaded_file($_FILES['file']['tmp_name'], SITE_PATH.$name);
+
+            /*if($object->$fn && is_file(SITE_PATH.$object->$fn))
+            {
+                unlink(SITE_PATH.$object->$fn);
+            }
+            if($object->$fn && is_file(SITE_PATH.get_cache_pic($object->$fn,75,75)))
+            {
+                unlink(SITE_PATH.get_cache_pic($object->$fn,75,75));
+            }*/
+
+            $img = isset ($ids[4]) ? $ids[4] : null;
+            $img  = str_replace('\\', '/', $img);
+            if($img)
+            {
+
+                foreach($xml->image as $image)
+                {
+                    if((string)$image->img == $img)
+                    {
+                        unlink(SITE_PATH.(string)$image->img);
+
+                        if(is_file(SITE_PATH.get_cache_pic(SITE_PATH.(string)$image->img,75,75)))
+                        {
+                            unlink(SITE_PATH.get_cache_pic((string)$image->img,75,75));
+                        }
+
+                        $image->img = $name;
+
+                        break;
+                        
+                    }
+                }
+            }
+            else
+            {
+                $image = $xml->addChild('image');
+                $img = $image->addChild('img',$name);
+            }
+
+            $object->$fn = $xml->asXml();
+
+            $table->save($object);
+
+            $res['success'] = true;
+            $res['msg'] = 'Картинка загружена';
+            //$res['src'] = get_cache_pic($name,75,75);
+            //$res['id'] = $id;
+            /*$s = '';
+            foreach($xml->image as $image)
+            {
+                $s .= '<img src="'.get_cache_pic($image->img,75,75).'"/>';
+            }
+            $res['src'] = $s;*/
+        }
+        catch(Exception $e)
+        {
+            $res['success'] = false;
+            $res['msg'] = $e->getMessage();
+        }
+
+
+        $this->setContent(json_encode($res));
+    }
+
+    public function deleteimages()
+    {
+        $res = array();
+
+        try
+        {
+            $id = Utils::getVar('id');
+
+            $ids = explode("/", $id);
+
+            $section_id = $ids[0];
+            $type_id = $ids[1];
+            $field_id = $ids[2];
+            $id = $ids[3];
+
+            $data = $this->getData();
+
+            $section = $data->getSection($section_id);
+
+            if(!$section)
+            {
+                throw new Exception('Объект уже удален');
+            }
+
+            if($type_id == 'position')
+            {
+                $table_id = $section->position_table;
+                $table_meta = $data->getTableMeta($table_id);
+            }
+            else
+            {
+                $table_id = $section->section_table;
+                $table_meta = $data->getTableMetaSection($table_id);
+            }
+
+            if($table_meta == null)
+            {
+                throw new Exception('Не найдена исходная таблица');
+            }
+
+            $table = new Table($table_meta['table']);
+
+            $object = $table->getEntity($id);
+
+            $fields = $table_meta['fields'];
+            $field = $fields[$field_id];
+
+            $fn = $field['field'];
+
+            $images = $object->$fn;
+
+            if(!$images)
+            {
+                $xml = simplexml_load_string(
+                        '<?xml version="1.0" encoding="UTF-8"?>
+<images>
+</images>');
+            }
+            else
+            {
+                $xml = simplexml_load_string($images);
+            }
+
+            $images = Utils::getVar('images');
+
+            $images = explode(",", $images);
+
+
+            for($i = count($xml->image)-1; $i >= 0; $i--)
+            {
+                $image = $xml->image[$i];
+                if(in_array((string)$image->img, $images))
+                {
+                    $dom = dom_import_simplexml($image);
+                    $dom->parentNode->removeChild($dom);
+
+
+                    unlink(SITE_PATH.(string)$image->img);
+
+                    if(is_file(SITE_PATH.get_cache_pic(SITE_PATH.(string)$image->img,75,75)))
+                    {
+                        unlink(SITE_PATH.get_cache_pic((string)$image->img,75,75));
+                    }
+
+                }
+            }
+
+
+            $object->$fn = $xml->asXml();
+
+            $table->save($object);
+
+            $res['success'] = true;
+            $res['msg'] = 'Картинка загружена';
+            //$res['src'] = get_cache_pic($name,75,75);
+            //$res['id'] = $id;
+        }
+        catch(Exception $e)
+        {
+            $res['success'] = false;
+            $res['msg'] = $e->getMessage();
+        }
+
+
+        $this->setContent(json_encode($res));
     }
 
 }
