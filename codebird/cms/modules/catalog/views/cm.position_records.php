@@ -21,6 +21,26 @@
                 }
                 continue;
             }
+            if($field['type'] == 'images')
+            {
+                if($row[$field['field']])
+                {
+                    $xml = simplexml_load_string($row[$field['field']]);
+
+                    $s = '';
+
+                    foreach($xml->image as $image)
+                    {
+                        $s .= '<img src="'.get_cache_pic($image->img,75,75).'"/>';
+                    }
+                    $res_row[$field['field']] = $s;
+                }
+                else
+                {
+                    $res_row[$field['field']] = '';
+                }
+                continue;
+            }
             elseif($field['type'] == 'date')
             {
                $res_row[$field['field']] = $row[$field['field']] ? date("d.m.Y",$row[$field['field']]) : null;

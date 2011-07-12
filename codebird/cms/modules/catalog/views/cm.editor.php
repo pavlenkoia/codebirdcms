@@ -427,6 +427,55 @@
                                                         })
                                                 }
                                                 <?php break;
+                                                case 'images' : ?>
+                                                ,{
+                                                    xtype: 'panel',
+                                                    fieldLabel: '<?php echo $field['title']?>',
+                                                    items:
+                                                    [
+                                                        {
+                                                            xtype: 'box',
+                                                            listeners:
+                                                            {   render: function()
+                                                                {
+                                                                    var st = option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') : '';
+                                                                    var t = new Ext.Template(st);
+                                                                    t.compile();
+                                                                    t.append(this.id);
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            xtype: 'button',
+                                                            text: 'Загрузить',
+                                                            handler: function(btn)
+                                                            {
+                                                                var images = option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') : '';
+                                                                Ext.Ajax.request({
+                                                                    url : '/ajax/cm/catalog.cm.images_form',
+                                                                    method: 'POST',
+                                                                    params:
+                                                                    {
+                                                                        title : '<?php echo $field['title']?>',
+                                                                        id: '<?php echo $section->id?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue(),
+                                                                        images: images
+                                                                    },
+                                                                    success : function (response) {
+                                                                        var win = new Ext.Window(response.responseJSON);
+                                                                        win.addListener('close',function(cmp){
+                                                                            if(cmp.t)
+                                                                            {
+                                                                                alert(cmp.t);
+                                                                            }
+                                                                        });
+                                                                        win.show();
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                                <?php break;
                                                 case "image" :?>
                                                     ,{
                                                         xtype: 'panel',
@@ -909,6 +958,7 @@
                                                 format:"d.m.Y"
                                             }
                                             <?php break;
+                                        
                                         case "image" :?>
                                             ,{
                                                 xtype: 'panel',
