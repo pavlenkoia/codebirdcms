@@ -1594,12 +1594,12 @@ class CatalogController_Cm extends Controller_Base
             $res['msg'] = 'Картинка загружена';
             //$res['src'] = get_cache_pic($name,75,75);
             //$res['id'] = $id;
-            /*$s = '';
+            $s = '';
             foreach($xml->image as $image)
             {
                 $s .= '<img src="'.get_cache_pic($image->img,75,75).'"/>';
             }
-            $res['src'] = $s;*/
+            //$res['msg'] = $s;
         }
         catch(Exception $e)
         {
@@ -1704,9 +1704,91 @@ class CatalogController_Cm extends Controller_Base
             $table->save($object);
 
             $res['success'] = true;
-            $res['msg'] = 'Картинка загружена';
+            $res['msg'] = 'Картинка удалена';
             //$res['src'] = get_cache_pic($name,75,75);
             //$res['id'] = $id;
+        }
+        catch(Exception $e)
+        {
+            $res['success'] = false;
+            $res['msg'] = $e->getMessage();
+        }
+
+
+        $this->setContent(json_encode($res));
+    }
+
+    public function getimages()
+    {
+        $res = array();
+
+        try
+        {
+            $id = Utils::getVar('id');
+
+            $ids = explode("/", $id);
+
+            $section_id = $ids[0];
+            $type_id = $ids[1];
+            $field_id = $ids[2];
+            $id = $ids[3];
+
+            $data = $this->getData();
+
+            $section = $data->getSection($section_id);
+
+            if(!$section)
+            {
+                throw new Exception('Объект уже удален');
+            }
+
+            if($type_id == 'position')
+            {
+                $table_id = $section->position_table;
+                $table_meta = $data->getTableMeta($table_id);
+            }
+            else
+            {
+                $table_id = $section->section_table;
+                $table_meta = $data->getTableMetaSection($table_id);
+            }
+
+            if($table_meta == null)
+            {
+                throw new Exception('Не найдена исходная таблица');
+            }
+
+            $table = new Table($table_meta['table']);
+
+            $object = $table->getEntity($id);
+
+            $fields = $table_meta['fields'];
+            $field = $fields[$field_id];
+
+            $fn = $field['field'];
+
+            $images = $object->$fn;
+
+            if(!$images)
+            {
+                $xml = simplexml_load_string(
+                        '<?xml version="1.0" encoding="UTF-8"?>
+<images>
+</images>');
+            }
+            else
+            {
+                $xml = simplexml_load_string($images);
+            }
+
+
+            $res['success'] = true;
+            $s = '';
+            foreach($xml->image as $image)
+            {
+                $s .= '<img src="'.get_cache_pic($image->img,75,75).'"/>';
+            }
+            $res['msg'] = $s;
         }
         catch(Exception $e)
         {
