@@ -33,8 +33,7 @@
                                     var paging = grid.getBottomToolbar();
                                     grid.getStore().load({params:{start:paging.cursor, limit:paging.pageSize}});
                                     grid.getSelectionModel().clearSelections();
-                                    //alert(result);
-                                    //item.ownerCt.ownerCt.ownerCt.t = result.src;
+
                                 }
                             });
                         }
@@ -57,7 +56,6 @@
                                     var paging = grid.getBottomToolbar();
                                     grid.getStore().load({params:{start:paging.cursor, limit:paging.pageSize}});
                                     grid.getSelectionModel().clearSelections();
-                                    item.ownerCt.ownerCt.ownerCt.t = result.src;
                                 }
                             });
                         }

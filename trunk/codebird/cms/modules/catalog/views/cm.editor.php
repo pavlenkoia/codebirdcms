@@ -435,6 +435,7 @@
                                                     [
                                                         {
                                                             xtype: 'box',
+                                                            id: 'xxxzzz',
                                                             listeners:
                                                             {   render: function()
                                                                 {
@@ -463,10 +464,33 @@
                                                                     success : function (response) {
                                                                         var win = new Ext.Window(response.responseJSON);
                                                                         win.addListener('close',function(cmp){
-                                                                            if(cmp.t)
-                                                                            {
-                                                                                alert(cmp.t);
-                                                                            }
+                                                                            Ext.Ajax.request(
+                                                                                {
+                                                                                    url : '/ajax/cm/catalog.cm.getimages',
+                                                                                    method: 'POST',
+                                                                                    params:
+                                                                                    {
+                                                                                        id: '<?php echo $section->id?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue()
+                                                                                    },
+                                                                                    success : function (response)
+                                                                                    { 
+                                                                                        var obj = response.responseJSON;
+                                                                                        if(obj.success)
+                                                                                        {
+                                                                                            var id_f = form.getForm().findField('id');
+                                                                                            id_f.setValue(obj.msg);
+                                                                                            var st = obj.msg;
+                                                                                            var t = new Ext.Template(st);
+                                                                                            t.compile();
+                                                                                            t.overwrite(btn.ownerCt.getComponent(0).id);
+
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            Ext.MessageBox.alert('Ошибка', obj.msg);
+                                                                                        }
+                                                                                    }
+                                                                                });
                                                                         });
                                                                         win.show();
                                                                     }
