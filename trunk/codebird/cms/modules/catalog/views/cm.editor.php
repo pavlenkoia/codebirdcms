@@ -435,7 +435,6 @@
                                                     [
                                                         {
                                                             xtype: 'box',
-                                                            id: 'xxxzzz',
                                                             listeners:
                                                             {   render: function()
                                                                 {
@@ -478,7 +477,6 @@
                                                                                         if(obj.success)
                                                                                         {
                                                                                             var id_f = form.getForm().findField('id');
-                                                                                            id_f.setValue(obj.msg);
                                                                                             var st = obj.msg;
                                                                                             var t = new Ext.Template(st);
                                                                                             t.compile();
