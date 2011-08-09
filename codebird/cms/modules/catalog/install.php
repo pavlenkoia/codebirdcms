@@ -55,6 +55,10 @@ CREATE TABLE IF NOT EXISTS `section_page` (
   `id` int(11) NOT NULL,
   `content` text collate utf8_unicode_ci,
   `visible` smallint(6) default '1',
+  `head_title` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `meta_keywords` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8_unicode_ci,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -303,6 +307,21 @@ INSERT INTO `forms_field_type` (`id`, `name`, `position`) VALUES
                     <value name="field">visible</value>
                     <value name="title">Доступна</value>
                     <value name="type">check</value>
+                </item>
+                <item name="head_title" type="array">
+                    <value name="field">head_title</value>
+                    <value name="title">title</value>
+                    <value name="type">text</value>
+                </item>
+                <item name="meta_description" type="array">
+                    <value name="field">meta_description</value>
+                    <value name="title">description</value>
+                    <value name="type">text</value>
+                </item>
+                <item name="meta_keywords" type="array">
+                    <value name="field">meta_keywords</value>
+                    <value name="title">keywords</value>
+                    <value name="type">text</value>
                 </item>
             </items>
         </param>
