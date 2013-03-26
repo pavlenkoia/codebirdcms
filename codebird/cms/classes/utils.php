@@ -141,7 +141,7 @@ class Utils
 
         $output = preg_replace("/\s+/", "_", $output);
 
-        $output = ereg_replace("[^A-Za-z0-9_\-]", "", $output);
+        $output = preg_replace("[^A-Za-z0-9_\-]", "", $output);
 
         return $output;
 
