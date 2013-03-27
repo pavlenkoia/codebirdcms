@@ -125,7 +125,7 @@ class CatalogController_Forms extends Controller_Base
                         {
                             if(!$value || trim($value) == '')
                             {
-                                $error_message .= ' Не заполнено: '.$row['name'].'.';
+                                $error_message .= 'Не заполнено: '.$row['name']."\n";
                                 $check = false;
                             }
                         }
