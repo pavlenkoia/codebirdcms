@@ -140,7 +140,9 @@ function err2exc($errno, $errstr, $errfile, $errline) {
     // TODO: отключить или нет E_NOTICE
     if($errno == E_NOTICE || $errno == E_WARNING)
     {
-
+        $app_errors = App::GetProperty('APP_ERRORS');
+        $app_errors .= $errno.' '.$errstr.' '.$errfile.' '.$errline.'<br>';
+        App::SetProperty('APP_ERRORS',$app_errors);
     }
     else
     {
