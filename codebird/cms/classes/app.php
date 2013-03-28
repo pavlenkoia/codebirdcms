@@ -119,6 +119,11 @@ class App
         echo $content;
     }
 
+    /**
+     * Выполняется перенаправление браузера на указанную страницу
+     *
+     * @param $url URL на который будет перенаправлен браузер. Необходимо использовать абсолютные адреса и адреса ведущих на другие сайты и начинающихся со следующих протоколов: "http://", "https://", "ftp://"
+     */
     public static function Redirect($url)
     {
         if(preg_match("'^(http://|https://|ftp://)'i", $url))
@@ -129,6 +134,9 @@ class App
         }
         else
         {
+            if(strpos($url, "/") !== 0)
+                $url = '/'.$url;
+
             $host = $_SERVER['HTTP_HOST'];
             if($_SERVER['SERVER_PORT'] <> 80 && $_SERVER['SERVER_PORT'] <> 443 && $_SERVER['SERVER_PORT'] > 0 && strpos($_SERVER['HTTP_HOST'], ":") === false)
                 $host .= ":".$_SERVER['SERVER_PORT'];
