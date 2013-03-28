@@ -13,6 +13,8 @@ if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']
 }
 else
 {
+    App::StartBuffer();
+
     if(Utils::getPost("mod_action"))
     {
         $mod_actions = explode(";", Utils::getPost("mod_action"));
@@ -63,5 +65,7 @@ else
     {
         include "html/templates/$template";
     }
+
+    App::OutBuffer();
 }
 ?>
