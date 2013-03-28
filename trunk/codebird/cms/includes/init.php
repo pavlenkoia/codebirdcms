@@ -136,7 +136,16 @@ class phpException extends exception {
 }
 
 function err2exc($errno, $errstr, $errfile, $errline) {
-    throw new phpException($errno, $errstr, $errfile, $errline);
+
+    // TODO: отключить или нет E_NOTICE
+    if($errno == E_NOTICE || $errno == E_WARNING)
+    {
+
+    }
+    else
+    {
+        throw new phpException($errno, $errstr, $errfile, $errline);
+    }
 }
 
 function offset()
