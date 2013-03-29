@@ -113,9 +113,11 @@ Class Template {
         {
             $$key = $value;
         }
+        $this->registry->NOT_SHOW_PROPERTY = true;
         ob_start();
         include ($file);
         $this->registry->mod_content = ob_get_clean();
+        $this->registry->NOT_SHOW_PROPERTY = false;
     }
      
     /**
@@ -139,9 +141,11 @@ Class Template {
         {
             $$key = $value;
         }
+        $this->registry->NOT_SHOW_PROPERTY = true;
         ob_start();
         include ($file);
         $this->registry->mod_content = ob_get_clean();
+        $this->registry->NOT_SHOW_PROPERTY = false;
         
         return true;
     }
