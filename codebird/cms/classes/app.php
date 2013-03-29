@@ -17,7 +17,12 @@ class App
      */
     public static function StartBuffer()
     {
-        $registry = Registry::__instance();
+        $registry = self::GetRegistry();
+
+        if($registry->NOT_SHOW_PROPERTY)
+        {
+            return;
+        }
 
         $registry->AppBuffer = array();
 
@@ -34,7 +39,12 @@ class App
      */
     public static function ShowProperty($name)
     {
-        $registry = Registry::__instance();
+        $registry = self::GetRegistry();
+
+        if($registry->NOT_SHOW_PROPERTY)
+        {
+            return;
+        }
 
         $appBuffer = $registry->AppBuffer;
 
@@ -55,7 +65,7 @@ class App
      */
     public static function SetProperty($name, $value)
     {
-        $registry = Registry::__instance();
+        $registry = self::GetRegistry();
 
         $appProperty = $registry->AppProperty;
 
@@ -71,7 +81,7 @@ class App
      */
     public static function GetProperty($name)
     {
-        $registry = Registry::__instance();
+        $registry = self::GetRegistry();
 
         $appProperty = $registry->AppProperty;
 
@@ -88,7 +98,12 @@ class App
      */
     public static function OutBuffer()
     {
-        $registry = Registry::__instance();
+        $registry = self::GetRegistry();
+
+        if($registry->NOT_SHOW_PROPERTY)
+        {
+            return;
+        }
 
         $appProperty = $registry->AppProperty;
 
@@ -117,6 +132,23 @@ class App
         $registry->remove('AppBuffer');
 
         echo $content;
+    }
+
+    /**
+     * Сброс буфера
+     */
+    public static function ResetBuffer()
+    {
+        $registry = Rself::GetRegistry();
+
+        if($registry->NOT_SHOW_PROPERTY)
+        {
+            return;
+        }
+
+        ob_clean();
+
+        $registry->AppBuffer = array();
     }
 
     /**
