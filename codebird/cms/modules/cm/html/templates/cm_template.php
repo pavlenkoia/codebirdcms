@@ -22,6 +22,8 @@
 
         <link rel="stylesheet" type="text/css" href="jscripts/ext/resources/css/ext-all.css" />
 
+        <link rel="stylesheet" type="text/css" href="jscripts/ext/resources/css/xtheme-gray.css" />
+
         <link rel="stylesheet" type="text/css" href="jscripts/ext/ux/css/CenterLayout.css" />
 
         <link rel="stylesheet" type="text/css" href="cms/modules/cm/html/css/application.css" />
