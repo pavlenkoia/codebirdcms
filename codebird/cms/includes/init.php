@@ -9,10 +9,28 @@ function __autoload($class_name)
 
     $file = SITE_PATH . DS . 'cms' . DS . 'classes' . DS . $filename;
 
-    if (file_exists($file) == false)
+    if (!file_exists($file))
     {
 
-        return false;
+        // загрузка классов модулей
+
+        $module = explode('_', strtolower($class_name));
+
+        if(isset($module[0]))
+        {
+            $module = $module[0];
+
+            $file = SITE_PATH . DS . 'cms' . DS . 'modules' . DS . $module . DS . 'classes' . DS . $filename;
+
+            if (!file_exists($file))
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
 
     }
 

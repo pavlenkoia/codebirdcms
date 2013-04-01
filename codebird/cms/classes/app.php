@@ -187,4 +187,23 @@ class App
 
         exit;
     }
+
+    public static function Set_Cookie($name, $value)
+    {
+        return setcookie($name, $value, time()+60*60*24*30*12, '/');
+    }
+
+    public static function Get_Cookie($name)
+    {
+        if(isset($_COOKIE[$name])){
+            return $_COOKIE[$name];
+        }
+
+        return null;
+    }
+
+    public  static function DeleteCookie($name)
+    {
+        setcookie ($name, '', time()-3600);
+    }
 }
