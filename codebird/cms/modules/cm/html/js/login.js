@@ -101,6 +101,14 @@ var App  = function()
                                                 }
                                             }
                                         }
+                                    },
+                                    {
+                                        xtype: 'checkbox',
+                                        boxLabel: 'запомнить меня',
+                                        inputValue: 1,
+                                        name: 'store',
+                                        itemId: 'store',
+                                        checked: true
                                     }
                                 ]
                                 

@@ -8,13 +8,12 @@ class Security_User extends Module_Class
 
         $data = $instance->getData();
 
-        if(!App::Get_Cookie('sess'))
+        if(!App::GetCookie('ss'))
         {
-            echo 'none';
-            echo App::Set_Cookie('sess','123')?' да':' нет';
+            App::SetCookie('ss',sha1('root'.'397567'.time()));
         }
 
-        return App::Get_Cookie('sess');
+        return App::GetCookie('ss');
 
         //return sha1('root'.'397567'.time());
 

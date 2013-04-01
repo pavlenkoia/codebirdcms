@@ -21,7 +21,7 @@ class App
 
         $level = ob_get_level();
 
-        if($level > 0)
+        if($level > 1)
         {
             return;
         }
@@ -144,14 +144,14 @@ class App
      */
     public static function ResetBuffer()
     {
-        $registry = Rself::GetRegistry();
+        $registry = self::GetRegistry();
 
-        if($registry->NOT_SHOW_PROPERTY)
+        $level = ob_get_level();
+
+        for($i = 0; $i < $level; $i++)
         {
-            return;
+            ob_clean();
         }
-
-        ob_clean();
 
         $registry->AppBuffer = array();
     }
@@ -188,12 +188,12 @@ class App
         exit;
     }
 
-    public static function Set_Cookie($name, $value)
+    public static function SetCookie($name, $value)
     {
-        return setcookie($name, $value, time()+60*60*24*30*12, '/');
+        return setcookie($name, $value, time()+60*60*24*30*12*2, '/');
     }
 
-    public static function Get_Cookie($name)
+    public static function GetCookie($name)
     {
         if(isset($_COOKIE[$name])){
             return $_COOKIE[$name];
@@ -202,8 +202,8 @@ class App
         return null;
     }
 
-    public  static function DeleteCookie($name)
+    public  static function DelCookie($name)
     {
-        setcookie ($name, '', time()-3600);
+        setcookie ($name, '', time()-3600, '/');
     }
 }

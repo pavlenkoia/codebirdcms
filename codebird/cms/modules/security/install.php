@@ -51,6 +51,14 @@ CREATE TABLE IF NOT EXISTS `security_user_role` (
   `role_id` int(11) NOT NULL,
   PRIMARY KEY  (`user_id`,`role_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `security_user_session` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `session` varchar(250) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `session` (`session`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 "
     ;
 
