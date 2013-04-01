@@ -19,7 +19,9 @@ class App
     {
         $registry = self::GetRegistry();
 
-        if($registry->NOT_SHOW_PROPERTY)
+        $level = ob_get_level();
+
+        if($level > 0)
         {
             return;
         }
@@ -41,20 +43,23 @@ class App
     {
         $registry = self::GetRegistry();
 
-        if($registry->NOT_SHOW_PROPERTY)
-        {
-            return;
-        }
-
         $appBuffer = $registry->AppBuffer;
 
-        $appBuffer[] = ob_get_clean();
+        $level = ob_get_level();
+
+        for($i = 0; $i < $level; $i++)
+        {
+            $appBuffer[] = ob_get_clean();
+        }
 
         $appBuffer[] = array('name'=>$name);
 
         $registry->AppBuffer = $appBuffer;
 
-        ob_start();
+        for($i = 0; $i < $level; $i++)
+        {
+            ob_start();
+        }
     }
 
     /**
@@ -100,16 +105,16 @@ class App
     {
         $registry = self::GetRegistry();
 
-        if($registry->NOT_SHOW_PROPERTY)
-        {
-            return;
-        }
-
         $appProperty = $registry->AppProperty;
 
         $appBuffer = $registry->AppBuffer;
 
-        $appBuffer[] = ob_get_clean();
+        $level = ob_get_level();
+
+        for($i = 0; $i < $level; $i++)
+        {
+            $appBuffer[] = ob_get_clean();
+        }
 
         $content = '';
 
