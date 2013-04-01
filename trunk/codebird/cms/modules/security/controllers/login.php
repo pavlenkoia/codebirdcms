@@ -17,7 +17,7 @@
     {
         $data = $this->getData();
 
-        $res = $data->login($this->args->name, $this->args->password);
+        $res = $data->login($this->args->name, $this->args->password, $this->args->store);
 
         $this->setContent($res);
     }

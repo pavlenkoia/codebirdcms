@@ -47,10 +47,53 @@ class SecurityModel_Security extends Model_Base
         {
             return true;
         }
+        elseif($ss = App::GetCookie('ss'))
+        {
+            $users = $this->getTableUser()->select(
+                'select u.id, u.name from security_user u ,security_user_session s
+                where s.session=:session and u.id=s.user_id and u.disabled <>1 limit 1',
+                array('session'=>$ss));
+
+            if(count($users))
+            {
+                $user = $users[0];
+
+                $rows = $this->getTableUser()->select(
+                    'select t2.name from security_user_role t1, security_role t2
+                    where t1.role_id=t2.id and user_id=:id',array('id'=>$user['id']));
+
+                foreach($rows as $row)
+                {
+                    $user['roles'][] = $row['name'];
+                }
+
+                $_SESSION['user'] = $user;
+
+                return true;
+            }
+        }
+
         return false;
     }
 
-    public function login($name, $password)
+    private function storeUser($name, $password, $user_id)
+    {
+        $session = sha1($name.$password.time());
+
+        $table = new Table('security_user_session');
+
+        $object = $table->GetEntity();
+
+        $object->user_id = $user_id;
+
+        $object->session = $session;
+
+        $table->save($object);
+
+        App::SetCookie('ss',$session);
+    }
+
+    public function login($name, $password, $store=true)
     {
         $users = Config::__("security")->users;
 
@@ -82,6 +125,17 @@ class SecurityModel_Security extends Model_Base
 
             $_SESSION['user'] = $user;
 
+            if($store)
+            {
+                $this->storeUser($name, $password, $user['id']);
+            }
+            elseif($ss = App::GetCookie('ss'))
+            {
+                $table = new Table('security_user_session');
+                $table->execute('delete from security_user_session where session=:ss',array('ss'=>$ss));
+                App::DelCookie('ss');
+            }
+
             return true; 
         }
 
@@ -91,11 +145,18 @@ class SecurityModel_Security extends Model_Base
     public function logout()
     {
         unset($_SESSION['user']);
+
+        if($ss = App::GetCookie('ss'))
+        {
+            $table = new Table('security_user_session');
+            $table->execute('delete from security_user_session where session=:ss',array('ss'=>$ss));
+            App::DelCookie('ss');
+        }
     }
 
     public function getUser()
     {
-        if(isset($_SESSION['user']))
+        if($this->isLogin && isset($_SESSION['user']))
         {
             return $_SESSION['user'];
         }
@@ -104,7 +165,7 @@ class SecurityModel_Security extends Model_Base
 
     public function inRole($name)
     {
-        if(isset($_SESSION['user']))
+        if($this->isLogin && isset($_SESSION['user']))
         {
             $user = $_SESSION['user'];
             if(isset($user['roles']) && in_array($name,$user['roles']))

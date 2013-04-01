@@ -67,6 +67,7 @@ else
         include "html/templates/$template";
     }
 
+
     App::OutBuffer();
 }
 ?>
