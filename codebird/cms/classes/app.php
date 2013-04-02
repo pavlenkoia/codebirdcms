@@ -4,6 +4,9 @@
 */
 class App
 {
+    private static $AppBuffer = array();
+    private static $AppProperty = array();
+
     /**
      * Возвращает регистр
      */
@@ -17,8 +20,6 @@ class App
      */
     public static function StartBuffer()
     {
-        $registry = self::GetRegistry();
-
         $level = ob_get_level();
 
         if($level > 1)
@@ -26,9 +27,9 @@ class App
             return;
         }
 
-        $registry->AppBuffer = array();
+        self::$AppBuffer = array();
 
-        $registry->AppProperty = array();
+        self::$AppProperty = array();
 
         ob_start();
 
@@ -41,20 +42,14 @@ class App
      */
     public static function ShowProperty($name)
     {
-        $registry = self::GetRegistry();
-
-        $appBuffer = $registry->AppBuffer;
-
         $level = ob_get_level();
 
         for($i = 0; $i < $level; $i++)
         {
-            $appBuffer[] = ob_get_clean();
+            self::$AppBuffer[] = ob_get_clean();
         }
 
-        $appBuffer[] = array('name'=>$name);
-
-        $registry->AppBuffer = $appBuffer;
+        self::$AppBuffer[] = array('name'=>$name);
 
         for($i = 0; $i < $level; $i++)
         {
@@ -70,13 +65,7 @@ class App
      */
     public static function SetProperty($name, $value)
     {
-        $registry = self::GetRegistry();
-
-        $appProperty = $registry->AppProperty;
-
-        $appProperty[$name] = $value;
-
-        $registry->AppProperty = $appProperty;
+        self::$AppProperty[$name] = $value;
     }
 
     /**
@@ -86,13 +75,9 @@ class App
      */
     public static function GetProperty($name)
     {
-        $registry = self::GetRegistry();
-
-        $appProperty = $registry->AppProperty;
-
-        if(isset($appProperty[$name]))
+        if(isset(self::$AppProperty[$name]))
         {
-            return $appProperty[$name];
+            return self::$AppProperty[$name];
         }
 
         return null;
@@ -103,29 +88,23 @@ class App
      */
     public static function OutBuffer()
     {
-        $registry = self::GetRegistry();
-
-        $appProperty = $registry->AppProperty;
-
-        $appBuffer = $registry->AppBuffer;
-
         $level = ob_get_level();
 
         for($i = 0; $i < $level; $i++)
         {
-            $appBuffer[] = ob_get_clean();
+            self::$AppBuffer[] = ob_get_clean();
         }
 
         $content = '';
 
-        foreach($appBuffer as $buffer)
+        foreach(self::$AppBuffer as $buffer)
         {
             if(is_array($buffer))
             {
                 $name = $buffer['name'];
-                if(isset($appProperty[$name]))
+                if(isset(self::$AppProperty[$name]))
                 {
-                    $content .= $appProperty[$name];
+                    $content .= self::$AppProperty[$name];
                 }
             }
             else
@@ -133,8 +112,7 @@ class App
                 $content .= $buffer;
             }
         }
-
-        $registry->remove('AppBuffer');
+        self::$AppBuffer = array();
 
         echo $content;
     }
@@ -144,8 +122,6 @@ class App
      */
     public static function ResetBuffer()
     {
-        $registry = self::GetRegistry();
-
         $level = ob_get_level();
 
         for($i = 0; $i < $level; $i++)
@@ -153,7 +129,7 @@ class App
             ob_clean();
         }
 
-        $registry->AppBuffer = array();
+        self::$AppBuffer = array();
     }
 
     /**
