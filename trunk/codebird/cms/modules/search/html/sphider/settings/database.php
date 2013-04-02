@@ -1,9 +1,12 @@
+<?
+include(dirname(__FILE__).'/../../../../../../config.php')
+?>
 <?php
-	$database="tian20132_ubplas";
-	$mysql_user = "tian20132_ubplas";
-	$mysql_password = "123321"; 
-	$mysql_host = "localhost";
-	$mysql_table_prefix = "sphider";
+	$database = $db_name;
+	$mysql_user = $db_user;
+	$mysql_password = $db_user_pass;
+	$mysql_host = $db_host;
+	$mysql_table_prefix = "sphider_";
 
 
 
