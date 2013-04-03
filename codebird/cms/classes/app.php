@@ -182,4 +182,12 @@ class App
     {
         setcookie ($name, '', time()-3600, '/');
     }
+
+    /**
+     * Возвращает значение алиаса страницы
+     */
+    public static function GetAlias()
+    {
+        return Utils::getVar('alias');
+    }
 }

@@ -12,6 +12,7 @@ class SearchConfig extends Config_Base
 
     public $site = '';
 
+    public $results_count = 10;
 
     public $template = "search.tpl.php";
 }
