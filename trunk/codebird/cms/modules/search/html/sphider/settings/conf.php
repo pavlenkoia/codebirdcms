@@ -15,7 +15,7 @@ $version_nr			= '1.3.5';
 $language			= 'en';
 
 // Template name/directory in templates dir
-$template	= 'result';
+$template	= 'standard';
 
 //Administrators email address (logs can be sent there)	
 $admin_email		= 'admin@localhost';
@@ -49,7 +49,7 @@ Spider settings
 ***********************/
 
 // Min words per page required for indexing 
-$min_words_per_page = 10;
+$min_words_per_page = 1;
 
 // Words shorter than this will not be indexed
 $min_word_length	= 3;
@@ -98,7 +98,7 @@ $user_agent			 = 'Sphider';
 $min_delay			= 0;
 
 // Use word stemming (e.g. find sites containing runs and running when searching for run) 
-$stem_words			= 0;
+$stem_words			= 1;
 
 // Strip session ids (PHPSESSID, JSESSIONID, ASPSESSIONID, sid) 
 $strip_sessids			= 1;
