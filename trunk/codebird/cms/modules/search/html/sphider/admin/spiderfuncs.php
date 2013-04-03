@@ -616,7 +616,7 @@ function clean_file($file, $url, $type) {
 		$file = preg_replace("/".$char[0]."/i", $char[1], $file);
 	}
 	$file = preg_replace("/&[a-z]{1,6};/", " ", $file);
-	$file = preg_replace("/[\*\^\+\?\\\.\[\]\^\$\|\{\)\(\}~!\"\/@#£$%&=`´;><:,]+/", " ", $file);
+	$file = preg_replace("/[\*\^\+\?\\\.\[\]\^\$\|\{\)\(\}~!\"\/@#Ðˆ$%&=`Ò‘;><:,]+/", " ", $file);
 	$file = preg_replace("/\s+/", " ", $file);
 	$data['fulltext'] = addslashes($fulltext);
 	$data['content'] = addslashes($file);
