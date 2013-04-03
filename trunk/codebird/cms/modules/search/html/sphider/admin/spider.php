@@ -252,7 +252,7 @@
 				if ($data['noindex'] == 1) {
 					$OKtoIndex = 0;
 					$deletable = 1;
-					printStandardReport('metaNoindex',$command_line);
+					printStandardReport('metaNoindex', $command_line);
 				}
 	
 
