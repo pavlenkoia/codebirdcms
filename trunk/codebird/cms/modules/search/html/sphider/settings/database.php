@@ -18,5 +18,10 @@ include(dirname(__FILE__).'/../../../../../../config.php')
 		print "<b>Cannot choose database, check if database name is correct.";
 		die();
 	}
+
+//mysql_query("SET NAMES 'utf8' COLLATE 'utf8_general_ci';");
+//mysql_query ("set character_set_client='utf8'");
+//mysql_query ("set character_set_results='utf8'");
+//mysql_query ("set collation_connection='utf8_general_ci'");
 ?>
 

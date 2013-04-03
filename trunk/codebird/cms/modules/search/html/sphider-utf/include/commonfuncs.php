@@ -14,15 +14,16 @@
 	/**
 	* Returns the result of a query as an array
 	* 
-	* @param string $query SQL pï¿½ring stringina
+	* @param string $query SQL päring stringina
 	* @return array|null massiiv
 	 */
 	function sql_fetch_all($query) {
-		$result = mysql_query($query);
+		global $mysqli_conn;
+		$result = $mysqli_conn->query($query);
 		if($mysql_err = mysql_errno()) {
 			print $query.'<br>'.mysql_error();
 		} else {
-			while($row=mysql_fetch_array($result)) {
+			while($row=$result->fetch_array()) {
 				$data[]=$row;
 			}	
 		}		
@@ -56,10 +57,10 @@
 		global $mysql_table_prefix;
 		$query = "SELECT * FROM ".$mysql_table_prefix."categories WHERE parent_num=$parent";
 		echo mysql_error();
-		$result = mysql_query($query);
+		$result = $mysqli_conn->query($query);
 		$arr[] = $parent;
 		if (mysql_num_rows($result) <> '') {
-			while ($row = mysql_fetch_array($result)) {
+			while ($row = $result->fetch_array()) {
 				$id = $row[category_id];
 				$arr = add_arrays($arr, get_cats($id));
 			}
@@ -79,72 +80,72 @@
 		(
 		"&amp" => "&",
 		"&apos" => "'",
-		"&THORN;"  => "ï¿½",
-		"&szlig;"  => "ï¿½",
-		"&agrave;" => "ï¿½",
-		"&aacute;" => "ï¿½",
-		"&acirc;"  => "ï¿½",
-		"&atilde;" => "ï¿½",
-		"&auml;"   => "ï¿½",
-		"&aring;"  => "ï¿½",
-		"&aelig;"  => "ï¿½",
-		"&ccedil;" => "ï¿½",
-		"&egrave;" => "ï¿½",
-		"&eacute;" => "ï¿½",
-		"&ecirc;"  => "ï¿½",
-		"&euml;"   => "ï¿½",
-		"&igrave;" => "ï¿½",
-		"&iacute;" => "ï¿½",
-		"&icirc;"  => "ï¿½",
-		"&iuml;"   => "ï¿½",
-		"&eth;"    => "ï¿½",
-		"&ntilde;" => "ï¿½",
-		"&ograve;" => "ï¿½",
-		"&oacute;" => "ï¿½",
-		"&ocirc;"  => "ï¿½",
-		"&otilde;" => "ï¿½",
-		"&ouml;"   => "ï¿½",
-		"&oslash;" => "ï¿½",
-		"&ugrave;" => "ï¿½",
-		"&uacute;" => "ï¿½",
-		"&ucirc;"  => "ï¿½",
-		"&uuml;"   => "ï¿½",
-		"&yacute;" => "ï¿½",
-		"&thorn;"  => "ï¿½",
-		"&yuml;"   => "ï¿½",
-		"&THORN;"  => "ï¿½",
-		"&szlig;"  => "ï¿½",
-		"&Agrave;" => "ï¿½",
-		"&Aacute;" => "ï¿½",
-		"&Acirc;"  => "ï¿½",
-		"&Atilde;" => "ï¿½",
-		"&Auml;"   => "ï¿½",
-		"&Aring;"  => "ï¿½",
-		"&Aelig;"  => "ï¿½",
-		"&Ccedil;" => "ï¿½",
-		"&Egrave;" => "ï¿½",
-		"&Eacute;" => "ï¿½",
-		"&Ecirc;"  => "ï¿½",
-		"&Euml;"   => "ï¿½",
-		"&Igrave;" => "ï¿½",
-		"&Iacute;" => "ï¿½",
-		"&Icirc;"  => "ï¿½",
-		"&Iuml;"   => "ï¿½",
-		"&ETH;"    => "ï¿½",
-		"&Ntilde;" => "ï¿½",
-		"&Ograve;" => "ï¿½",
-		"&Oacute;" => "ï¿½",
-		"&Ocirc;"  => "ï¿½",
-		"&Otilde;" => "ï¿½",
-		"&Ouml;"   => "ï¿½",
-		"&Oslash;" => "ï¿½",
-		"&Ugrave;" => "ï¿½",
-		"&Uacute;" => "ï¿½",
-		"&Ucirc;"  => "ï¿½",
-		"&Uuml;"   => "ï¿½",
-		"&Yacute;" => "ï¿½",
-		"&Yhorn;"  => "ï¿½",
-		"&Yuml;"   => "ï¿½"
+		"&THORN;"  => "Ş",
+		"&szlig;"  => "ß",
+		"&agrave;" => "à",
+		"&aacute;" => "á",
+		"&acirc;"  => "â",
+		"&atilde;" => "ã",
+		"&auml;"   => "ä",
+		"&aring;"  => "å",
+		"&aelig;"  => "æ",
+		"&ccedil;" => "ç",
+		"&egrave;" => "è",
+		"&eacute;" => "é",
+		"&ecirc;"  => "ê",
+		"&euml;"   => "ë",
+		"&igrave;" => "ì",
+		"&iacute;" => "í",
+		"&icirc;"  => "î",
+		"&iuml;"   => "ï",
+		"&eth;"    => "ğ",
+		"&ntilde;" => "ñ",
+		"&ograve;" => "ò",
+		"&oacute;" => "ó",
+		"&ocirc;"  => "ô",
+		"&otilde;" => "õ",
+		"&ouml;"   => "ö",
+		"&oslash;" => "ø",
+		"&ugrave;" => "ù",
+		"&uacute;" => "ú",
+		"&ucirc;"  => "û",
+		"&uuml;"   => "ü",
+		"&yacute;" => "ı",
+		"&thorn;"  => "ş",
+		"&yuml;"   => "ÿ",
+		"&THORN;"  => "Ş",
+		"&szlig;"  => "ß",
+		"&Agrave;" => "à",
+		"&Aacute;" => "á",
+		"&Acirc;"  => "â",
+		"&Atilde;" => "ã",
+		"&Auml;"   => "ä",
+		"&Aring;"  => "å",
+		"&Aelig;"  => "æ",
+		"&Ccedil;" => "ç",
+		"&Egrave;" => "è",
+		"&Eacute;" => "é",
+		"&Ecirc;"  => "ê",
+		"&Euml;"   => "ë",
+		"&Igrave;" => "ì",
+		"&Iacute;" => "í",
+		"&Icirc;"  => "î",
+		"&Iuml;"   => "ï",
+		"&ETH;"    => "ğ",
+		"&Ntilde;" => "ñ",
+		"&Ograve;" => "ò",
+		"&Oacute;" => "ó",
+		"&Ocirc;"  => "ô",
+		"&Otilde;" => "õ",
+		"&Ouml;"   => "ö",
+		"&Oslash;" => "ø",
+		"&Ugrave;" => "ù",
+		"&Uacute;" => "ú",
+		"&Ucirc;"  => "û",
+		"&Uuml;"   => "ü",
+		"&Yacute;" => "ı",
+		"&Yhorn;"  => "ş",
+		"&Yuml;"   => "ÿ"
 		);
 
 	//Apache multi indexes parameters
@@ -168,7 +169,7 @@
 
 
 	function remove_accents($string) {
-		return (strtr($string, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+		return (strtr($string, "ÀÁÂÃÄÅÆàáâãäåæÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëğÇçĞÌÍÎÏìíîïÙÚÛÜùúûüÑñŞßÿı",
 					  "aaaaaaaaaaaaaaoooooooooooooeeeeeeeeecceiiiiiiiiuuuuuuuunntsyy"));
 	}
 
