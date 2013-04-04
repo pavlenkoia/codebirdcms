@@ -1,5 +1,5 @@
 <?php
-echo '<pre>';print_r($searchresult);echo '</pre>';
+//echo '<pre>';print_r($searchresult);echo '</pre>';
 
 if(!$results || !$resultCount)
 {
