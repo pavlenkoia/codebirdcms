@@ -29,17 +29,20 @@ $cursor = '';
 
 echo '<div class="searchpager">';
 
-foreach($pages as $page)
+if(count($pages) > 1)
 {
-    if($page == $currentPageIndex)
+    foreach($pages as $page)
     {
-        $cursor .= ' <span class="current">'.$page.'</span>';
-    }
-    else
-    {
-        $cursor .= ' <span><a href="'.$alias.'.html?start='.$page.'&q='.urlencode($searchquery).'">'.$page.'</a></span>';
-    }
+        if($page == $currentPageIndex)
+        {
+            $cursor .= ' <span class="current">'.$page.'</span>';
+        }
+        else
+        {
+            $cursor .= ' <span><a href="'.$alias.'.html?start='.$page.'&q='.urlencode($searchquery).'">'.$page.'</a></span>';
+        }
 
+    }
 }
 
 echo $cursor;
