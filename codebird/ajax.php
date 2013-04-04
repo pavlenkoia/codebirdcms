@@ -1,5 +1,5 @@
 <?php
-if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || (isset($_FILES) && count($_FILES)))
+if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || (isset($_FILES) && count($_FILES)) || isset($_GET['ajax']))
 {
     session_start();
     include "config.php";

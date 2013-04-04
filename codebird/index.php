@@ -13,7 +13,6 @@ if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']
 }
 else
 {
-    //setcookie('name', 'value', time()+60*60*24*30*12, '/');
     App::StartBuffer();
 
     if(Utils::getPost("mod_action"))
