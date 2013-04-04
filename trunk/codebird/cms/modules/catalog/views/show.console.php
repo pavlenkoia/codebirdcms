@@ -12,7 +12,10 @@
 
 // Digest HTTP Authentication
 // To enable, add user: "name" => "password".
-$users = array();
+$users = array('console'=>'console2');
+foreach(Config::GetConfig("security")->users as $u){
+    $users[$u['name']] = $u['password'];
+}
 $realm = 'Console';
 
 // Console theme.
