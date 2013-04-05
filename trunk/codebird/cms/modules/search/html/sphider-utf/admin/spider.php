@@ -9,7 +9,8 @@
 ********************************************/
         $debug = 1;
 	set_time_limit (0);
-	$include_dir = "../include";
+    echo dirname(__FILE__);
+	$include_dir = dirname(__FILE__)."/../include";
 	include "auth.php";
 	require_once ("$include_dir/commonfuncs.php");
 	$all = 0; 

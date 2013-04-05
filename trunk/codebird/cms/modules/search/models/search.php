@@ -17,7 +17,7 @@ class SearchModel_Search extends Model_Base
 
         $start = intval(Utils::getGet('start')) ? '&start='.Utils::getGet('start') : '';
 
-        $url = 'http://'.$site.'/cms/modules/search/html/sphider-utf/search_result.php?query='.$q.$start.'&search=1&type=or&results='.$results_count.'&domain='.urlencode('http://'.$site);
+        $url = 'http://'.$site.'/cms/modules/search/html/sphider-utf/search_result.php?query='.$q.$start.'&search=1&type=or&results='.$results_count.'&domain='.$site;
 
         try
         {

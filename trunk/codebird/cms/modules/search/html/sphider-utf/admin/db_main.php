@@ -212,4 +212,4 @@ if (isset($file) && $del==1) {
 	</TR>
 	
   </TABLE>
-</CENTER>
+</center>

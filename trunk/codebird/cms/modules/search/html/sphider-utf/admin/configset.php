@@ -1,5 +1,5 @@
 <?php 
-include "auth.php";
+//include "auth.php";
 if ($_index_numbers=="") {
 	$_index_numbers=0;
 } 

@@ -163,7 +163,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 		$result = $mysqli_conn->query("select domain_id from ".$mysql_table_prefix."domains where domain = '$domain'");
 		if ($result->num_rows> 0) {
-			$thisrow = mysql_fetch_array($result);
+			$thisrow = $result->fetch_array();
 			$domain_qry = "and domain = ".$thisrow[0];
 		} else {
 			$domain_qry = "";
