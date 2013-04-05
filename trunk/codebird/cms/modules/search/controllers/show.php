@@ -1,6 +1,6 @@
 <?php
 /* 
- * Контроллер show gsearch
+ * Контроллер show search
  */
 
 class SearchController_Show extends Controller_Base

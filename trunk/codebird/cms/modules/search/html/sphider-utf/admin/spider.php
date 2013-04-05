@@ -7,19 +7,22 @@
 * Thanks to Antoine Bajolet for ideas and
 * several code pieces
 ********************************************/
+
+$cur_dir = dirname(__FILE__);
+$sphider_root = join('/', array_slice(explode('/', __FILE__), 0, -2));
+
         $debug = 1;
 	set_time_limit (0);
-    echo dirname(__FILE__);
-	$include_dir = dirname(__FILE__)."/../include";
-	include "auth.php";
-	require_once ("$include_dir/commonfuncs.php");
+	$include_dir = "../include";
+	include $cur_dir."/auth.php";
+	require_once ($sphider_root."/include/commonfuncs.php");
 	$all = 0; 
 	extract (getHttpVars());
 	$settings_dir =  "../settings";
-	require_once ("$settings_dir/conf.php");
+	require_once ($sphider_root."/settings/conf.php");
 
-	include "messages.php";
-	include "spiderfuncs.php";
+	include $cur_dir."/messages.php";
+	include $cur_dir."/spiderfuncs.php";
 	error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
 //	error_reporting (E_ALL);
 
@@ -381,7 +384,7 @@
 
 
 	function index_site($url, $reindex, $maxlevel, $soption, $url_inc, $url_not_inc, $can_leave_domain) {
-		global $mysqli_conn, $mysql_table_prefix, $command_line, $mainurl,  $tmp_urls, $domain_arr, $all_keywords,$mysqli_conn;
+		global $mysqli_conn, $mysql_table_prefix, $command_line, $mainurl,  $tmp_urls, $domain_arr, $all_keywords;
 		if (!isset($all_keywords)) {
 			$result = $mysqli_conn->query("select keyword_ID, keyword from ".$mysql_table_prefix."keywords");
 			echo $mysqli_conn->error;

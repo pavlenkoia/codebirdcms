@@ -8,7 +8,7 @@
 	$includes = array('./include', 'include', '../include');
 	if( !in_array($include_dir, $includes) )  {
        die("Illegal include.");
-	} 
+	}
 
 
 	/**

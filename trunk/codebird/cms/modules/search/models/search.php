@@ -41,6 +41,11 @@ class SearchModel_Search extends Model_Base
 
         return $data;
     }
+
+    public function Index($domain=null)
+    {
+        $site = Config::__('search')->site;
+    }
 }
 
 ?>
