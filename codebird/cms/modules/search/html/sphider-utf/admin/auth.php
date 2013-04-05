@@ -49,5 +49,4 @@ if (isset($_POST['user']) && isset($_POST['pass'])) {
 
 $settings_dir = "../settings";
 include "$settings_dir/database.php";
-
 ?>
