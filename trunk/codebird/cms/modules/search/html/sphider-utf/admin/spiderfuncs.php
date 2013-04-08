@@ -735,7 +735,7 @@ function clean_file($file, $url, $type) {
 	}
 //echo $file;
 
-	//couse some problems with russian we need to replace letter '¨' and '¸' with 'Å' and 'å'
+	//couse some problems with russian we need to replace letter 'ï¿½' and 'ï¿½' with 'ï¿½' and 'ï¿½'
 	$file = preg_replace("/Ğ/", "Ğ•", $file);
 	$file = preg_replace("/Ñ‘/", "Ğµ", $file);
 
@@ -812,11 +812,11 @@ function calc_weights($wordarray, $title, $host, $path, $keywords) {
 
 function isDuplicateMD5($md5sum) {
 	global $mysqli_conn, $mysql_table_prefix;
-	$result = $mysqli_conn->query("select link_id from ".$mysql_table_prefix."links where md5sum='$md5sum'");
+	/*$result = $mysqli_conn->query("select link_id from ".$mysql_table_prefix."links where md5sum='$md5sum'");
 	echo $mysqli_conn->error;
 	if ($result->num_rows > 0) {
 		return true;
-	}
+	}*/
 	return false;
 }
 

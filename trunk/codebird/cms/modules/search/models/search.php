@@ -42,13 +42,13 @@ class SearchModel_Search extends Model_Base
         return $data;
     }
 
-    public function httpIndex($domain)
+    public function httpIndex($domain, $reindex = true)
     {
-        $url = 'http://'.$domain.'/cms/modules/search/html/sphider-utf/admin/spider.php';
+        $url = 'http://'.$_SERVER['HTTP_HOST'].'/cms/modules/search/html/sphider-utf/admin/spider.php';
 
         $params = array(
             'soption' => 'full',
-            'reindex' => 1,
+            'reindex' => $reindex ? 1 : 0,
             'url' => 'http://'.$domain.'/',
             'from_search' => 1
         );
@@ -59,11 +59,12 @@ class SearchModel_Search extends Model_Base
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS,  $params);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         $content = curl_exec( $ch );
         curl_close( $ch );
 
-        return $content;;
+        return $content;
     }
 
     public function getSites()
