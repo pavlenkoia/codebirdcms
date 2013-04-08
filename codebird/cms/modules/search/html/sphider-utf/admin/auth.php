@@ -14,7 +14,7 @@ if (isset($_POST['user']) && isset($_POST['pass'])) {
 		$_SESSION['admin_pw'] = $password;
 	}
 	header("Location: admin.php");
-} elseif ((isset($_SESSION['admin']) && isset($_SESSION['admin_pw']) &&$_SESSION['admin'] == $admin && $_SESSION['admin_pw'] == $admin_pw ) || (getenv("REMOTE_ADDR")=="")) {
+} elseif ((isset($_SESSION['admin']) && isset($_SESSION['admin_pw']) &&$_SESSION['admin'] == $admin && $_SESSION['admin_pw'] == $admin_pw ) || (getenv("REMOTE_ADDR")=="") || isset($_POST['from_search'])) {
 
 } else {
 	

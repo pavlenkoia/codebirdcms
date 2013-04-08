@@ -28,7 +28,7 @@
                             App.showEditor({
                                 url: '/ajax/cm/search.cm.editor?id='+node.id,
                                 id : '<?php echo $args->module ?>-edit-'+node.id,
-                                caption: 'Поиск: '+node.text
+                                caption: '<?=$args->title ?>'
                                 });
                         }
                     }
