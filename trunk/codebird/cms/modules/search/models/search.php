@@ -42,9 +42,53 @@ class SearchModel_Search extends Model_Base
         return $data;
     }
 
-    public function Index($domain=null)
+    public function httpIndex($domain)
     {
-        $site = Config::__('search')->site;
+        $url = 'http://'.$domain.'/cms/modules/search/html/sphider-utf/admin/spider.php';
+
+        $params = array(
+            'soption' => 'full',
+            'reindex' => 1,
+            'url' => 'http://'.$domain.'/',
+            'from_search' => 1
+        );
+        $params = http_build_query($params);
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,  $params);
+
+        $content = curl_exec( $ch );
+        curl_close( $ch );
+
+        return $content;;
+    }
+
+    public function getSites()
+    {
+        $table = new Table('sphider_sites','site_id');
+
+        $rows = $table->select('select a.site_id, a.url, a.indexdate, b.site_id as pending from sphider_sites a left outer join sphider_pending b on a.site_id=b.site_id');
+
+        return $rows;
+    }
+
+    public function getSite($id)
+    {
+        $table = new Table('sphider_sites','site_id');
+
+        $rows = $table->select('select a.site_id as id, a.url, a.indexdate, b.site_id as pending from sphider_sites a left outer join sphider_pending b on a.site_id=b.site_id where a.site_id=:id',array('id'=>$id));
+
+        if(count($rows) > 0)
+        {
+            return $rows[0];
+        }
+        else
+        {
+            return null;
+        }
     }
 }
 

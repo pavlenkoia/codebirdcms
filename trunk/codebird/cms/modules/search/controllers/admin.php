@@ -21,6 +21,8 @@ class SearchController_Admin extends Controller_Base
 
         $template->domain = $site;
 
+        $template->data = $data;
+
         $template->render();
     }
 }
