@@ -11,7 +11,7 @@ if(!$results || !$resultCount)
     return;
 }
 
-echo '<div class="searchresultquery">Вы искали: «<strong>'.htmlspecialchars($searchresult->query).'</strong>»';
+echo '<div class="searchresultquery">Вы искали: «<strong>'.htmlspecialchars($searchresult->query).'</strong>»</div>';
 echo '<div class="searchresultcount">Всего найдено: <strong>'.$resultCount.'</strong></div>';
 
 $formattedresults = '';
