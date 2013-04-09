@@ -44,7 +44,10 @@ class SearchModel_Search extends Model_Base
 
     public function httpIndex($domain, $reindex = true)
     {
-        $url = 'http://'.$_SERVER['HTTP_HOST'].'/cms/modules/search/html/sphider-utf/admin/spider.php';
+        $site = Config::__('search')->site;
+        $site = $site ? $site : $_SERVER['HTTP_HOST'];
+
+        $url = 'http://'.$site.'/cms/modules/search/html/sphider-utf/admin/spider.php';
 
         $params = array(
             'soption' => 'full',
