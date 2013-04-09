@@ -83,12 +83,14 @@ class SearchController_Admin extends Controller_Base
 
         $indexdate = '';
         $status = '';
+        $pending = false;
 
         if($row)
         {
             if($row['pending'])
             {
                 $status = 'Индексирование не закончено';
+                $pending = true;
             }
             else
             {
@@ -100,6 +102,7 @@ class SearchController_Admin extends Controller_Base
         $res = array();
         $res['indexdate'] = $indexdate;
         $res['status'] = $status;
+        $res['pending'] = $pending;
 
         $this->setContent(json_encode($res));
     }

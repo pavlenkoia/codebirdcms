@@ -45,63 +45,7 @@
             handler: function(item)
             {
                 var form = item.ownerCt;
-                var f_id = form.getForm().findField('id');
-                Ext.Ajax.request({
-                    url : '/ajax/search.admin.exec_index',
-                    method: 'POST',
-                    params:
-                    {
-                        id: f_id.getValue()
-                    },
-                    maskEl : form,
-                    loadingMessage : 'Индексирование...',
-                    success : function (response)
-                    {
-                        var obj = response.responseJSON;
-                        var panel = form.getComponent('panel-result');
-                        panel.setVisible(true);
-                        panel.update(obj.content);
-                        var f_indexdate = form.getForm().findField('indexdate');
-                        var f_pending = form.getForm().findField('pending');
-                        f_indexdate.setValue(obj.indexdate);
-                        f_pending.setValue(obj.status);
-                        /*if(obj.success)
-                        {
-                            tree.getLoader().load(tree.root);
-                            App.msg('Готово', 'Пункт меню добавлен');
-                        }
-                        else
-                        {
-                            Ext.MessageBox.alert('Ошибка', obj.msg);
-                        }*/
-                    },
-                    failure: function(response, opts) {
-                        //console.log('server-side failure with status code ' + response.status);
-                        if(response.status = -1){
-                            Ext.Ajax.request({
-                                url : '/ajax/search.admin.status',
-                                method: 'POST',
-                                params:
-                                {
-                                    id: f_id.getValue()
-                                },
-                                maskEl : form,
-                                loadingMessage : 'Получение статуса...',
-                                success : function (response){
-                                    var obj = response.responseJSON;
-                                    var panel = form.getComponent('panel-result');
-                                    panel.setVisible(false);
-                                    panel.update('');
-                                    var f_indexdate = form.getForm().findField('indexdate');
-                                    var f_pending = form.getForm().findField('pending');
-                                    f_indexdate.setValue(obj.indexdate);
-                                    f_pending.setValue(obj.status);
-                                }
-                            });
-                            form.execIndex(item);
-                        }
-                    }
-                });
+                form.execIndex(item);
             }
         },
         {
@@ -130,7 +74,66 @@
     ],
     execIndex: function(item)
     {
-        alert(item);
+        var form = item.ownerCt;
+        var f_id = form.getForm().findField('id');
+        Ext.Ajax.request({
+            url : '/ajax/search.admin.exec_index',
+            method: 'POST',
+            params:
+            {
+                id: f_id.getValue()
+            },
+            maskEl : form,
+            loadingMessage : 'Индексирование...',
+            success : function (response)
+            {
+                var obj = response.responseJSON;
+                var panel = form.getComponent('panel-result');
+                panel.setVisible(true);
+                panel.update(obj.content);
+                var f_indexdate = form.getForm().findField('indexdate');
+                var f_pending = form.getForm().findField('pending');
+                f_indexdate.setValue(obj.indexdate);
+                f_pending.setValue(obj.status);
+                /*if(obj.success)
+                {
+                    tree.getLoader().load(tree.root);
+                    App.msg('Готово', 'Пункт меню добавлен');
+                }
+                else
+                {
+                    Ext.MessageBox.alert('Ошибка', obj.msg);
+                }*/
+            },
+            failure: function(response, opts) {
+                //console.log('server-side failure with status code ' + response.status);
+                if(response.status = -1){
+                    Ext.Ajax.request({
+                        url : '/ajax/search.admin.status',
+                        method: 'POST',
+                        params:
+                        {
+                            id: f_id.getValue()
+                        },
+                        maskEl : form,
+                        loadingMessage : 'Получение статуса...',
+                        success : function (response){
+                            var obj = response.responseJSON;
+                            var panel = form.getComponent('panel-result');
+                            panel.setVisible(false);
+                            panel.update('');
+                            var f_indexdate = form.getForm().findField('indexdate');
+                            var f_pending = form.getForm().findField('pending');
+                            f_indexdate.setValue(obj.indexdate);
+                            f_pending.setValue(obj.status);
+                            if(obj.pending){
+                                form.execIndex(item);
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 }
 
