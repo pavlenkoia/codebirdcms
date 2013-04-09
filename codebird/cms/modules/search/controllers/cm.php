@@ -46,7 +46,55 @@ class SearchController_Cm extends Controller_Base
 
         $template->site = $site;
 
+        $template->status = 'Не индексировано';
+        if($site['indexdate'])
+        {
+            $template->status =  $site['pending']?'Индексирование не закончено':'Проиндексировано';
+        }
+
         $template->render();
+    }
+
+    public function delete()
+    {
+        $id = Utils::getVar('id');
+
+        $id = str_replace('site_', '', $id);
+
+        $data = $this->getData();
+
+        $data->deleteSite($id);
+
+        $res = array();
+
+        $res['success'] = true;
+
+        $this->setContent(json_encode($res));
+    }
+
+    public function add()
+    {
+        $url = Utils::getVar('url');
+
+        $data = $this->getData();
+
+        $site_id = $data->addSite($url);
+
+        $res = array();
+
+        if($site_id)
+        {
+            $res['success'] = true;
+            $res['id'] = $site_id;
+        }
+        else
+        {
+            $res['success'] = false;
+        }
+
+
+
+        $this->setContent(json_encode($res));
     }
 
 }

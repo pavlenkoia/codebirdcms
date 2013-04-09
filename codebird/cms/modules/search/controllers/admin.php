@@ -106,6 +106,8 @@ class SearchController_Admin extends Controller_Base
 
         $this->setContent(json_encode($res));
     }
+
+
 }
 
 

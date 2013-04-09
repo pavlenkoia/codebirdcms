@@ -15,7 +15,84 @@
                 itemId: 'add',
                 handler: function(event, toolEl, panel)
                 {
-
+                    var win = new Ext.Window
+                    ({
+                        layout:'fit',
+                        width:400,
+                        height:150,
+                        closeAction:'close',
+                        plain: true,
+                        border: false,
+                        title: 'Добавить новый сайт',
+                        items:
+                        [
+                            {
+                                xtype: 'form',
+                                itemId: 'form',
+                                frame: true,
+                                labelAlign: 'top',
+                                defaults:
+                                {
+                                    width: 350,
+                                    xtype: 'textfield'
+                                },
+                                items:
+                                [
+                                    {
+                                        xtype: 'textfield',
+                                        fieldLabel: 'URL',
+                                        name: 'url',
+                                        anchor: '95%',
+                                        allowBlank: false,
+                                        value: 'http://'
+                                    }
+                                ]
+                            }
+                        ],
+                        buttonAlign: 'center',
+                        buttons:
+                        [
+                            {
+                                text:'Добавить',
+                                handler: function()
+                                {
+                                    var form = this.ownerCt.ownerCt.getComponent('form');
+                                    if(form.getForm().isValid())
+                                    {
+                                        form.getForm().submit({
+                                            url: '/ajax/cm/search.cm.add',
+                                            method: 'POST',
+                                            waitTitle: 'Подождите',
+                                            waitMsg: 'Добавление сайта...',
+                                            success: function(form, action)
+                                            {
+                                                win.hide();
+                                                var tree = Ext.getCmp('<?php echo $args->module ?>-navigator-tree');
+                                                tree.getLoader().load(tree.root);
+                                                App.msg('Готово', 'Сайт добавлен');
+                                            },
+                                            failure: function(form, action)
+                                            {
+                                                Ext.MessageBox.alert('Ошибка', action.result.msg);
+                                            }
+                                        });
+                                    }
+                                    else
+                                    {
+                                        App.msg('Проверка', 'Заполните поля');
+                                    }
+                                }
+                            },
+                            {
+                                text: 'Отмена',
+                                handler: function()
+                                {
+                                    win.hide();
+                                }
+                            }
+                        ]
+                    });
+                    win.show(this.id);
                 }
             },
             {
@@ -25,7 +102,39 @@
                 itemId: 'delete',
                 handler: function(event, toolEl, panel)
                 {
-
+                    var tree = Ext.getCmp('<?php echo $args->module ?>-navigator-tree');
+                    var node = tree.getSelectionModel().getSelectedNode();
+                    Ext.MessageBox.confirm('Подтверждение', 'Вы&nbsp;действительно&nbsp;хотите&nbsp;удалить&nbsp;сайт&nbsp;'+node.text,
+                        function(btn){
+                            if(btn == 'yes')
+                            {
+                                Ext.Ajax.request({
+                                    url : '/ajax/cm/search.cm.delete',
+                                    method: 'POST',
+                                    params:
+                                    {
+                                        id: node.id
+                                    },
+                                    maskEl : 'navigator-panel',
+                                    loadingMessage : 'Удаление...',
+                                    success : function (response)
+                                    {
+                                        var obj = response.responseJSON;
+                                        if(obj.success)
+                                        {
+                                            App.closeEditor({id : '<?php echo $args->module ?>-edit-'+node.id});
+                                            tree.getLoader().load(tree.root);
+                                            App.msg('Готово', 'Сайт удален');
+                                            item.setDisabled(true);
+                                        }
+                                        else
+                                        {
+                                            Ext.MessageBox.alert('Ошибка', obj.msg);
+                                        }
+                                    }
+                                });
+                            }
+                        });
                 }
             }
         ]

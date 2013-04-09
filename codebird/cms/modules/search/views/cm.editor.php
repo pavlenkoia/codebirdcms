@@ -34,7 +34,7 @@
                     fieldLabel: 'Статус',
                     name: 'pending',
                     style: 'font-weight:bold;',
-                    value: '<?=$site['pending']?'Индексирование не закончено':'Проиндексировано'?>'
+                    value: <?php echo escapeJSON($status)?>
                 }
             ]
         },
