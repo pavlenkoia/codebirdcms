@@ -94,6 +94,83 @@ class SearchModel_Search extends Model_Base
             return null;
         }
     }
+
+    public function deleteSite($id)
+    {
+        $table = new Table('sphider_sites','site_id');
+
+        $oSite = $table->getEntity($id);
+
+        if($oSite)
+        {
+            $site_id = $oSite->site_id;
+
+            $table->execute("delete from sphider_site_category where site_id=:site_id",array('site_id'=>$site_id));
+
+            $rows = $table->select("select link_id from sphider_links where site_id=:site_id",array('site_id'=>$site_id));
+
+            $todelete = array();
+
+            foreach($rows as $row)
+            {
+                $todelete[]=$row['link_id'];
+            }
+
+            if (count($todelete)>0) {
+                $todelete = implode(",", $todelete);
+                for ($i=0;$i<=15; $i++)
+                {
+                    $char = dechex($i);
+                    $query = "delete from sphider_link_keyword$char where link_id in($todelete)";
+                    $table->execute($query);
+                }
+            }
+
+            $table->execute("delete from sphider_links where site_id=:site_id",array('site_id'=>$site_id));
+
+            $table->execute("delete from sphider_pending where site_id=:site_id",array('site_id'=>$site_id));
+
+            $table->delete($oSite);
+        }
+    }
+
+    public  function addSite($url)
+    {
+        $table = new Table('sphider_sites','site_id');
+
+        $site_id = null;
+
+        $compurl = parse_url("".$url);
+
+        if ($compurl['path']=='')
+        {
+            $url = $url."/";
+        }
+
+        $rows = $table->select("select site_ID from sphider_sites where url=:url",array('url'=>$url));
+
+        if(!count($rows))
+        {
+            $object = $table->getEntity();
+            $object->url = $url;
+
+            $site_id = $table->save($object);
+
+            $domain = str_replace("http:",'',$url);
+            $domain = str_replace("/",'',$domain);
+
+            $table2 = new Table('sphider_domains','domain_id');
+            $rows = $table2->select("select site_ID from sphider_domains where domain=:domain",array('domain'=>$domain));
+            if(!count($rows))
+            {
+                $object2 = $table2->getEntity();
+                $object2->domain = $domain;
+                $table2->save($object2);
+            }
+        }
+
+        return $site_id;
+    }
 }
 
 ?>
