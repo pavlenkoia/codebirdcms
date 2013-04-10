@@ -70,6 +70,19 @@ class SearchModel_Search extends Model_Base
         return $content;
     }
 
+    public function Index($domain, $reindex = true)
+    {
+        $url = 'http://'.$domain.'/';
+        $soption = 'full';
+        $reindex = $reindex ? 1 : 0;
+
+        ob_start();
+
+        include(ROOT.'/cms/modules/search/html/sphider-utf/admin/spider.php');
+
+        return ob_get_clean();
+    }
+
     public function getSites()
     {
         $table = new Table('sphider_sites','site_id');

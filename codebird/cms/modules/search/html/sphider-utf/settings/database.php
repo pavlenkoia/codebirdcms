@@ -1,5 +1,6 @@
 <?
-include(dirname(__FILE__).'/../../../../../../config.php')
+$doc_root = join('/', array_slice(explode('/', __FILE__), 0, -7));
+include($doc_root.'/config.php');
 ?>
 <?php
     $database = $db_name;

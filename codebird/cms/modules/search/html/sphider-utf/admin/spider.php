@@ -16,7 +16,11 @@ $sphider_root = join('/', array_slice(explode('/', __FILE__), 0, -2));
 	$include_dir = "../include";
 	include $cur_dir."/auth.php";
 	require_once ($sphider_root."/include/commonfuncs.php");
-	$all = 0; 
+	$all = 0;
+    if(isset($allExt))
+    {
+        $all = $allExt;
+    }
 	extract (getHttpVars());
 	$settings_dir =  "../settings";
 	require_once ($sphider_root."/settings/conf.php");
