@@ -129,6 +129,10 @@
                             if(obj.pending){
                                 form.execIndex(item);
                             }
+                        },
+                        failure: function(response, opts)
+                        {
+                            form.execIndex(item);
                         }
                     });
                 }
