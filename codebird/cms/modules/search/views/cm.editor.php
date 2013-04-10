@@ -57,6 +57,12 @@
             autoScroll: true,
             hidden: true,
             bodyStyle: 'background-color: #fff; padding: 8px'
+        },
+        {
+            xtype: 'displayfield',
+            style: 'margin-top:20px;',
+            hideLabel: true,
+            value: <?php echo escapeJSON('Задайте в Cron выполнение файла '.ROOT.'/cms/cron/search.php . Права на файл должны быть <b>705</b>.')?>
         }
     ],
     labelAlign: 'left',

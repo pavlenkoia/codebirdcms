@@ -1,4 +1,4 @@
-﻿#!/usr/local/bin/php
+﻿#!/usr/bin/php
 <?php
 $DOCUMENT_ROOT = join('/', array_slice(explode('/', __FILE__), 0, -3));
 putenv("DOCUMENT_ROOT=$DOCUMENT_ROOT");
