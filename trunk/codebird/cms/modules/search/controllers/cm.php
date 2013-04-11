@@ -52,6 +52,8 @@ class SearchController_Cm extends Controller_Base
             $template->status =  $site['pending']?'Индексирование не закончено':'Проиндексировано';
         }
 
+        $template->links_count = $site['links_count'];
+
         $template->render();
     }
 

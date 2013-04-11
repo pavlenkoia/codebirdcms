@@ -40,6 +40,7 @@ class SearchController_Admin extends Controller_Base
         $pending = false;
         $indexdate = '';
         $status = '';
+        $links_count = '';
 
         if($row)
         {
@@ -60,6 +61,7 @@ class SearchController_Admin extends Controller_Base
                     $status = 'Проиндексировано';
                 }
                 $indexdate = $row2['indexdate'];
+                $links_count = $row2['links_count'];
             }
         }
 
@@ -69,6 +71,7 @@ class SearchController_Admin extends Controller_Base
         $template->content = $content;
         $template->indexdate = $indexdate;
         $template->status = $status;
+        $template->links_count = $links_count;
 
         $template->render();
     }
@@ -84,6 +87,7 @@ class SearchController_Admin extends Controller_Base
         $indexdate = '';
         $status = '';
         $pending = false;
+        $links_count = '';
 
         if($row)
         {
@@ -97,12 +101,14 @@ class SearchController_Admin extends Controller_Base
                 $status = 'Проиндексировано';
             }
             $indexdate = $row['indexdate'];
+            $links_count = $row['links_count'];
         }
 
         $res = array();
         $res['indexdate'] = $indexdate;
         $res['status'] = $status;
         $res['pending'] = $pending;
+        $res['links_count'] = $links_count;
 
         $this->setContent(json_encode($res));
     }
