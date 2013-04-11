@@ -35,6 +35,13 @@
                     name: 'pending',
                     style: 'font-weight:bold;',
                     value: <?php echo escapeJSON($status)?>
+                },
+                {
+                    xtype: 'displayfield',
+                    fieldLabel: 'Индексировано',
+                    name: 'count',
+                    style: 'font-weight:bold;',
+                    value: <?php echo escapeJSON($links_count)?>
                 }
             ]
         },
@@ -99,17 +106,10 @@
                 panel.update(obj.content);
                 var f_indexdate = form.getForm().findField('indexdate');
                 var f_pending = form.getForm().findField('pending');
+                var f_count = form.getForm().findField('count');
                 f_indexdate.setValue(obj.indexdate);
                 f_pending.setValue(obj.status);
-                /*if(obj.success)
-                {
-                    tree.getLoader().load(tree.root);
-                    App.msg('Готово', 'Пункт меню добавлен');
-                }
-                else
-                {
-                    Ext.MessageBox.alert('Ошибка', obj.msg);
-                }*/
+                f_count.setValue(obj.links_count);
             },
             failure: function(response, opts) {
                 //console.log('server-side failure with status code ' + response.status);
@@ -130,8 +130,10 @@
                             panel.update('');
                             var f_indexdate = form.getForm().findField('indexdate');
                             var f_pending = form.getForm().findField('pending');
+                            var f_count = form.getForm().findField('count');
                             f_indexdate.setValue(obj.indexdate);
                             f_pending.setValue(obj.status);
+                            f_count.setValue(obj.links_count);
                             if(obj.pending){
                                 form.execIndex(item);
                             }

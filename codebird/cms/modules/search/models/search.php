@@ -100,7 +100,13 @@ class SearchModel_Search extends Model_Base
 
         if(count($rows) > 0)
         {
-            return $rows[0];
+            $row = $rows[0];
+
+            $rows2 = $table->select('SELECT count(*) as count FROM sphider_links where site_id=:id',array('id'=>$id));
+
+            $row['links_count']  =  $rows2[0]['count'];
+
+            return $row;
         }
         else
         {
