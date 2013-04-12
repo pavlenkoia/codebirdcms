@@ -350,7 +350,7 @@ function unique_array($arr) {
 		//to eliminate/count multiple instance of words
 		$next_in_arr = next($arr);
 		if ($next_in_arr != $element) {
-			if (strlen($element) >= $min_word_length && preg_match($pattern, remove_accents($element)) && (@ $common[$element] <> 1)) {
+			if (strlen($element) >= $min_word_length /*&& preg_match($pattern, remove_accents($element))*/ && (@ $common[$element] <> 1)) {
 				if (preg_match("/^(-|\\\')(.*)/", $element, $regs))
 					$element = $regs[2];
 

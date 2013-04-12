@@ -146,7 +146,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 		} else {
 			$pattern = "[a-z]+";
 		}
-		if (mb_strlen($word) < $min_word_length || (!preg_match("/".$pattern."/i", remove_accents($word))) || ($common[$word] == 1)) {
+		if (mb_strlen($word) < $min_word_length /*|| (!preg_match("/".$pattern."/i", remove_accents($word))) || ($common[$word] == 1)*/) {
 			return 1;
 		} else {
 			return 0;

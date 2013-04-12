@@ -17,9 +17,37 @@ class SearchModel_Search extends Model_Base
 
         $start = intval(Utils::getGet('start')) ? '&start='.Utils::getGet('start') : '';
 
-        $url = 'http://'.$site.'/cms/modules/search/html/sphider-utf/search_result.php?query='.$q.$start.'&search=1&type=and&results='.$results_count.'&domain='.$site;
+        //$url = 'http://'.$site.'/cms/modules/search/html/sphider-utf/search_result.php?query='.$q.$start.'&search=1&type=and&results='.$results_count.'&domain='.$site;
 
-        try
+        $url = 'http://'.$site.'/cms/modules/search/html/sphider-utf/search_result.php';
+
+        $params = array(
+            //'domain' => $site,
+            'url' => $url,
+            'search' => 1,
+            'query' => $searchquery,
+            'start' => intval(Utils::getGet('start')) ? Utils::getGet('start') : '',
+            'type' => 'and',
+            'results' => $results_count
+
+        );
+        $params = http_build_query($params);
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 0);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,  $params);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $content = curl_exec( $ch );
+        curl_close( $ch );
+
+        $data = json_decode($content);
+
+        /*try
         {
             $handle = fopen($url, 'rb');
         }
@@ -37,7 +65,7 @@ class SearchModel_Search extends Model_Base
 
         fclose($handle);
 
-        $data = json_decode($body);
+        $data = json_decode($body);*/
 
         return $data;
     }
@@ -87,7 +115,7 @@ class SearchModel_Search extends Model_Base
     {
         $table = new Table('sphider_sites','site_id');
 
-        $rows = $table->select('select a.site_id, a.url, a.indexdate, b.site_id as pending from sphider_sites a left outer join sphider_pending b on a.site_id=b.site_id');
+        $rows = $table->select('select DISTINCT a.site_id, a.url, a.indexdate, b.site_id as pending from sphider_sites a left outer join sphider_pending b on a.site_id=b.site_id');
 
         return $rows;
     }
