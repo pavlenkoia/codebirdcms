@@ -284,8 +284,15 @@ $sphider_root = join('/', array_slice(explode('/', __FILE__), 0, -2));
 	
 
 				$wordarray = unique_array(explode(" ", $data['content']));
-//	                        print_r($wordarray);
-				if ($data['nofollow'] != 1) {
+
+
+                /*
+                echo '<pre>';echo $data['content'];echo '</pre>';
+                echo '<pre>';print_r($wordarray);echo '</pre>';
+                die;
+                */
+
+                if ($data['nofollow'] != 1) {
 					$links = get_links($file, $url, $can_leave_domain, $data['base']);
 					$links = distinct_array($links);
 					$all_links = count($links);
