@@ -180,6 +180,28 @@ class CatalogModel_Action extends Model_Base
 
         return $rows;
     }
+
+    private function chainId($id, $arRes)
+    {
+        $section = $this->getSection($id);
+
+        if($section->parent_id)
+        {
+            $arRes[] = $section->parent_id;
+            $arRes = $this->chainId($section->parent_id, $arRes);
+        }
+
+        return $arRes;
+    }
+
+    public function getChainId($id)
+    {
+        $ar = array($id);
+
+        $ar = $this->chainId($id, $ar);
+
+        return $ar;
+    }
 }
 
 ?>
