@@ -47,7 +47,7 @@ class SearchController_Admin extends Controller_Base
             $domain = str_replace("http:",'',$row['url']);
             $domain = str_replace("/",'',$domain);
 
-            $content = $data->httpIndex($domain,false);
+            $content = $data->httpIndex($domain,true);
 
             if($row2 = $data->getSite($row['id']))
             {
