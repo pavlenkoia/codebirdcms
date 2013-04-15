@@ -603,9 +603,9 @@ function get_search_results($query, $start, $category, $searchtype, $results, $d
 				$title = $sph_messages["Untitled"];
 			$regs = Array();
 
-			if (mb_strlen($title) > 80) {
+			/*if (mb_strlen($title) > 80) {
 				$title = mb_substr($title, 0,76)."...";
-			}
+			}*/
 			//print_r($words['hilight']);
 			foreach($words['hilight'] as $change) {
 				while (preg_match("/[^\>](".$change.")[^\<]/ui", " ".$title." ", $regs)) {
