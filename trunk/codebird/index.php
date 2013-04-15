@@ -52,6 +52,11 @@ else
         $registry->mainpage = true;
     }
 
+    App::SetProperty('title', $registry->title);
+    App::SetProperty('page_title', $registry->title);
+    App::SetProperty('description', $registry->description);
+    App::SetProperty('keywords', $registry->keywords);
+
     if(!isset($template) || !$template)
     {
         $template = "404.tpl.php";
