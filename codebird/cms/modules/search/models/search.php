@@ -177,6 +177,10 @@ class SearchModel_Search extends Model_Base
 
             $table->execute("delete from sphider_pending where site_id=:site_id",array('site_id'=>$site_id));
 
+            $domain = str_replace("http:",'',$oSite->url);
+            $domain = str_replace("/",'',$domain);
+            $table->execute("delete from sphider_domains where domain=:domain",array('domain'=>$domain));
+
             $table->delete($oSite);
         }
     }
