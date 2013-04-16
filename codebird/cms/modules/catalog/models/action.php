@@ -202,6 +202,33 @@ class CatalogModel_Action extends Model_Base
 
         return $ar;
     }
+
+    /**
+     * Получение картинок из поля images
+     */
+    public function getImages($images)
+    {
+        if(!$images)
+        {
+            $xml = simplexml_load_string(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<images>
+</images>');
+        }
+        else
+        {
+            $xml = simplexml_load_string($images);
+        }
+
+        $res = array();
+
+        foreach($xml->image as $image)
+        {
+            $res[] = $image->img;
+        }
+
+        return $res;
+    }
 }
 
 ?>
