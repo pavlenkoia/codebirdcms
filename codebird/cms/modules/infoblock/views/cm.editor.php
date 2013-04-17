@@ -68,7 +68,7 @@
                 items:
                 [
                     {
-                        text:'Правка в визуальном редакторе',
+                        text:'Править в визуальном редакторе',
                         iconCls: 'edit-menu',
                         handler: function(){
                            var oFCKeditorOptions =
