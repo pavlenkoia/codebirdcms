@@ -40,57 +40,57 @@
             width: '99%',
             autoScroll: true,
             bodyStyle: 'background-color: #fff; padding: 8px',
-            html: <?php echo escapeJSON($infoblock->html)?>,
+            //html: <?php echo escapeJSON($infoblock->html)?>,
+            listeners:{
+                render : function(element){
+                    var textarea =
+                    {
+                        xtype: 'textarea',
+                        fieldLabel: 'Текст',
+                        id: 'infoblock-form-textarea-<?php echo $infoblock->id?>',
+                        name: 'html',
+                        height : 300,
+                        width : '98%',
+                        value : <?php echo escapeJSON($infoblock->html)?>,
+                    };
+                    var panel = Ext.getCmp('infoblock-form-<?php echo $infoblock->id?>').getComponent('panel-content');
+                    panel.setHeight('auto');
+                    panel.add(textarea);
+                    panel.body.update('');
+                    panel.body.setStyle('background-color','');
+                    //panel.getTopToolbar().hide();
+                    panel.doLayout();
+                }
+            },
             tbar:
             {
                 xtype: 'toolbar',
                 items:
                 [
                     {
-                        text:'Правка',
+                        text:'Правка в визуальном редакторе',
                         iconCls: 'edit-menu',
                         handler: function(){
-                                var textarea =
-                                {
-                                    xtype: 'textarea',
-                                    fieldLabel: 'Текст',
-                                    id: 'infoblock-form-textarea-<?php echo $infoblock->id?>',
-                                    name: 'html',
-                                    height : 400,
-                                    width : 600,
-                                    value : <?php echo escapeJSON($infoblock->html)?>,
-                                    listeners:
-                                    {
-                                        render : function(element)
-                                            {
-                                                var oFCKeditorOptions =
-                                                {
-                                                    BasePath : 'jscripts/fckeditor/' ,
-                                                    Config : {
-                                                        BaseHref : window.location ,
-                                                        SkinPath : '../editor/skins/office2003/' ,
-                                                        ProcessHTMLEntities : true ,
-                                                        ProcessNumericEntities : false
-                                                    },
-                                                    ToolbarSet : 'Default'
-                                                };
-                                                oFCKeditor = new FCKeditor(element.id);
-                                                oFCKeditor.BasePath      = oFCKeditorOptions.BasePath;
-                                                oFCKeditor.ToolbarSet    = oFCKeditorOptions.ToolbarSet;
-                                                oFCKeditor.Config        = oFCKeditorOptions.Config;
-                                                oFCKeditor.Height          = element.height;
-                                                oFCKeditor.ReplaceTextarea();
-                                            }
-                                     }
-                                };
-                                var panel = Ext.getCmp('infoblock-form-<?php echo $infoblock->id?>').getComponent('panel-content');
-                                panel.setHeight('auto');
-                                panel.add(textarea);
-                                panel.body.update('');
-                                panel.body.setStyle('background-color','');
-                                panel.getTopToolbar().hide();
-                                panel.doLayout();
-                            }
+                           var oFCKeditorOptions =
+                            {
+                                BasePath : 'jscripts/fckeditor/' ,
+                                Config : {
+                                    BaseHref : window.location ,
+                                    SkinPath : '../editor/skins/office2003/' ,
+                                    ProcessHTMLEntities : true ,
+                                    ProcessNumericEntities : false
+                                },
+                                ToolbarSet : 'Default'
+                            };
+                            oFCKeditor = new FCKeditor('infoblock-form-textarea-<?php echo $infoblock->id?>');
+                            oFCKeditor.BasePath      = oFCKeditorOptions.BasePath;
+                            oFCKeditor.ToolbarSet    = oFCKeditorOptions.ToolbarSet;
+                            oFCKeditor.Config        = oFCKeditorOptions.Config;
+                            oFCKeditor.Height          = 350;
+                            oFCKeditor.ReplaceTextarea();
+                            var panel = Ext.getCmp('infoblock-form-<?php echo $infoblock->id?>').getComponent('panel-content');
+                            panel.getTopToolbar().hide();
+                        }
                     }
                 ]
             }
@@ -113,8 +113,10 @@
                 if(ta)
                 {
                     var api = FCKeditorAPI.GetInstance(ta.getId());
-                    var val = api.GetHTML();
-                    ta.setValue(val);
+                    if(api){
+                        var val = api.GetHTML();
+                        ta.setValue(val);
+                    }
                 }
 
                 form.getForm().submit({
