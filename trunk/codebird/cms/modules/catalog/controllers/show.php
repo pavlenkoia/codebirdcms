@@ -51,10 +51,11 @@ class CatalogController_Show extends Controller_Base
 
                 $result['items'] = $rows;
 
-                $result['pager'] = array();
 
                 if($pager['count'] > 1)
                 {
+                    $result['pager'] = array();
+
                     $uri_orig = $_SERVER['REQUEST_URI'];
                     $uris = explode('?', $uri_orig);
                     $uris = array_pad($uris,2,null);
@@ -65,7 +66,7 @@ class CatalogController_Show extends Controller_Base
 
                     $page = Utils::getGet('page');
 
-                    if(!$page || !is_numeric($page) || $page < 1 || $page > $args->count) $page = 1;
+                    if(!$page || !is_numeric($page) || $page < 1 || $page > $pager['count']) $page = 1;
 
                     for($i=1; $i<=$pager['count']; $i++ )
                     {
