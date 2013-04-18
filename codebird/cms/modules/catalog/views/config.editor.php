@@ -33,9 +33,75 @@
                     rootVisible: false,
                     loader: new Ext.tree.TreeLoader(
                     {
-                        dataUrl: '/ajax/cm/catalog.config.tree'
+                        dataUrl: '/ajax/cm/catalog.config.tree_tables'
                     }),
-                    root: new Ext.tree.AsyncTreeNode()
+                    root: new Ext.tree.AsyncTreeNode({id:'_root'}),
+                    listeners:
+                    {
+                        click: function(node)
+                        {
+                            var tabs = Ext.getCmp('panel-catalog-config-editor').getComponent('item').getComponent('tabs');
+                            var id = 'tab-catalog-config-item-'+node.id;
+                            if(tabs.findById(id))
+                            {
+                                tabs.setActiveTab(tabs.findById(id));
+                            }
+                            else if(node.id != '_tables_section' && node.id != '_tables_position')
+                            {
+                                tabs.add({
+                                    id: id,
+                                    title: node.text,
+                                    closable:true,
+                                    bodyStyle: 'margin: 0px',
+                                    layout:'fit',
+                                    listeners:
+                                    {
+                                        afterrender: function(comp)
+                                        {
+                                            Ext.Ajax.request({
+                                                url : '/ajax/cm/catalog.config.editor_item',
+                                                method: 'POST',
+                                                params:
+                                                {
+                                                    id: node.id,
+                                                },
+                                                maskEl : tabs,
+                                                loadingMessage : 'Загрузка...',
+                                                success : function (response) {
+                                                    comp.add(response.responseJSON);
+                                                    comp.doLayout();
+                                                    comp.node = node;
+                                                }
+                                            });
+                                        }
+                                    }
+                                }).show();
+                                tabs.ownerCt.doLayout();
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            region: 'center',
+            itemId: 'item',
+            layout:'fit',
+            items:
+            [
+                {
+                    xtype: 'tabpanel',
+                    itemId: 'tabs',
+                    resizeTabs:true,
+                    minTabWidth: 100,
+                    tabWidth: 150,
+                    enableTabScroll:true,
+                    border: false,
+                    defaults:
+                    {
+                        autoScroll:true
+                    },
+                    plugins: new Ext.ux.TabCloseMenu()
                 }
             ]
         }
