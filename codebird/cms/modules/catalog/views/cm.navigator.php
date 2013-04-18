@@ -126,6 +126,19 @@
                     var tree = Ext.getCmp('catalog-navigator-<?php echo $alias ?>').getComponent('tree');
                     tree.getLoader().load(tree.root);
                 }
+            },
+            {
+                iconCls: 'config-menu',
+                tooltip: 'Конфигуратор разделов',
+                handler: function(event, toolEl, panel)
+                {
+                    App.showEditor({
+                        url: '/ajax/cm/catalog.config.editor',
+                        id : 'catalog-config-editor',
+                        caption: 'Конфигуратор разделов',
+                        iconCls: 'config-menu'
+                    });
+                }
             }
         ]
     },
