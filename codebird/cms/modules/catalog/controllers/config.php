@@ -17,6 +17,21 @@ class CatalogController_Config extends Controller_Base
         $template->render();
     }
 
+    public function editor_item()
+    {
+        $template = $this->createTemplate();
+
+        $table_id = Utils::getVar("id");
+
+        $data = $this->getData('config');
+
+        $param_table = $data->GetParam($table_id);
+
+        $template->param_table = $param_table;
+
+        $template->render();
+    }
+
     public function tree_tables()
     {
         $node_id = Utils::getVar("node");

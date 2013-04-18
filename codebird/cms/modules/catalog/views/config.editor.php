@@ -26,7 +26,7 @@
                     xtype: 'treepanel',
                     itemId: 'tree',
                     animate: true,
-                    enableDD: true,
+                    //enableDD: true,
                     containerScroll: false,
                     border: false,
                     autoScroll: true,
