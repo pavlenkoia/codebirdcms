@@ -49,7 +49,11 @@ class CatalogController_Show extends Controller_Base
 
                 $rows = $table->select('select * from `'.$section->position_table.'` where section_id=:section_id '.$order.$pager['limit'], array('section_id'=>$section->id));
 
-                $result['items'] = $rows;
+                foreach($rows as $row)
+                {
+                    $row['_url'] = '/'.$alias.'/'.$row['id'].'/';
+                    $result['items'][] = $row;
+                }
 
 
                 if($pager['count'] > 1)
