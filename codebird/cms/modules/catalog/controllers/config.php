@@ -29,6 +29,23 @@ class CatalogController_Config extends Controller_Base
 
         $template->param_table = $param_table;
 
+        $tables = $data->GetParam('tables_section');
+        if($tables[$table_id])
+        {
+            $template->table = $tables[$table_id];
+            $template->is_section = true;
+        }
+        else
+        {
+            $tables = $data->GetParam('tables');
+            if($tables[$table_id])
+            {
+                $template->table = $tables[$table_id];
+                $template->is_position = true;
+            }
+        }
+
+
         $template->render();
     }
 
