@@ -34,6 +34,7 @@ class CatalogController_Config extends Controller_Base
         {
             $template->table = $tables[$table_id];
             $template->is_section = true;
+            $table = $tables[$table_id];
         }
         else
         {
@@ -42,7 +43,14 @@ class CatalogController_Config extends Controller_Base
             {
                 $template->table = $tables[$table_id];
                 $template->is_position = true;
+                $table = $tables[$table_id];
             }
+        }
+
+        if($table)
+        {
+            $db_fields = $data->GetFields($table['table']);
+            $template->db_fields = $db_fields;
         }
 
 
@@ -84,7 +92,8 @@ class CatalogController_Config extends Controller_Base
 
                 $nodes[] = $node;
             }
-            
+
+
         }
         elseif($node_id == '_tables_position')
         {
@@ -102,6 +111,21 @@ class CatalogController_Config extends Controller_Base
         }
 
         $this->setContent(json_encode($nodes));
+    }
+
+    public function fields_records()
+    {
+        $table_name = Utils::getVar("table_name");
+
+        $data = $this->getData('config');
+
+        $db_fields = $data->GetFields($table_name);
+
+        $res = array();
+
+        $res['rows'] = $db_fields;
+
+        $this->setContent(json_encode($res));
     }
 }
 ?>

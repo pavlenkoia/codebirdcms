@@ -36,5 +36,27 @@ class CatalogModel_Config extends Model_Base
 
         return $res;
     }
+
+    public function GetFields($table_name)
+    {
+        $table = new Table('catalog_section');
+
+        $rows = $table->select('SHOW COLUMNS FROM `'.$table_name.'` ');
+
+        $db_fields = array();
+
+        foreach($rows as $row)
+        {
+            if(in_array($row['Field'],array('id','section_id'))) continue;
+
+            $db_field = array(
+                'Field'=>$row['Field'],
+                'Type'=>$row['Type']
+            );
+            $db_fields[] = $db_field;
+        }
+
+        return $db_fields;
+    }
 }
 ?>
