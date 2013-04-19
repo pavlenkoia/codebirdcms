@@ -84,9 +84,7 @@ class CatalogController_Config extends Controller_Base
 
                 $nodes[] = $node;
             }
-
-            /*echo '<pre>';print_r($tables);echo '</pre>';
-            die();*/
+            
         }
         elseif($node_id == '_tables_position')
         {
