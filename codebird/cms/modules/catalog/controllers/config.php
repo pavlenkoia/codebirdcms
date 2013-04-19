@@ -47,13 +47,6 @@ class CatalogController_Config extends Controller_Base
             }
         }
 
-        if($table)
-        {
-            $db_fields = $data->GetFields($table['table']);
-            $template->db_fields = $db_fields;
-        }
-
-
         $template->render();
     }
 
@@ -124,6 +117,44 @@ class CatalogController_Config extends Controller_Base
         $res = array();
 
         $res['rows'] = $db_fields;
+        $res['results'] = count($db_fields);
+        $res['success'] = true;
+
+        $this->setContent(json_encode($res));
+    }
+
+    public function fields_add_form()
+    {
+        $table_name = Utils::getVar("table_name");
+
+        $template = $this->createTemplate();
+
+        $template->table_name = $table_name;
+
+        $template->render();
+    }
+
+    public function fields_add()
+    {
+        $table_name = Utils::getVar("table_name");
+        $field_name = Utils::getVar("name");
+
+        $data = $this->getData('config');
+
+        $error = $data->AddField($table_name,$field_name);
+
+        $res = array();
+
+        if($error)
+        {
+            $res['success'] = false;
+            $res['msg'] = $error;
+        }
+        else
+        {
+            $res['success'] = true;
+            $res['msg'] = 'Добавлено';
+        }
 
         $this->setContent(json_encode($res));
     }
