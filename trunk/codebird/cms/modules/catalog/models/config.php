@@ -58,5 +58,16 @@ class CatalogModel_Config extends Model_Base
 
         return $db_fields;
     }
+
+    public function AddField($table_name, $field_name)
+    {
+        $table = new Table('catalog_section');
+
+        $table->execute('ALTER TABLE `'.$table_name.'` ADD `'.$field_name.'` varchar(256) collate utf8_unicode_ci default NULL');
+
+        $res = $table->errorInfo;
+
+        return $res;
+    }
 }
 ?>
