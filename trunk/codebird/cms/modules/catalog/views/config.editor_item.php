@@ -155,6 +155,8 @@
             {
                 render: function()
                 {
+                    var button_add,button_up,button_down;
+
                     var ds = new Ext.data.Store
                     ({
                         url: '/ajax/cm/catalog.config.editors_records?table_id=<?=$table_id?>',
@@ -176,6 +178,12 @@
                     var sm = new Ext.grid.CheckboxSelectionModel({
                         listeners:
                         {
+                            rowselect: function(sm, rowIndex, r){
+                                button_up.setDisabled(!sm.hasPrevious());
+                                button_up.up_id = r.id;
+                                button_down.setDisabled(!sm.hasNext());
+                                button_down.down_id = r.id;
+                            }
                         }
                     });
                     var grid = new Ext.grid.GridPanel
@@ -218,23 +226,80 @@
 
                     this.add(grid);
 
-                    /*var button_add = new Ext.Button
+                    button_add = new Ext.Button
                     ({
                         text: 'Добавить',
-                        style: 'margin-top: 5px;',
+                        style: 'padding: 5px;',
                         handler: function()
                         {
-
+                            Ext.Ajax.request({
+                                url : '/ajax/cm/catalog.config.editors_add',
+                                params:
+                                {
+                                    table_id: <?=escapeJSON($table_id)?>
+                                },
+                                method: 'POST',
+                                maskEl : grid,
+                                loadingMessage : 'Загрузка...',
+                                success : function (response) {
+                                    console.log(response);
+                                }
+                            });
                         }
                     });
 
-                    this.add(button_add);*/
+                    button_up = new Ext.Button
+                    ({
+                        text: 'Наверх',
+                        style: 'padding: 5px;',
+                        disabled: true,
+                        handler: function()
+                        {
+                            var id = this.up_id;
+                            var index = ds.find('id',id);
+                            var record = ds.getById(id);
+                            ds.remove(record);
+                            ds.insert(index-1,record);
+                            sm.selectRow(index-1);
+                        }
+                    });
+
+                    button_down = new Ext.Button
+                    ({
+                        text: 'Вниз',
+                        style: 'padding: 5px;',
+                        disabled: true,
+                        handler: function()
+                        {
+                            var id = this.down_id;
+                            var index = ds.find('id',id);
+                            var record = ds.getById(id);
+                            ds.remove(record);
+                            ds.insert(index+1,record);
+                            sm.selectRow(index+1);
+                        }
+                    });
+
+                    var panel_btn = new Ext.Panel({
+                        layout: {
+                            type: 'hbox',
+                            align: 'left'
+                        }
+                    });
+                    panel_btn.add(button_add);
+                    panel_btn.add(button_up);
+                    panel_btn.add(button_down);
+                    this.add(panel_btn);
+
+
+
+
                 }
             }
-        }/*,
+        },
         {
             html: <?=escapeJSON('<pre>'.print_r($param_table,1).'</pre>');?>
-        } ,
+        }/* ,
         {
             html: <?=escapeJSON('<pre>'.print_r($table,1).'</pre>');?>
         }*/

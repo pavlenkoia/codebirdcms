@@ -238,5 +238,24 @@ class CatalogController_Config extends Controller_Base
 
         $this->setContent(json_encode($res));
     }
+
+    public function editors_add()
+    {
+        $table_id = Utils::getVar("table_id");
+
+        $data = $this->getData('config');
+
+        $param_table = $data->GetParam($table_id);
+
+        $param_table['xxx'] = array(
+            'field'=>'xxx',
+            'title'=>'Тест',
+            'type'=>'text'
+        );
+
+        $data->SetParam($table_id,$param_table);
+
+        //echo print_r($param_table,1);
+    }
 }
 ?>
