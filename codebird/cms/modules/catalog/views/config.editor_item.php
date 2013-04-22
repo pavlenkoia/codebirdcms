@@ -296,10 +296,10 @@
 
                 }
             }
-        },
+        }/*,
         {
             html: <?=escapeJSON('<pre>'.print_r($param_table,1).'</pre>');?>
-        }/* ,
+        } ,
         {
             html: <?=escapeJSON('<pre>'.print_r($table,1).'</pre>');?>
         }*/
