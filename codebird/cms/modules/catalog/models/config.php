@@ -69,5 +69,16 @@ class CatalogModel_Config extends Model_Base
 
         return $res;
     }
+
+    public function DelField($table_name, $field_name)
+    {
+        $table = new Table('catalog_section');
+
+        $table->execute('ALTER TABLE `'.$table_name.'` DROP `'.$field_name.'`');
+
+        $res = $table->errorInfo;
+
+        return $res;
+    }
 }
 ?>

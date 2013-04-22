@@ -28,6 +28,7 @@ class CatalogController_Config extends Controller_Base
         $param_table = $data->GetParam($table_id);
 
         $template->param_table = $param_table;
+        $template->table_id = $table_id;
 
         $tables = $data->GetParam('tables_section');
         if($tables[$table_id])
@@ -154,6 +155,85 @@ class CatalogController_Config extends Controller_Base
         {
             $res['success'] = true;
             $res['msg'] = 'Добавлено';
+        }
+
+        $this->setContent(json_encode($res));
+    }
+
+    public function fields_edit_form()
+    {
+        $table_name = Utils::getVar("table_name");
+        $field_name = Utils::getVar("field_name");
+
+        $data = $this->getData('config');
+
+        $db_fields = $data->GetFields($table_name);
+        foreach($db_fields as $db_field)
+        {
+            if($db_field['Field'] == $field_name)
+            {
+                $field_type = $db_field['Type'];
+                break;
+            }
+        }
+
+        $template = $this->createTemplate();
+
+        $template->table_name = $table_name;
+        $template->field_name = $field_name;
+        $template->field_type = $field_type;
+
+        $template->render();
+    }
+
+    public function fields_del()
+    {
+        $table_name = Utils::getVar("table_name");
+        $field_name = Utils::getVar("field_name");
+
+        $data = $this->getData('config');
+
+        $error = $data->DelField($table_name,$field_name);
+
+        $res = array();
+
+        if($error)
+        {
+            $res['success'] = false;
+            $res['msg'] = $error;
+        }
+        else
+        {
+            $res['success'] = true;
+            $res['msg'] = 'Удалено';
+        }
+
+        $this->setContent(json_encode($res));
+    }
+
+    public function editors_records()
+    {
+        $table_id = Utils::getVar("table_id");
+
+        $data = $this->getData('config');
+
+        $param_table = $data->GetParam($table_id);
+
+        $res = array();
+
+        $res['rows'] = array();
+        $res['results'] = count($param_table);
+        $res['success'] = true;
+
+        foreach($param_table as $key=>$param)
+        {
+            $row = array(
+                'id'=>$key,
+                'title'=>$param['title'],
+                'field'=>$param['field'],
+                'type'=>$param['type']
+            );
+            $res['rows'][] = $row;
         }
 
         $this->setContent(json_encode($res));
