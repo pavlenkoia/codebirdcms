@@ -219,6 +219,8 @@ class CatalogController_Config extends Controller_Base
 
         $param_table = $data->GetParam($table_id);
 
+        $editors_type = $data->GetEditorsType();
+
         $res = array();
 
         $res['rows'] = array();
@@ -231,7 +233,7 @@ class CatalogController_Config extends Controller_Base
                 'id'=>$key,
                 'title'=>$param['title'],
                 'field'=>$param['field'],
-                'type'=>$param['type']
+                'type'=>($editors_type[$param['type']])?$editors_type[$param['type']]:$param['type']
             );
             $res['rows'][] = $row;
         }
@@ -256,7 +258,7 @@ class CatalogController_Config extends Controller_Base
         $data->SetParam($table_id,$param_table);
     }
 
-    public function editor_edit_form()
+    public function editors_edit_form()
     {
         $table_id = Utils::getVar("table_id");
         $table_name = Utils::getVar("table_name");
@@ -270,20 +272,176 @@ class CatalogController_Config extends Controller_Base
 
         $template = $this->createTemplate();
 
+        $template->table_id = $table_id;
+
         if($editor)
         {
-            $template->table_id = $table_id;
             $template->editor_name = $editor_name;
             $template->editor_title = $editor['title'];
             $template->editor_field = $editor['field'];
             $template->editor_type = $editor['type'];
-            $fields = $data->getFields($table_name);
-            $ar_fields = array();
-            foreach($fields as $field)
+            $template->editor_mode = $editor['mode'];
+        }
+
+        $fields = $data->getFields($table_name);
+        $ar_fields = array();
+        foreach($fields as $field)
+        {
+            $ar_fields[] = $field['Field'];
+        }
+        $template->fields = $ar_fields;
+
+        $template->editors_type = $data->GetEditorsType();
+
+        $template->render();
+    }
+
+    public function  editors_del()
+    {
+        $table_id = Utils::getVar("table_id");
+        $editor_name = Utils::getVar("editor_name");
+
+        $data = $this->getData('config');
+
+        $param_table = $data->GetParam($table_id);
+
+        unset($param_table[$editor_name]);
+
+        $data->SetParam($table_id,$param_table);
+
+        $res = array();
+
+        $res['success'] = true;
+        $res['msg'] = 'Удалено';
+
+        $this->setContent(json_encode($res));
+    }
+
+    public function editors_edit()
+    {
+        $res = array();
+
+        $res['success'] = true;
+        $res['msg'] = 'Готово';
+
+        $data = $this->getData('config');
+
+        $table_id = Utils::getVar("table_id");
+        $editor_name = Utils::getVar("editor_name");
+
+        $param_table = $data->GetParam($table_id);
+
+        $field = Utils::getVar("field");
+        $title = Utils::getVar("title");
+        $type = Utils::getVar("type");
+        $mode = Utils::getVar("mode");
+
+        if($res['success'])
+        {
+            if($editor_name)
             {
-                $ar_fields[] = $field['Field'];
+                $name = $editor_name;
             }
-            $template->fields = $ar_fields;
+            else
+            {
+                $i = 2;
+                $name = $field;
+                while($param_table[$name])
+                {
+                    $name = $field.$i++;
+                }
+            }
+
+            $param_table[$name]['field'] = $field;
+            $param_table[$name]['title'] = $title;
+            $param_table[$name]['type'] = $type;
+            if($mode)
+            {
+                $param_table[$name]['mode'] = $mode;
+            }
+            else
+            {
+                unset($param_table[$name]['mode']);
+            }
+
+            $data->SetParam($table_id,$param_table);
+        }
+
+        $this->setContent(json_encode($res));
+    }
+
+    public function editors_pos()
+    {
+        $data = $this->getData('config');
+
+        $table_id = Utils::getVar("table_id");
+        $editor_name = Utils::getVar("editor_name");
+        $pos = Utils::getVar("pos");
+
+        $param_table = $data->GetParam($table_id);
+
+        if($param_table[$editor_name])
+        {
+            $keys = array_keys($param_table);
+
+            $index = array_search($editor_name,$keys);
+
+            if($pos == 'up')
+            {
+                if($index > 0 )
+                {
+                    $val = $keys[$index-1];
+                    $keys[$index-1] = $keys[$index];
+                    $keys[$index] = $val;
+                }
+            }
+            elseif($pos == 'down')
+            {
+                if($index+1 < count($keys) )
+                {
+                    $val = $keys[$index+1];
+                    $keys[$index+1] = $keys[$index];
+                    $keys[$index] = $val;
+                }
+            }
+
+            $param_table2 = array();
+
+            foreach($keys as $key)
+            {
+                $param_table2[$key] = $param_table[$key];
+            }
+
+            $data->SetParam($table_id,$param_table2);
+        }
+
+        $this->setContent(print_r($param_table2,1));
+    }
+
+    public function table_edit_form()
+    {
+        $template = $this->createTemplate();
+
+        $data = $this->getData('config');
+
+        $table_id = Utils::getVar("table_id");
+
+        $template->table_id = $table_id;
+
+        $tables = $data->GetParam('tables_section');
+        if($tables[$table_id])
+        {
+            $template->table = $tables[$table_id];
+            $template->is_section = true;
+        }
+        else
+        {
+            $tables = $data->GetParam('tables');
+            if($tables[$table_id])
+            {
+                $template->table = $tables[$table_id];
+                $template->is_position = true;
+            }
         }
 
         $template->render();
