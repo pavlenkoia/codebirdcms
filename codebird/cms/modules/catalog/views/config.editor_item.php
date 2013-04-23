@@ -24,6 +24,30 @@
                     xtype: 'displayfield',
                     fieldLabel: 'Таблица',
                     value: <?=escapeJSON('`'.$table['table'].'`')?>
+                },
+                {
+                    xtype: 'button',
+                    text: 'Изменить',
+                    handler: function(){
+                        Ext.Ajax.request({
+                            url : '/ajax/cm/catalog.config.table_edit_form',
+                            params:
+                            {
+                                table_id: <?=escapeJSON($table_id)?>
+                            },
+                            method: 'POST',
+                            maskEl : this.ownerCt,
+                            loadingMessage : 'Загрузка...',
+                            success : function (response) {
+                                var obj = response.responseJSON;
+                                obj.success_update = function(){
+
+                                };
+                                var win = new Ext.Window(obj);
+                                win.show(this.id);
+                            }
+                        });
+                    }
                 }
             ]
         },
@@ -149,7 +173,7 @@
         {
             xtype:'fieldset',
             title: <?=escapeJSON('Поля редактора')?>,
-            collapsible: false,
+            collapsible: true,
             autoHeight:true,
             listeners:
             {
@@ -218,7 +242,7 @@
                                 {
                                     var id = sels[0].id;
                                     Ext.Ajax.request({
-                                        url : '/ajax/cm/catalog.config.editor_edit_form',
+                                        url : '/ajax/cm/catalog.config.editors_edit_form',
                                         params:
                                         {
                                             table_id: <?=escapeJSON($table_id)?>,
@@ -252,16 +276,22 @@
                         handler: function()
                         {
                             Ext.Ajax.request({
-                                url : '/ajax/cm/catalog.config.editors_add',
+                                url : '/ajax/cm/catalog.config.editors_edit_form',
                                 params:
                                 {
-                                    table_id: <?=escapeJSON($table_id)?>
+                                    table_id: <?=escapeJSON($table_id)?>,
+                                    table_name: <?=escapeJSON($table['table'])?>
                                 },
                                 method: 'POST',
                                 maskEl : grid,
                                 loadingMessage : 'Загрузка...',
                                 success : function (response) {
-                                    console.log(response);
+                                    var obj = response.responseJSON;
+                                    obj.success_update = function(){
+                                        grid.getStore().load();
+                                    };
+                                    var win = new Ext.Window(obj);
+                                    win.show(this.id);
                                 }
                             });
                         }
@@ -280,6 +310,20 @@
                             ds.remove(record);
                             ds.insert(index-1,record);
                             sm.selectRow(index-1);
+
+                            Ext.Ajax.request({
+                                url : '/ajax/cm/catalog.config.editors_pos',
+                                params:
+                                {
+                                    table_id: <?=escapeJSON($table_id)?>,
+                                    editor_name: id,
+                                    pos: 'up'
+                                },
+                                method: 'POST',
+                                success : function (response) {
+
+                                }
+                            });
                         }
                     });
 
@@ -296,6 +340,20 @@
                             ds.remove(record);
                             ds.insert(index+1,record);
                             sm.selectRow(index+1);
+
+                            Ext.Ajax.request({
+                                url : '/ajax/cm/catalog.config.editors_pos',
+                                params:
+                                {
+                                    table_id: <?=escapeJSON($table_id)?>,
+                                    editor_name: id,
+                                    pos: 'down'
+                                },
+                                method: 'POST',
+                                success : function (response) {
+
+                                }
+                            });
                         }
                     });
 

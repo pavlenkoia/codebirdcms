@@ -152,5 +152,26 @@ class CatalogModel_Config extends Model_Base
 
         return $res;
     }
+
+    public function GetEditorsType()
+    {
+        $res = array();
+
+        $res['text'] = 'Текстовая строка';
+        $res['memo'] = 'Многострочный редактор';
+        $res['richtext'] = 'Визуальный редактор';
+        $res['date'] = 'Дата';
+        $res['check'] = 'Чекбокс';
+        $res['image'] = 'Картинка';
+        $res['file'] = 'Файл';
+        $res['int'] = 'Целое число';
+        $res['dec'] = 'Десятичное число';
+        $res['select'] = 'Выпадающий список справочника';
+        $res['selecttext'] = 'Текстовая строка с выпадающим списком';
+        $res['labeltext'] = 'Нередактируемая текстовая строка';
+        $res['images'] = 'Картинки';
+
+        return $res;
+    }
 }
 ?>
