@@ -254,8 +254,39 @@ class CatalogController_Config extends Controller_Base
         );
 
         $data->SetParam($table_id,$param_table);
+    }
 
-        //echo print_r($param_table,1);
+    public function editor_edit_form()
+    {
+        $table_id = Utils::getVar("table_id");
+        $table_name = Utils::getVar("table_name");
+        $editor_name = Utils::getVar("editor_name");
+
+        $data = $this->getData('config');
+
+        $editors = $data->getParam($table_id);
+
+        $editor = $editors[$editor_name];
+
+        $template = $this->createTemplate();
+
+        if($editor)
+        {
+            $template->table_id = $table_id;
+            $template->editor_name = $editor_name;
+            $template->editor_title = $editor['title'];
+            $template->editor_field = $editor['field'];
+            $template->editor_type = $editor['type'];
+            $fields = $data->getFields($table_name);
+            $ar_fields = array();
+            foreach($fields as $field)
+            {
+                $ar_fields[] = $field['Field'];
+            }
+            $template->fields = $ar_fields;
+        }
+
+        $template->render();
     }
 }
 ?>

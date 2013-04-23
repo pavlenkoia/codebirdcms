@@ -217,7 +217,26 @@
                                 if(sels.length > 0)
                                 {
                                     var id = sels[0].id;
-
+                                    Ext.Ajax.request({
+                                        url : '/ajax/cm/catalog.config.editor_edit_form',
+                                        params:
+                                        {
+                                            table_id: <?=escapeJSON($table_id)?>,
+                                            editor_name: id,
+                                            table_name: <?=escapeJSON($table['table'])?>
+                                        },
+                                        method: 'POST',
+                                        maskEl : grid,
+                                        loadingMessage : 'Загрузка...',
+                                        success : function (response) {
+                                            var obj = response.responseJSON;
+                                            obj.success_update = function(){
+                                                grid.getStore().load();
+                                            };
+                                            var win = new Ext.Window(obj);
+                                            win.show(this.id);
+                                        }
+                                    });
                                 }
                             }
                         }
