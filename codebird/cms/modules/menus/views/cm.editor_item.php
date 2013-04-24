@@ -212,7 +212,7 @@
                     handler: function(btn)
                     {
                         var form = btn.ownerCt.ownerCt;
-                        Editor.uploadWindow({
+                        App.uploadWindow({
                             targetId: this.id,
                             id: '<?php echo  $item->id ?>',
                             url: '/ajax/cm/menus.cm.uploadimage',
