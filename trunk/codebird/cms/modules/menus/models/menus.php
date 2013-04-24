@@ -56,6 +56,43 @@ class MenusModel_Menus extends Model_Base
         return $rows;
     }
 
+    public function getMenuItems($menus_id,$parent_id=null)
+    {
+        $menuItems = array();
+
+        $items = $this->getItems($menus_id,$parent_id);
+
+        $uri_orig = $_SERVER['REQUEST_URI'];
+        $uris = explode('?', $uri_orig);
+        $url = $uris[0];
+
+        $url2 = '/'.Utils::getVar('alias').'.html';
+
+        $pages = $this->getPages();
+
+        foreach($items as $row)
+        {
+            if($row['visible'] != 1) continue;
+
+            $href = $row['type_link'];
+
+            $row['href'] = $href;
+
+            if($url == $href || $url2 == $href || ($row['type_id'] && in_array($href,$pages)))
+            {
+                $row['active'] = true;
+            }
+            else
+            {
+                $row['active'] = false;
+            }
+
+            $menuItems[] = $row;
+        }
+
+        return $menuItems;
+    }
+
     public function getItem($id=-1)
     {
         $table = $this->getTableItem();
