@@ -21,7 +21,8 @@ class MenusController_Show extends Controller_Base
 
 
             // одноуровневое меню
-            $menuItems = array();
+            $menuItems = $data->getMenuItems($menu->id);
+            /*$menuItems = array();
 
             $items = $data->getItems($menu->id);
 
@@ -51,7 +52,7 @@ class MenusController_Show extends Controller_Base
                 }
 
                 $menuItems[] = $row;
-            }
+            }*/
 
             $template->items = $menuItems;
             // end одноуровневое меню

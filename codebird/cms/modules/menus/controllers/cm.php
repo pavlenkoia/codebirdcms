@@ -458,5 +458,83 @@ class MenusController_Cm extends Controller_Base
 
         $this->setContent(json_encode($res));
     }
+
+    public function uploadimage()
+    {
+        $res = array();
+        try
+        {
+            $data = $this->getData();
+            $id = Utils::getVar('id');
+            $object = $data->getItem($id);
+
+            if($object)
+            {
+                if(isset($_FILES["file"]))
+                {
+                    $ext = '.jpg';
+                    switch ($_FILES['file']['type'])
+                    {
+                        case 'image/jpeg':
+                            $ext = '.jpg';
+                            break;
+
+                        case 'image/bmp':
+                            $ext = '.bmp';
+                            break;
+
+                        case 'image/png':
+                            $ext = '.png';
+                            break;
+
+                        case 'image/jpg':
+                            $ext = '.jpg';
+                            break;
+
+                        case 'image/gif':
+                            $ext = '.gif';
+                            break;
+
+                        default:
+                            //$ext = '.';
+                    }
+
+                    if($ext == '.bmp' || $ext == '.')
+                    {
+                        throw new Exception('Картинка такого формата не поддерживается');
+                    }
+
+                    $img_src = "menu_item_".$id.md5(uniqid(rand(0, 1000000))).$ext;
+
+                    $upload_path = SITE_PATH.'files/menus/upload/'.$img_src;
+                    move_uploaded_file($_FILES['file']['tmp_name'], $upload_path);
+
+                    $object->img_src = 'files/menus/upload/'.$img_src;
+                    $data->saveItem($object);
+
+                    $res['success'] = true;
+                    $res['msg'] = 'Картинка загружена';
+                    $res['src'] = get_cache_pic($object->img_src,100,100,true,'','files/menus/cache/');
+                    $res['id'] = $id;
+                }
+                else
+                {
+                    $res['success'] = false;
+                    $res['msg'] = 'Нет файла для загрузки';
+                }
+            }
+            else
+            {
+                $res['success'] = false;
+                $res['msg'] = 'Страница уже удалена';
+            }
+        }
+        catch(Exception $e)
+        {
+            $res['success'] = false;
+            $res['msg'] = $e->getMessage();
+        }
+        $this->setContent(json_encode($res));
+    }
 }
 ?>

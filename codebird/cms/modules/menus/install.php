@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `menus_item` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;";
 
-    public $dirs = array('menus');
+    public $dirs = array('menus','menus/cache','menus/upload');
 }
 
 ?>
