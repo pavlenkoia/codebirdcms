@@ -39,7 +39,7 @@ class CatalogController_Show extends Controller_Base
                 $object = $table->getEntity($params[0]);
             }
 
-            if($object)
+            if($object && $object->section_id == $section->id)
             {
                 $result['object'] = (array)$object;
             }
