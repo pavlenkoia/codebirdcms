@@ -25,7 +25,7 @@ class CatalogController_Show extends Controller_Base
 
         if($section && $section->position_table)
         {
-            //$result['section'] = $section;
+            $result['section'] = $section;
 
             $table = new Table($section->position_table);
 
@@ -41,7 +41,19 @@ class CatalogController_Show extends Controller_Base
             }
             else
             {
-                $page_size = $this->args->page_size ? $this->args->page_size : 20;
+                $page_size = $this->args->page_size;
+
+                if(!$page_size && $section->section_table )
+                {
+                    $section_table = new Table($section->section_table);
+                    $section_data = $section_table->getEntity($section->id);
+                    if($section_data && $section_data->page_size)
+                    {
+                        $page_size = $section_data->page_size;
+                    }
+                }
+
+                $page_size = $page_size ? $page_size : 20;
 
                 $pager = $data->getPositionPagerArray($section->position_table, $section->id, $page_size);
 
@@ -72,6 +84,13 @@ class CatalogController_Show extends Controller_Base
 
                     if(!$page || !is_numeric($page) || $page < 1 || $page > $pager['count']) $page = 1;
 
+                    $result['pager']['pre'] = null;
+                    $result['pager']['next'] = null;
+                    $result['pager']['start'] = null;
+                    $result['pager']['end'] = null;
+
+                    $active = false;
+
                     for($i=1; $i<=$pager['count']; $i++ )
                     {
                         $arg_page = $i===1 ? '' : 'page='.$i;
@@ -87,12 +106,29 @@ class CatalogController_Show extends Controller_Base
 
                         if($page==$i)
                         {
-                            $result['pager']['items'][] = array('page'=>$i,'active'=>true,'href'=>$href);
+                            $item = array('page'=>$i,'active'=>true,'href'=>$href);
+                            $result['pager']['items'][] = $item;
+
+                            $result['pager']['pre'] = $result['pager']['end'];
+
+                            $active = true;
                         }
                         else
                         {
-                            $result['pager']['items'][] = array('page'=>$i,'active'=>false,'href'=>$href);
+                            $item = array('page'=>$i,'active'=>false,'href'=>$href);
+                            $result['pager']['items'][] = $item;
+
+                            if($active && !$result['pager']['next'])
+                            {
+                                $result['pager']['next'] = $item;
+                            }
                         }
+
+                        if(!$result['pager']['start'])
+                        {
+                            $result['pager']['start'] = $item;
+                        }
+                        $result['pager']['end'] = $item;
                     }
                 }
             }
