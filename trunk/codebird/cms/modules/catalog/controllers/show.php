@@ -11,6 +11,7 @@ class CatalogController_Show extends Controller_Base
         $template = $this->createTemplate();
 
         $data = $this->getData('action');
+        $data_config = $this->getData('config');
         $template->data = $data;
         $alias = Utils::getVar('alias');
         $uri = Utils::getVar('uri');
@@ -27,7 +28,10 @@ class CatalogController_Show extends Controller_Base
         {
             $result['section'] = $section;
 
-            $table = new Table($section->position_table);
+            $tables = $data_config->GetParam('tables');
+            $position_table =  $tables[$section->position_table]['table'];
+
+            $table = new Table($position_table);
 
             $object = null;
             if($this->args->mode != 'list' && $params[0])
@@ -45,7 +49,10 @@ class CatalogController_Show extends Controller_Base
 
                 if(!$page_size && $section->section_table )
                 {
-                    $section_table = new Table($section->section_table);
+                    $tables = $data_config->GetParam('tables_section');
+                    $section_table_name =  $tables[$section->section_table]['table'];
+
+                    $section_table = new Table($section_table_name);
                     $section_data = $section_table->getEntity($section->id);
                     if($section_data && $section_data->page_size)
                     {
@@ -55,11 +62,11 @@ class CatalogController_Show extends Controller_Base
 
                 $page_size = $page_size ? $page_size : 20;
 
-                $pager = $data->getPositionPagerArray($section->position_table, $section->id, $page_size);
+                $pager = $data->getPositionPagerArray($position_table, $section->id, $page_size);
 
                 $order = $this->args->order;
 
-                $rows = $table->select('select * from `'.$section->position_table.'` where section_id=:section_id '.$order.$pager['limit'], array('section_id'=>$section->id));
+                $rows = $table->select('select * from `'.$position_table.'` where section_id=:section_id '.$order.$pager['limit'], array('section_id'=>$section->id));
 
                 foreach($rows as $row)
                 {
