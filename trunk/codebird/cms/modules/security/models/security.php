@@ -102,6 +102,7 @@ class SecurityModel_Security extends Model_Base
             if($user['name'] == $name && $user['password'] == $password)
             {
                 $user['roles'][] = 'admin';
+                $user['roles'][] = 'dev';
                 $_SESSION['user'] = $user;
                 return true;
             }

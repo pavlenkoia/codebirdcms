@@ -6,6 +6,18 @@
     title: <?php echo escapeJSON('Конфигуратор разделов')?>,
     autoScroll: true,
     layout: 'border',
+    tbar:
+    {
+        xtype: 'toolbar',
+        items:
+        [
+            {
+                text:'Создать',
+                iconCls: 'add-menu',
+                itemId: 'add',
+            }
+        ]
+    },
     defaults:
     {
         collapsible: false,

@@ -126,7 +126,7 @@
                     var tree = Ext.getCmp('catalog-navigator-<?php echo $alias ?>').getComponent('tree');
                     tree.getLoader().load(tree.root);
                 }
-            },
+            }<?if(Security_User::inRole('dev')){?>,
             {
                 iconCls: 'config-menu',
                 tooltip: 'Конфигуратор разделов',
@@ -139,7 +139,7 @@
                         iconCls: 'config-menu'
                     });
                 }
-            }
+            }<?}?>
         ]
     },
     listeners:

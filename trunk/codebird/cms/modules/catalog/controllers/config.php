@@ -457,14 +457,41 @@ class CatalogController_Config extends Controller_Base
         $table_id = Utils::GetVar('table_id');
         $table_name = Utils::GetVar('table');
         $is_position = Utils::GetVar('is_position');
+        $order = Utils::GetVar('order');
+        $sql = Utils::GetVar('sql');
 
         if($is_position)
         {
             $param = $data->GetParam('tables');
 
             $param[$table_id]['title'] = $title;
-
+            $param[$table_id]['table'] = $table_name;
+            if($order)
+            {
+                $param[$table_id]['order'] = $order;
+            }
+            else
+            {
+                unset($param[$table_id]['order']);
+            }
+            if($sql)
+            {
+                $param[$table_id]['sql'] = $sql;
+            }
+            else
+            {
+                unset($param[$table_id]['sql']);
+            }
             $data->SetParam('tables',$param);
+        }
+        else
+        {
+            $param = $data->GetParam('tables_section');
+
+            $param[$table_id]['title'] = $title;
+            $param[$table_id]['table'] = $table_name;
+
+            $data->SetParam('tables_section',$param);
         }
 
         $res = array();
