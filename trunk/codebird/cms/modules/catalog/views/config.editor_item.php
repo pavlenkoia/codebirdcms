@@ -43,11 +43,11 @@
                             success : function (response) {
                                 var obj = response.responseJSON;
                                 obj.success_update = function(item){
+                                    var node = btn.ownerCt.ownerCt.ownerCt.node;
                                     if(item && item.name){
-                                        btn.ownerCt.getComponent('labelName').setValue(item.name);
-                                    }
-                                    if(item && item.table){
-                                        btn.ownerCt.getComponent('labelTable').setValue(item.table);
+                                        node.setText(item.name);
+                                        btn.ownerCt.ownerCt.ownerCt.ownerCt.remove(btn.ownerCt.ownerCt.ownerCt);
+                                        node.fireEvent('click',node);
                                     }
                                 };
                                 var win = new Ext.Window(obj);

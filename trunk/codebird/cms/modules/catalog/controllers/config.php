@@ -456,12 +456,20 @@ class CatalogController_Config extends Controller_Base
         $title = Utils::GetVar('title');
         $table_id = Utils::GetVar('table_id');
         $table_name = Utils::GetVar('table');
+        $is_position = Utils::GetVar('is_position');
+
+        if($is_position)
+        {
+            $param = $data->GetParam('tables');
+
+            $param[$table_id]['title'] = $title;
+
+            $data->SetParam('tables',$param);
+        }
 
         $res = array();
 
-        $ar = $data->GetPositionTables();
-
-        $res['item']['name'] = '<pre>'.print_r($ar,1).'</pre>';
+        $res['item']['name'] = $title;
 
         $res['success'] = true;
         $res['msg'] = 'Готово';
