@@ -1,7 +1,7 @@
 {
     layout:'fit',
     width: 400,
-    height: 400,
+    height: 340,
     closeAction:'close',
     plain: true,
     border: false,
@@ -27,6 +27,11 @@
                     value: <?=escapeJSON($table_id)?>
                 },
                 {
+                    xtype: 'hidden',
+                    name: 'is_position',
+                    value: <?=escapeJSON($is_position?1:0)?>
+                },
+                {
                     fieldLabel: 'Название',
                     name: 'title',
                     anchor: '95%',
@@ -34,16 +39,10 @@
                     value: <?=escapeJSON($table['title'])?>
                 },
                 {
-                    fieldLabel: 'Таблица',
-                    name: 'table',
-                    anchor: '95%',
-                    allowBlank: false,
-                    value: <?=escapeJSON($table['table'])?>
-                },
-                {
                     xtype: 'combo',
-                    fieldLabel: 'Тип поля',
-                    hiddenName: 'type',
+                    fieldLabel: 'Таблица',
+                    allowBlank: false,
+                    hiddenName: 'table',
                     anchor: '95%',
                     mode: 'local',
                     editable: false,
@@ -51,7 +50,7 @@
                     valueField: 'id',
                     displayField: 'display',
                     triggerAction: 'all',
-                    value: 'varchar',
+                    value: <?=escapeJSON($table['table'])?>,
                     store: new Ext.data.ArrayStore({
                         id: 0,
                         fields:
@@ -61,14 +60,31 @@
                         ],
                         data:
                         [
-                            ['varchar','varchar(256)'],
-                            ['text','text'],
-                            ['int','int'],
-                            ['float','float'],
-                            ['smallint','smallint']
+                            <?
+                            $ar = array();
+                            foreach($db_tables as $db_table)
+                            {
+                                $ar[] = '['.escapeJSON($db_table).','.escapeJSON($db_table).']';
+                            }
+                            echo implode(',',$ar);
+                            ?>
                         ]
                     })
-                }
+                }<?if($is_position){?>,
+                {
+                    fieldLabel: 'Сортировка (ORDER BY)',
+                    name: 'order',
+                    anchor: '95%',
+                    value: <?=escapeJSON($table['order'])?>
+                },
+                {
+                    fieldLabel: 'Запрос (sql)',
+                    name: 'sql',
+                    anchor: '95%',
+                    xtype: 'textarea',
+                    height: 60,
+                    value: <?=escapeJSON($table['sql'])?>
+                }<?}?>
             ]
         }
     ],
@@ -84,14 +100,14 @@
                 if(form.getForm().isValid())
                 {
                     form.getForm().submit({
-                        url: '/ajax/cm/catalog.config.fields_add',
+                        url: '/ajax/cm/catalog.config.table_save',
                         method: 'POST',
                         waitTitle: 'Подождите',
                         waitMsg: 'Сохранение...',
                         success: function(form, action){
-                                App.msg('Готово', 'Поле добавлено');
+                                App.msg('Готово', 'Таблица сохранена');
                                 if(btn.ownerCt.ownerCt.success_update){
-                                    btn.ownerCt.ownerCt.success_update();
+                                    btn.ownerCt.ownerCt.success_update(action.result.item);
                                 }
                                 btn.ownerCt.ownerCt.hide();
                             },

@@ -134,13 +134,7 @@ CREATE TABLE IF NOT EXISTS `forms_field_type` (
                 <item name="position_forms" type="array">
                     <value name="title">Поля формы</value>
                     <value name="table">position_forms</value>
-                    <value name="sql">
-                        select p1.*, p2.name as type_name
-                        from position_forms p1
-                        left outer join forms_field_type p2 on p1.type_id=p2.id
-                        where section_id=:section_id
-                        ORDER BY position
-                    </value>
+                    <value name="sql">select p1.*, p2.name as type_name from position_forms p1 left outer join forms_field_type p2 on p1.type_id=p2.id where section_id=:section_id ORDER BY position</value>
                 </item>
             </items>
         </param>
