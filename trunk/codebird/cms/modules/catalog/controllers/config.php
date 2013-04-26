@@ -433,6 +433,7 @@ class CatalogController_Config extends Controller_Base
         {
             $template->table = $tables[$table_id];
             $template->is_section = true;
+            $template->db_tables = $data->GetSectionTables();
         }
         else
         {
@@ -441,10 +442,31 @@ class CatalogController_Config extends Controller_Base
             {
                 $template->table = $tables[$table_id];
                 $template->is_position = true;
+                $template->db_tables = $data->GetPositionTables();
             }
         }
 
         $template->render();
+    }
+
+    public function table_save()
+    {
+        $data = $this->getData('config');
+
+        $title = Utils::GetVar('title');
+        $table_id = Utils::GetVar('table_id');
+        $table_name = Utils::GetVar('table');
+
+        $res = array();
+
+        $ar = $data->GetPositionTables();
+
+        $res['item']['name'] = '<pre>'.print_r($ar,1).'</pre>';
+
+        $res['success'] = true;
+        $res['msg'] = 'Готово';
+
+        $this->setContent(json_encode($res));
     }
 }
 ?>

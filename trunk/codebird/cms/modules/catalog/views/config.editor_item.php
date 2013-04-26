@@ -18,17 +18,19 @@
                 {
                     xtype: 'displayfield',
                     fieldLabel: 'Название',
+                    itemId: 'labelName',
                     value: <?=escapeJSON($table['title'])?>
                 },
                 {
                     xtype: 'displayfield',
                     fieldLabel: 'Таблица',
-                    value: <?=escapeJSON('`'.$table['table'].'`')?>
+                    itemId: 'labelTable',
+                    value: <?=escapeJSON($table['table'])?>
                 },
                 {
                     xtype: 'button',
                     text: 'Изменить',
-                    handler: function(){
+                    handler: function(btn){
                         Ext.Ajax.request({
                             url : '/ajax/cm/catalog.config.table_edit_form',
                             params:
@@ -40,8 +42,13 @@
                             loadingMessage : 'Загрузка...',
                             success : function (response) {
                                 var obj = response.responseJSON;
-                                obj.success_update = function(){
-
+                                obj.success_update = function(item){
+                                    if(item && item.name){
+                                        btn.ownerCt.getComponent('labelName').setValue(item.name);
+                                    }
+                                    if(item && item.table){
+                                        btn.ownerCt.getComponent('labelTable').setValue(item.table);
+                                    }
                                 };
                                 var win = new Ext.Window(obj);
                                 win.show(this.id);

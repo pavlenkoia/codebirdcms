@@ -131,6 +131,48 @@ class CatalogModel_Config extends Model_Base
         return $db_fields;
     }
 
+    public function GetPositionTables()
+    {
+        $table = new Table('catalog_section');
+
+        $rows = $table->select('SHOW TABLES');
+
+        $db_tables = array();
+
+        foreach($rows as $row)
+        {
+            $val = current($row);
+
+            if(strpos($val,'position_') === 0)
+            {
+                $db_tables[] = $val;
+            }
+        }
+
+        return $db_tables;
+    }
+
+    public function GetSectionTables()
+    {
+        $table = new Table('catalog_section');
+
+        $rows = $table->select('SHOW TABLES');
+
+        $db_tables = array();
+
+        foreach($rows as $row)
+        {
+            $val = current($row);
+
+            if(strpos($val,'section_') === 0)
+            {
+                $db_tables[] = $val;
+            }
+        }
+
+        return $db_tables;
+    }
+
     public function AddField($table_name, $field_name)
     {
         $table = new Table('catalog_section');
