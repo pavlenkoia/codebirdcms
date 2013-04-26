@@ -2,11 +2,6 @@
 
 class Security_User extends Module_Class
 {
-    public static function Test()
-    {
-
-    }
-
     public static function  IsLogin()
     {
         $instance = new self;
@@ -23,6 +18,15 @@ class Security_User extends Module_Class
         $data = $instance->getData();
 
         return $data->user;
+    }
+
+    public static function inRole($name)
+    {
+        $instance = new self;
+
+        $data = $instance->getData();
+
+        return $data->inRole($name);
     }
 
 }
