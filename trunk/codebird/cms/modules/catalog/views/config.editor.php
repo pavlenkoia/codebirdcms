@@ -15,6 +15,41 @@
                 text:'Создать',
                 iconCls: 'add-menu',
                 itemId: 'add',
+                menu:
+                {
+                    items:
+                    [
+                        {
+                            text: 'Таблицу раздела',
+                            handler: function(){
+                                Ext.Ajax.request({
+                                    url : '/ajax/cm/catalog.config.table_edit_form',
+                                    params:
+                                    {
+                                        create: 'section'
+                                    },
+                                    method: 'POST',
+                                    maskEl : this.ownerCt.ownerCt.ownerCt.ownerCt,
+                                    loadingMessage : 'Загрузка...',
+                                    success : function (response) {
+                                        var obj = response.responseJSON;
+                                        obj.success_update = function(item){
+
+                                        };
+                                        var win = new Ext.Window(obj);
+                                        win.show(this.id);
+                                    }
+                                });
+                            }
+                        },
+                        {
+                            text: 'Таблицу позиций',
+                            handler: function(){
+
+                            }
+                        }
+                    ]
+                }
             }
         ]
     },
@@ -38,7 +73,6 @@
                     xtype: 'treepanel',
                     itemId: 'tree',
                     animate: true,
-                    //enableDD: true,
                     containerScroll: false,
                     border: false,
                     autoScroll: true,

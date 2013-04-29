@@ -424,27 +424,48 @@ class CatalogController_Config extends Controller_Base
 
         $data = $this->getData('config');
 
-        $table_id = Utils::getVar("table_id");
-
-        $template->table_id = $table_id;
-
-        $tables = $data->GetParam('tables_section');
-        if($tables[$table_id])
+        if($create = Utils::getVar('create'))
         {
-            $template->table = $tables[$table_id];
-            $template->is_section = true;
-            $template->db_tables = $data->GetSectionTables();
-        }
-        else
-        {
-            $tables = $data->GetParam('tables');
-            if($tables[$table_id])
+            $template->create = true;
+            if($create == 'section')
             {
-                $template->table = $tables[$table_id];
+                $template->is_section = true;
+                $template->db_tables = $data->GetSectionTables();
+            }
+            if($create == 'position')
+            {
                 $template->is_position = true;
                 $template->db_tables = $data->GetPositionTables();
             }
+
+            $template->table_id = 0;
         }
+        else
+        {
+            $table_id = Utils::getVar("table_id");
+
+            $template->table_id = $table_id;
+
+            $tables = $data->GetParam('tables_section');
+            if($tables[$table_id])
+            {
+                $template->table = $tables[$table_id];
+                $template->is_section = true;
+                $template->db_tables = $data->GetSectionTables();
+            }
+            else
+            {
+                $tables = $data->GetParam('tables');
+                if($tables[$table_id])
+                {
+                    $template->table = $tables[$table_id];
+                    $template->is_position = true;
+                    $template->db_tables = $data->GetPositionTables();
+                }
+            }
+        }
+
+
 
         $template->render();
     }
@@ -460,46 +481,86 @@ class CatalogController_Config extends Controller_Base
         $order = Utils::GetVar('order');
         $sql = Utils::GetVar('sql');
 
-        if($is_position)
-        {
-            $param = $data->GetParam('tables');
+        $error = null;
 
-            $param[$table_id]['title'] = $title;
-            $param[$table_id]['table'] = $table_name;
-            if($order)
+        if(!$table_id)
+        {
+            if($is_position)
             {
-                $param[$table_id]['order'] = $order;
+                $error = $data->CreatePositionTable($table_name);
+
+                if(!$error)
+                {
+                    $table_id = $table_name;
+
+                    $param = $data->GetParam('tables_section');
+
+                    $i = 2;
+                    while($param[$table_id])
+                    {
+                        $table_id = $table_name.$i++;
+                    }
+
+                    $param[$table_id] = array();
+                }
+
+
             }
             else
             {
-                unset($param[$table_id]['order']);
+                $error = $data->CreateSectionTable($table_name);
             }
-            if($sql)
-            {
-                $param[$table_id]['sql'] = $sql;
-            }
-            else
-            {
-                unset($param[$table_id]['sql']);
-            }
-            $data->SetParam('tables',$param);
+        }
+
+        if($error)
+        {
+            $res['success'] = false;
+            $res['msg'] = $error;
         }
         else
         {
-            $param = $data->GetParam('tables_section');
+            if($is_position)
+            {
+                $param = $data->GetParam('tables');
 
-            $param[$table_id]['title'] = $title;
-            $param[$table_id]['table'] = $table_name;
+                $param[$table_id]['title'] = $title;
+                $param[$table_id]['table'] = $table_name;
+                if($order)
+                {
+                    $param[$table_id]['order'] = $order;
+                }
+                else
+                {
+                    unset($param[$table_id]['order']);
+                }
+                if($sql)
+                {
+                    $param[$table_id]['sql'] = $sql;
+                }
+                else
+                {
+                    unset($param[$table_id]['sql']);
+                }
+                $data->SetParam('tables',$param);
+            }
+            else
+            {
+                $param = $data->GetParam('tables_section');
 
-            $data->SetParam('tables_section',$param);
+                $param[$table_id]['title'] = $title;
+                $param[$table_id]['table'] = $table_name;
+
+                $data->SetParam('tables_section',$param);
+            }
+
+            $res = array();
+
+            $res['item']['name'] = $title;
+
+            $res['success'] = true;
+            $res['msg'] = 'Готово';
+
         }
-
-        $res = array();
-
-        $res['item']['name'] = $title;
-
-        $res['success'] = true;
-        $res['msg'] = 'Готово';
 
         $this->setContent(json_encode($res));
     }
