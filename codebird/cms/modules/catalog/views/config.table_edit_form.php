@@ -35,8 +35,8 @@
                     fieldLabel: 'Название',
                     name: 'title',
                     anchor: '95%',
-                    allowBlank: false,
-                    value: <?=escapeJSON($table['title'])?>
+                    allowBlank: false<?if(!$create){?>,
+                    value: <?=escapeJSON($table['title'])?><?}?>
                 },
                 {
                     xtype: 'combo',
@@ -50,7 +50,11 @@
                     valueField: 'id',
                     displayField: 'display',
                     triggerAction: 'all',
+                    <?if($create){?>
+                    value: <?=$is_position?escapeJSON('position_'):escapeJSON('section_')?>,
+                    <?}else{?>
                     value: <?=escapeJSON($table['table'])?>,
+                    <?}?>
                     store: new Ext.data.ArrayStore({
                         id: 0,
                         fields:
@@ -74,16 +78,16 @@
                 {
                     fieldLabel: 'Сортировка (ORDER BY)',
                     name: 'order',
-                    anchor: '95%',
-                    value: <?=escapeJSON($table['order'])?>
+                    anchor: '95%'<?if(!$create){?>,
+                    value: <?=escapeJSON($table['order'])?><?}?>
                 },
                 {
                     fieldLabel: 'Запрос (sql)',
                     name: 'sql',
                     anchor: '95%',
                     xtype: 'textarea',
-                    height: 60,
-                    value: <?=escapeJSON($table['sql'])?>
+                    height: 60<?if(!$create){?>,
+                    value: <?=escapeJSON($table['sql'])?><?}?>
                 }<?}?>
             ]
         }

@@ -173,6 +173,32 @@ class CatalogModel_Config extends Model_Base
         return $db_tables;
     }
 
+    public function CreateSectionTable($table_name)
+    {
+        $table = new Table('catalog_section');
+
+        $table->execute('CREATE TABLE `'.$table_name.'` (`id` int(11) NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+
+        $res = $table->errorInfo;
+
+        return $res;
+    }
+
+    public function CreatePositionTable($table_name)
+    {
+        $table = new Table('catalog_section');
+
+        $table->execute('CREATE TABLE IF NOT EXISTS `'.$table_name.'` (
+              `id` int(11) NOT NULL auto_increment,
+              `section_id` int(11) NOT NULL,
+              PRIMARY KEY  (`id`)
+            ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
+
+        $res = $table->errorInfo;
+
+        return $res;
+    }
+
     public function AddField($table_name, $field_name)
     {
         $table = new Table('catalog_section');
@@ -215,5 +241,6 @@ class CatalogModel_Config extends Model_Base
 
         return $res;
     }
+
 }
 ?>
