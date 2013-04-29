@@ -28,33 +28,83 @@
                     value: <?=escapeJSON($table['table'])?>
                 },
                 {
-                    xtype: 'button',
-                    text: 'Изменить',
-                    handler: function(btn){
-                        Ext.Ajax.request({
-                            url : '/ajax/cm/catalog.config.table_edit_form',
-                            params:
-                            {
-                                table_id: <?=escapeJSON($table_id)?>
-                            },
-                            method: 'POST',
-                            maskEl : this.ownerCt,
-                            loadingMessage : 'Загрузка...',
-                            success : function (response) {
-                                var obj = response.responseJSON;
-                                obj.success_update = function(item){
-                                    var node = btn.ownerCt.ownerCt.ownerCt.node;
-                                    if(item && item.name){
-                                        node.setText(item.name);
-                                        btn.ownerCt.ownerCt.ownerCt.ownerCt.remove(btn.ownerCt.ownerCt.ownerCt);
-                                        node.fireEvent('click',node);
+                    xtype: 'panel',
+                    layout:
+                    {
+                        type: 'hbox',
+                        align: 'left'
+                    },
+                    items:
+                    [
+                        {
+                            xtype: 'button',
+                            text: 'Изменить',
+                            style: 'padding: 5px;',
+                            handler: function(btn){
+                                Ext.Ajax.request({
+                                    url : '/ajax/cm/catalog.config.table_edit_form',
+                                    params:
+                                    {
+                                        table_id: <?=escapeJSON($table_id)?>
+                                    },
+                                    method: 'POST',
+                                    maskEl : this.ownerCt.ownerCt,
+                                    loadingMessage : 'Загрузка...',
+                                    success : function (response) {
+                                        var obj = response.responseJSON;
+                                        obj.success_update = function(item){
+                                            var node = btn.ownerCt.ownerCt.ownerCt.ownerCt.node;
+                                            if(item && item.name){
+                                                node.setText(item.name);
+                                                btn.ownerCt.ownerCt.ownerCt.ownerCt.ownerCt.remove(btn.ownerCt.ownerCt.ownerCt.ownerCt);
+                                                node.fireEvent('click',node);
+                                            }
+                                        };
+                                        var win = new Ext.Window(obj);
+                                        win.show(this.id);
                                     }
-                                };
-                                var win = new Ext.Window(obj);
-                                win.show(this.id);
+                                });
                             }
-                        });
-                    }
+                        },
+                        {
+                            xtype: 'button',
+                            text: 'Удалить',
+                            style: 'padding: 5px;',
+                            handler: function(btn){
+                                Ext.MessageBox.confirm('Удаление', 'Вы действительно хотите удалить эту таблицу <?=($is_position)?'позиций':'разделов'?>?',
+                                    function(btn_conf){
+                                        if(btn_conf == 'yes'){
+                                            Ext.Ajax.request({
+                                                url : '/ajax/cm/catalog.config.table_del',
+                                                params:
+                                                {
+                                                    table_id: <?=escapeJSON($table_id)?>,
+                                                    is_position: <?=escapeJSON($is_position?1:0)?>
+                                                },
+                                                method: 'POST',
+                                                maskEl : btn.ownerCt.ownerCt,
+                                                loadingMessage : 'Удаление...',
+                                                success : function (response) {
+                                                    var result = response.responseJSON;
+                                                    if(result.success){
+                                                        App.msg('Готово', 'Таблица удалена');
+                                                        var node = btn.ownerCt.ownerCt.ownerCt.ownerCt.node;
+                                                        btn.ownerCt.ownerCt.ownerCt.ownerCt.ownerCt.remove(btn.ownerCt.ownerCt.ownerCt.ownerCt);
+                                                        var tree = node.getOwnerTree();
+                                                        var parent_node = node.parentNode;
+                                                        tree.getLoader().load(parent_node);
+                                                        parent_node.expand();
+                                                    }
+                                                    else{
+                                                        Ext.MessageBox.alert('Ошибка', result.msg);
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                            }
+                        }
+                    ]
                 }
             ]
         },

@@ -54,11 +54,14 @@
                         ],
                         data:
                         [
-                            ['varchar(256)','varchar(256)'],
-                            ['text','text'],
-                            ['int11','int11'],
-                            ['float','float'],
-                            ['smallint(6)','smallint(6)']
+                            <?
+                            $ar = array();
+                            foreach($fields_type as $key=>$value)
+                            {
+                                $ar[] = '['.escapeJSON($key).','.escapeJSON($value).']';
+                            }
+                            echo implode(',',$ar);
+                            ?>
                         ]
                     })
                 }

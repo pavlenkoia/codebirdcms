@@ -126,11 +126,15 @@ class CatalogController_Config extends Controller_Base
 
     public function fields_add_form()
     {
+        $data = $this->getData('config');
+
         $table_name = Utils::getVar("table_name");
 
         $template = $this->createTemplate();
 
         $template->table_name = $table_name;
+
+        $template->fields_type = $data->GetFieldsType();
 
         $template->render();
     }
@@ -182,6 +186,8 @@ class CatalogController_Config extends Controller_Base
         $template->table_name = $table_name;
         $template->field_name = $field_name;
         $template->field_type = $field_type;
+
+        $template->fields_type = $data->GetFieldsType();
 
         $template->render();
     }
@@ -487,22 +493,25 @@ class CatalogController_Config extends Controller_Base
         {
             if($is_position)
             {
-                $error = $data->CreatePositionTable($table_name);
+                $data->CreatePositionTable($table_name);
 
-                if(!$error)
+                $table_id = $table_name;
+
+                $param = $data->GetParam('tables');
+
+                $i = 2;
+                while($param[$table_id])
                 {
-                    $table_id = $table_name;
-
-                    $param = $data->GetParam('tables_section');
-
-                    $i = 2;
-                    while($param[$table_id])
-                    {
-                        $table_id = $table_name.$i++;
-                    }
-
-                    $param[$table_id] = array();
+                    $table_id = $table_name.$i++;
                 }
+
+                $param[$table_id] = array();
+
+                $data->SetParam('tables',$param);
+
+                $createParam = array($table_id=>'');
+
+                $data->CreateParam($table_id,$createParam);
 
 
             }
@@ -511,6 +520,8 @@ class CatalogController_Config extends Controller_Base
                 $error = $data->CreateSectionTable($table_name);
             }
         }
+
+        $res = array();
 
         if($error)
         {
@@ -553,14 +564,42 @@ class CatalogController_Config extends Controller_Base
                 $data->SetParam('tables_section',$param);
             }
 
-            $res = array();
-
             $res['item']['name'] = $title;
 
             $res['success'] = true;
             $res['msg'] = 'Готово';
 
         }
+
+        $this->setContent(json_encode($res));
+    }
+
+    public function table_del()
+    {
+        $res = array();
+
+        $data = $this->getData('config');
+
+        $table_id = Utils::GetVar('table_id');
+        $is_position = Utils::GetVar('is_position');
+
+        if($is_position)
+        {
+            $param = $data->GetParam('tables');
+            unset($param[$table_id]);
+            $data->SetParam('tables',$param);
+        }
+        else
+        {
+            $param = $data->GetParam('tables_section');
+            unset($param[$table_id]);
+            $data->SetParam('tables_section',$param);
+        }
+
+        $data->DelParam($table_id);
+
+        $res['success'] = true;
+        $res['msg'] = 'Готово';
 
         $this->setContent(json_encode($res));
     }

@@ -45,7 +45,7 @@
                     hiddenName: 'table',
                     anchor: '95%',
                     mode: 'local',
-                    editable: false,
+                    editable: true,
                     resizable: false,
                     valueField: 'id',
                     displayField: 'display',

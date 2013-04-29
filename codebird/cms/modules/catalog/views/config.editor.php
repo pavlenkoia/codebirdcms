@@ -45,7 +45,25 @@
                         {
                             text: 'Таблицу позиций',
                             handler: function(){
-
+                                Ext.Ajax.request({
+                                    url : '/ajax/cm/catalog.config.table_edit_form',
+                                    params:
+                                    {
+                                        create: 'position'
+                                    },
+                                    method: 'POST',
+                                    maskEl : this.ownerCt.ownerCt.ownerCt.ownerCt,
+                                    loadingMessage : 'Загрузка...',
+                                    success : function (response) {
+                                        var obj = response.responseJSON;
+                                        obj.success_update = function(item){
+                                            var tree = Ext.getCmp('panel-catalog-config-editor').getComponent('items').getComponent('tree');
+                                            tree.getLoader().load(tree.root);
+                                        };
+                                        var win = new Ext.Window(obj);
+                                        win.show(this.id);
+                                    }
+                                });
                             }
                         }
                     ]
