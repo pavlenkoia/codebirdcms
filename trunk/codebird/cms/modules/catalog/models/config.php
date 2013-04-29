@@ -71,6 +71,80 @@ class CatalogModel_Config extends Model_Base
                     $xml2->asXML($file);
 
                     //$xml->asXML($file);
+
+                    break;
+                }
+            }
+        }
+    }
+
+    public function CreateParam($param_name, $pitems)
+    {
+        $file = SITE_PATH.'config'.DS.'catalog.config.xml';
+
+        if(file_exists($file))
+        {
+            $xml = simplexml_load_file($file);
+
+            $exist = false;
+
+            foreach($xml->xpath('/config/params/param') as $param)
+            {
+                $name = (string)$param->name;
+                if($name == $param_name)
+                {
+                    $exist = true;
+                    break;
+                }
+            }
+
+            if(!$exist)
+            {
+                foreach($xml->xpath('/config/params') as $params)
+                {
+                    $param = $params->addChild('param');
+                    $param->addAttribute('type','array');
+
+                    $param->addChild('name',$param_name);
+
+                    $param->addChild('items','');
+
+                    $str_xml = $this->xmlpp($xml->asXML());
+
+                    $xml2 = simplexml_load_string($str_xml);
+
+                    $xml2->asXML($file);
+
+                    break;
+                }
+            }
+        }
+    }
+
+    public function DelParam($param_name)
+    {
+        $file = SITE_PATH.'config'.DS.'catalog.config.xml';
+
+        if(file_exists($file))
+        {
+            $xml = simplexml_load_file($file);
+
+            foreach($xml->xpath('/config/params/param') as $param)
+            {
+                $name = (string)$param->name;
+                if($name == $param_name)
+                {
+                    $oNode = dom_import_simplexml($param);
+
+                    $oNode->parentNode->removeChild($oNode);
+
+                    $str_xml = $this->xmlpp($xml->asXML());
+
+                    $xml2 = simplexml_load_string($str_xml);
+
+                    $xml2->asXML($file);
+
+                    break;
                 }
             }
         }
@@ -199,7 +273,7 @@ class CatalogModel_Config extends Model_Base
         return $res;
     }
 
-    public function AddField($table_name, $field_name)
+    public function AddField($table_name, $field_name, $field_type)
     {
         $table = new Table('catalog_section');
 
@@ -238,6 +312,19 @@ class CatalogModel_Config extends Model_Base
         $res['selecttext'] = 'Текстовая строка с выпадающим списком';
         $res['labeltext'] = 'Нередактируемая текстовая строка';
         $res['images'] = 'Картинки';
+
+        return $res;
+    }
+
+    public function GetFieldsType()
+    {
+        $res = array();
+
+        $res['varchar(256)'] = 'varchar(256)';
+        $res['text'] = 'text';
+        $res['int(11)'] = 'int(11)';
+        $res['float'] = 'float';
+        $res['smallint(6)'] = 'smallint(6)';
 
         return $res;
     }

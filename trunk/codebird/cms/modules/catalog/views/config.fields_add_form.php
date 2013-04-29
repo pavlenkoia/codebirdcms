@@ -43,7 +43,7 @@
                     valueField: 'id',
                     displayField: 'display',
                     triggerAction: 'all',
-                    value: 'varchar',
+                    value: 'varchar(256)',
                     store: new Ext.data.ArrayStore({
                         id: 0,
                         fields:
@@ -53,11 +53,14 @@
                         ],
                         data:
                         [
-                            ['varchar','varchar(256)'],
-                            ['text','text'],
-                            ['int','int'],
-                            ['float','float'],
-                            ['smallint','smallint']
+                            <?
+                            $ar = array();
+                            foreach($fields_type as $key=>$value)
+                            {
+                                $ar[] = '['.escapeJSON($key).','.escapeJSON($value).']';
+                            }
+                            echo implode(',',$ar);
+                            ?>
                         ]
                     })
                 }
