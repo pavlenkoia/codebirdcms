@@ -15,7 +15,7 @@
         </style>
     </head>
     <body scroll="no" id="docs">
-        <div id="loading-mask" style="width:100%;height:100%;background:#c3daf9;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
+        <div id="loading-mask" style="width:100%;height:100%;background:#F0F0F0;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
         <div id="loading">
             <div class="loading-indicator"><img src="jscripts/ext/resources/images/default/grid/loading.gif" style="width:16px;height:16px;" align="absmiddle">&#160;Загрузка...</div>
         </div>
