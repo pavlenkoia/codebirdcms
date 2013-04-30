@@ -143,10 +143,11 @@ class CatalogController_Config extends Controller_Base
     {
         $table_name = Utils::getVar("table_name");
         $field_name = Utils::getVar("name");
+        $field_type = Utils::getVar("type");
 
         $data = $this->getData('config');
 
-        $error = $data->AddField($table_name,$field_name);
+        $error = $data->AddField($table_name,$field_name,$field_type);
 
         $res = array();
 
@@ -190,6 +191,33 @@ class CatalogController_Config extends Controller_Base
         $template->fields_type = $data->GetFieldsType();
 
         $template->render();
+    }
+
+    public function fields_edit()
+    {
+        $table_name = Utils::getVar("table_name");
+        $field_name = Utils::getVar("name");
+        $field_old_name = Utils::getVar("old_name");
+        $field_type = Utils::getVar("type");
+
+        $data = $this->getData('config');
+
+        $error = $data->EditField($table_name,$field_name,$field_old_name,$field_type);
+
+        $res = array();
+
+        if($error)
+        {
+            $res['success'] = false;
+            $res['msg'] = $error;
+        }
+        else
+        {
+            $res['success'] = true;
+            $res['msg'] = 'Добавлено';
+        }
+
+        $this->setContent(json_encode($res));
     }
 
     public function fields_del()

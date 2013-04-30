@@ -27,6 +27,11 @@
                     value: <?=escapeJSON($table_name)?>
                 },
                 {
+                    xtype: 'hidden',
+                    name: 'old_name',
+                    value: <?=escapeJSON($field_name)?>
+                },
+                {
                     fieldLabel: 'Имя поля',
                     name: 'name',
                     anchor: '95%',
