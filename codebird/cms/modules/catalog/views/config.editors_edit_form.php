@@ -35,8 +35,9 @@
                     fieldLabel: 'Заголовок',
                     name: 'title',
                     anchor: '95%',
-                    allowBlank: false,
+                    allowBlank: false<?if($editor_name){?>,
                     value: <?=escapeJSON($editor_title)?>
+                    <?}?>
                 },
                 {
                     xtype: 'combo',
@@ -50,7 +51,7 @@
                     valueField: 'id',
                     displayField: 'display',
                     triggerAction: 'all',
-                    value: <?=escapeJSON($editor_field)?>,
+                    <?if($editor_name){?>value: <?=escapeJSON($editor_field)?>,<?}?>
                     store: new Ext.data.ArrayStore({
                         id: 0,
                         fields:
@@ -115,7 +116,7 @@
                     valueField: 'id',
                     displayField: 'display',
                     triggerAction: 'all',
-                    value: <?=escapeJSON($editor_type)?>,
+                    <?if($editor_name){?>value: <?=escapeJSON($editor_type)?>,<?}?>
                     store: new Ext.data.ArrayStore({
                         id: 0,
                         fields:

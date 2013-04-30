@@ -277,7 +277,22 @@ class CatalogModel_Config extends Model_Base
     {
         $table = new Table('catalog_section');
 
-        $table->execute('ALTER TABLE `'.$table_name.'` ADD `'.$field_name.'` varchar(256) collate utf8_unicode_ci default NULL');
+        $field_type_ddl = $this->GetFieldsTypeDDL($field_type);
+
+        $table->execute('ALTER TABLE `'.$table_name.'` ADD `'.$field_name.'` '.$field_type_ddl);
+
+        $res = $table->errorInfo;
+
+        return $res;
+    }
+
+    public function EditField($table_name, $field_name, $field_old_name, $field_type)
+    {
+        $table = new Table('catalog_section');
+
+        $field_type_ddl = $this->GetFieldsTypeDDL($field_type);
+
+        $table->execute('ALTER TABLE `'.$table_name.'` CHANGE `'.$field_old_name.'` `'.$field_name.'` '.$field_type_ddl);
 
         $res = $table->errorInfo;
 
@@ -327,6 +342,31 @@ class CatalogModel_Config extends Model_Base
         $res['smallint(6)'] = 'smallint(6)';
 
         return $res;
+    }
+
+    public function GetFieldsTypeDDL($field_type)
+    {
+        $field_type_ddl = 'varchar(256) collate utf8_unicode_ci default NULL';
+
+        switch ($field_type) {
+            case 'varchar(256)':
+                $field_type_ddl = 'varchar(256) collate utf8_unicode_ci default NULL';
+                break;
+            case 'text':
+                $field_type_ddl = 'text collate utf8_unicode_ci default NULL';
+                break;
+            case 'int(11)':
+                $field_type_ddl = 'int(11) default NULL';
+                break;
+            case 'float':
+                $field_type_ddl = 'float default NULL';
+                break;
+            case 'smallint(6)':
+                $field_type_ddl = 'smallint(6) default NULL';
+                break;
+        }
+
+        return $field_type_ddl;
     }
 
 }
