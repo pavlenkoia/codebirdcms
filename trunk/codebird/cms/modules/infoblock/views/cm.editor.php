@@ -110,7 +110,7 @@
                 var form = this.ownerCt.ownerCt;
 
                 var ta = form.getForm().findField('html');
-                if(ta && FCKeditorAPI)
+                if(ta && typeof(FCKeditorAPI) !== 'undefined')
                 {
                     var api = FCKeditorAPI.GetInstance(ta.getId());
                     if(api){
