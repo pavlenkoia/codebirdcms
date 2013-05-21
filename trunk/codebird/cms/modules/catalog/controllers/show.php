@@ -62,11 +62,14 @@ class CatalogController_Show extends Controller_Base
 
                 $page_size = $page_size ? $page_size : 20;
 
-                $pager = $data->getPositionPagerArray($position_table, $section->id, $page_size);
+                $where = $this->args->where;
+                $where = $where ? ' and '.$where.' ' : '';
+
+                $pager = $data->getPositionPagerArray($position_table, $section->id, $page_size, $where);
 
                 $order = $this->args->order;
 
-                $rows = $table->select('select * from `'.$position_table.'` where section_id=:section_id '.$order.$pager['limit'], array('section_id'=>$section->id));
+                $rows = $table->select('select * from `'.$position_table.'` where section_id=:section_id '.$where.$order.$pager['limit'], array('section_id'=>$section->id));
 
                 foreach($rows as $row)
                 {
