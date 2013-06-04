@@ -546,6 +546,24 @@ class CatalogController_Config extends Controller_Base
             else
             {
                 $error = $data->CreateSectionTable($table_name);
+
+                $table_id = $table_name;
+
+                $param = $data->GetParam('tables_section');
+
+                $i = 2;
+                while($param[$table_id])
+                {
+                    $table_id = $table_name.$i++;
+                }
+
+                $param[$table_id] = array();
+
+                $data->SetParam('tables_section',$param);
+
+                $createParam = array($table_id=>'');
+
+                $data->CreateParam($table_id,$createParam);
             }
         }
 
