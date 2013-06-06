@@ -545,7 +545,7 @@ class CatalogController_Config extends Controller_Base
             }
             else
             {
-                $error = $data->CreateSectionTable($table_name);
+                /*$error = */$data->CreateSectionTable($table_name);
 
                 $table_id = $table_name;
 

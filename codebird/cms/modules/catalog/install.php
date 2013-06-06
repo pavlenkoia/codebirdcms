@@ -266,21 +266,17 @@ CREATE TABLE IF NOT EXISTS `forms_field_type` (
                     <value name="title">Показывать CAPTCHA формы</value>
                     <value name="type">check</value>
                 </item>
-                <!--item name="title_form" type="array">
-                    <value name="field">title_form</value>
-                    <value name="title">Заголовок формы</value>
-                    <value name="type">text</value>
-                </item-->
                 <item name="success_message" type="array">
                     <value name="field">success_message</value>
                     <value name="title">Сообщение после успешной отправки</value>
                     <value name="type">memo</value>
                 </item>
-                <!--item name="html" type="array">
+                <item name="html" type="array">
                     <value name="field">html</value>
-                    <value name="title">html код для вставки на страницу</value>
+                    <value name="title">Шаблон письма</value>
                     <value name="type">memo</value>
-                </item-->
+                    <value name="editor_height">160</value>
+                </item>
             </items>
         </param>
 

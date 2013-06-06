@@ -34,7 +34,8 @@
                                     success : function (response) {
                                         var obj = response.responseJSON;
                                         obj.success_update = function(item){
-
+                                            var tree = Ext.getCmp('panel-catalog-config-editor').getComponent('items').getComponent('tree');
+                                            tree.getLoader().load(tree.root);
                                         };
                                         var win = new Ext.Window(obj);
                                         win.show(this.id);
