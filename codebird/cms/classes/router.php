@@ -47,7 +47,7 @@ Class Router
             $config_name = $module.'_config';
             if(!$registry->has($config_name))
             {
-                $config = $this->path.DS.$module.DS.'config.php';
+                $config = SITE_PATH.$this->path.DS.$module.DS.'config.php';
 
                 if (is_readable($config) == true)
                 {

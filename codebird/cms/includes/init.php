@@ -7,7 +7,7 @@ function __autoload($class_name)
 {
     $filename = strtolower($class_name) . '.php';
 
-    $file = SITE_PATH . DS . 'cms' . DS . 'classes' . DS . $filename;
+    $file = SITE_PATH . 'cms' . DS . 'classes' . DS . $filename;
 
     if (!file_exists($file))
     {
