@@ -224,7 +224,7 @@ class CatalogModel_Action extends Model_Base
 
         foreach($xml->image as $image)
         {
-            $res[] = $image->img;
+            $res[] = (String)$image->img;
         }
 
         return $res;
