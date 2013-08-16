@@ -93,12 +93,12 @@ class CatalogController_Forms extends Controller_Base
 
                     $mailer->Subject = $form->esubject;
 
-                    $body = '';
+                    $body = $form->html;
 
-                    if($form->header_mail)
+                    /*if($form->header_mail)
                     {
                         $body .= $form->header_mail."\n\n";
-                    }
+                    }*/
 
                     foreach($field_rows as $row)
                     {
@@ -130,7 +130,14 @@ class CatalogController_Forms extends Controller_Base
                             }
                         }
 
-                        $body .= $row['name'].': '.$value."\n\n";
+                        if($form->html)
+                        {
+                            $body = str_replace('#'.$row['nameid'].'#',$value,$body);
+                        }
+                        else
+                        {
+                            $body .= $row['name'].': '.$value."\n\n";
+                        }
                     }
 
                     if($check)
