@@ -169,6 +169,12 @@ class CatalogController_Cm extends Controller_Base
 
             $object->title = Utils::getPost("title");
 
+            // генерация алиаса
+            $alias = $object->title;
+            $alias = Utils::translit($alias);
+            $object->alias = Utils::getUniqueAlias($alias, "catalog_section", $object->id);
+
+
             if($object->title === null || trim($object->title) == '')
             {
                 throw new Exception('Заголовок не указан');
@@ -689,6 +695,11 @@ class CatalogController_Cm extends Controller_Base
             if($alias)
             {
                 $object->alias = Utils::translit($alias);
+                $object->alias = Utils::getUniqueAlias($alias, "catalog_section", $object->id);
+            }
+            else
+            {
+                $alias = Utils::translit($object->title);
                 $object->alias = Utils::getUniqueAlias($alias, "catalog_section", $object->id);
             }
 
