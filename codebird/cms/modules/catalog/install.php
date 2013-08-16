@@ -256,11 +256,6 @@ CREATE TABLE IF NOT EXISTS `forms_field_type` (
                     <value name="title">Заголовок письма</value>
                     <value name="type">text</value>
                 </item>
-                <item name="header_mail" type="array">
-                    <value name="field">header_mail</value>
-                    <value name="title">Вступительный текст письма</value>
-                    <value name="type">memo</value>
-                </item>
                 <item name="captcha" type="array">
                     <value name="field">captcha</value>
                     <value name="title">Показывать CAPTCHA формы</value>
