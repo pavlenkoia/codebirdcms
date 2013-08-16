@@ -694,7 +694,6 @@ class CatalogController_Cm extends Controller_Base
             $alias = Utils::getPost('alias');
             if($alias)
             {
-
                 $object->alias = Utils::translit($alias);
                 $object->alias = Utils::getUniqueAlias($alias, "catalog_section", $object->id);
             }
