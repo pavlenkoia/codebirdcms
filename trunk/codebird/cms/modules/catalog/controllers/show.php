@@ -24,6 +24,8 @@ class CatalogController_Show extends Controller_Base
 
         $section = $data->GetSection($name);
 
+        $object_level = $this->args->object_level ? $this->args->object_level : 0;
+
         if($section && $section->position_table)
         {
             $result['section'] = $section;
@@ -34,9 +36,10 @@ class CatalogController_Show extends Controller_Base
             $table = new Table($position_table);
 
             $object = null;
-            if($this->args->mode != 'list' && $params[0])
+            $param = $params[$object_level];
+            if($this->args->mode != 'list' && $param)
             {
-                $object = $table->getEntity($params[0]);
+                $object = $table->getEntity($param);
             }
 
             if($object && $object->section_id == $section->id)
@@ -73,7 +76,12 @@ class CatalogController_Show extends Controller_Base
 
                 foreach($rows as $row)
                 {
-                    $row['_url'] = '/'.$alias.'/'.$row['id'].'/';
+                    $row['_url'] = '/'.$alias.'/';
+                    for($i = 0; $i <  $object_level; $i++)
+                    {
+                        $row['_url'] .= $params[$i].'/';
+                    }
+                    $row['_url'] .= $row['id'].'/';
                     $result['items'][] = $row;
                 }
 
