@@ -258,6 +258,11 @@ $site_name = "'.str_replace('"','\\"',$site_name).'";
                         $item->addAttribute("type","array");
                         $value = $item->addChild("value", $module['title']);
                         $value->addAttribute("name","title");
+                        if($module['module'] == 'catalog')
+                        {
+                            $value2 = $item->addChild("value", 'dev');
+                            $value2->addAttribute("name","access");
+                        }
                     }
                 }
                 elseif($name == "service_modules")
