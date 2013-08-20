@@ -16,7 +16,8 @@ class CatalogController_Show extends Controller_Base
         $alias = Utils::getVar('alias');
         $uri = Utils::getVar('uri');
         $params = explode("/",$uri);
-        $params = array_pad($params,10,null);
+        $params = array_diff($params, array(''));
+        //$params = array_pad($params,10,null);
         $template->alias = $alias;
         $template->params = $params;
 
@@ -24,7 +25,8 @@ class CatalogController_Show extends Controller_Base
 
         $section = $data->GetSection($name);
 
-        $object_level = $this->args->object_level ? $this->args->object_level : 0;
+        //$object_level = $this->args->object_level ? $this->args->object_level : 0;
+        $object_level = count($params) > 0 ? count($params)-1 : 0;
 
         if($section && $section->position_table)
         {
@@ -77,7 +79,7 @@ class CatalogController_Show extends Controller_Base
                 foreach($rows as $row)
                 {
                     $row['_url'] = '/'.$alias.'/';
-                    for($i = 0; $i <  $object_level; $i++)
+                    for($i = 0; $i <  $object_level+1; $i++)
                     {
                         $row['_url'] .= $params[$i].'/';
                     }
