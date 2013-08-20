@@ -295,6 +295,8 @@ class CatalogController_Cm extends Controller_Base
 
             $res['success'] = true;
             $res['msg'] = 'Добавлено';
+
+            val('catalog.cache.clear');
         }
         catch(Exception $e)
         {
@@ -358,6 +360,8 @@ class CatalogController_Cm extends Controller_Base
 
             $res['success'] = true;
             $res['msg'] = 'Удалено';
+
+            val('catalog.cache.clear');
         }
         catch(Exception $e)
         {
