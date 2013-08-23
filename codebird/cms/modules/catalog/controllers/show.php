@@ -26,12 +26,12 @@ class CatalogController_Show extends Controller_Base
         $section = $data->GetSection($name);
 
         //$object_level = $this->args->object_level ? $this->args->object_level : 0;
-        $object_level = count($params) > 0 ? count($params)-1 : 0;
+        $object_level = count($params) > 1 ? count($params)-1 : 0;
+
+        $result['section'] = $section;
 
         if($section && $section->position_table)
         {
-            $result['section'] = $section;
-
             $tables = $data_config->GetParam('tables');
             $position_table =  $tables[$section->position_table]['table'];
 
@@ -81,6 +81,7 @@ class CatalogController_Show extends Controller_Base
                     $row['_url'] = '/'.$alias.'/';
                     for($i = 0; $i <  $object_level+1; $i++)
                     {
+                        if(!$params[$i]) continue;
                         $row['_url'] .= $params[$i].'/';
                     }
                     $row['_url'] .= $row['id'].'/';

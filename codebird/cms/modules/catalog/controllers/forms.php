@@ -140,6 +140,14 @@ class CatalogController_Forms extends Controller_Base
                         }
                     }
 
+                    if($template_fields = $this->args->template_fields)
+                    {
+                        foreach($template_fields as $key=>$value)
+                        {
+                            $body = str_replace('#'.$key.'#',$value,$body);
+                        }
+                    }
+
                     if($check)
                     {
                         $mailer->Body = $body;
