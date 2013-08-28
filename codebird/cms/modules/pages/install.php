@@ -76,7 +76,7 @@ INSERT INTO `pages` (`title`, `content`, `position`, `visible`, `alias`, `templa
             <name>templates</name>
             <items>
                 <item name="main.tpl.php">Главная страница</item>
-		<item name="page.tpl.php">Шаблон страницы</item>
+		        <item name="page.tpl.php">Контентная страница</item>
             </items>
         </param>
     </params>
