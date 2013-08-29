@@ -29,4 +29,13 @@ class Security_User extends Module_Class
         return $data->inRole($name);
     }
 
+    public static function Logout()
+    {
+        $instance = new self;
+
+        $data = $instance->getData();
+
+        $data->logout();
+    }
+
 }
