@@ -173,9 +173,11 @@ class CatalogModel_Action extends Model_Base
         return $res;
     }
 
-    public function getSectionsData($table_name, $parent_id)
+    public function getSectionsData($table_name, $parent_id, $order=null)
     {
-        $rows = $this->getSectionTable()->select('select s1.title, s1.alias, s2.* from catalog_section s1 inner join '.$table_name.' s2 on s1.id=s2.id where s1.parent_id=:id order by s1.position',
+        $order = $order ? ' '.$order.' ' : ' order by s1.position ';
+
+        $rows = $this->getSectionTable()->select('select s1.title, s1.alias, s2.* from catalog_section s1 inner join '.$table_name.' s2 on s1.id=s2.id where s1.parent_id=:id '.$order,
             array('id'=>$parent_id));
 
         return $rows;

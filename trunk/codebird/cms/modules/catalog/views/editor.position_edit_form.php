@@ -260,7 +260,7 @@
                                                             id_f.setValue(result.id);
                                                             var t = new Ext.Template('<div style="margin:5px 0px 10px 0px;"><a href="{src}" target="_blank"/>{name}</a></div>');
                                                             t.compile();
-                                                            t.overwrite(btn.ownerCt.getComponent(0).id, {src: result.src, name: result.src});
+                                                            t.overwrite(btn.ownerCt.ownerCt.getComponent(0).id, {src: result.src, name: result.src});
                                                         }
                                                     });
                                                 }
