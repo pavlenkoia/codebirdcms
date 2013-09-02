@@ -53,7 +53,7 @@ else
     }
 
     App::SetProperty('title', $registry->title);
-    App::SetProperty('page_title', $registry->title);
+    App::SetProperty('page_title', $registry->page_title);
     App::SetProperty('description', $registry->description);
     App::SetProperty('keywords', $registry->keywords);
 

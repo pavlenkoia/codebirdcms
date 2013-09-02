@@ -52,6 +52,7 @@ Class PagesController_Site Extends Controller_Base
             $this->registry->mod_content = $page->template;
             $head_title = $page->head_title;
             $this->registry->title = (!$head_title || $head_title == '') ? $page->title : $head_title;
+            $this->registry->page_title = $page->title;
             $this->registry->description = $page->meta_description;
             $this->registry->keywords = $page->meta_keywords;
         }
