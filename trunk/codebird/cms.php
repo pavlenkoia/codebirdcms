@@ -24,4 +24,5 @@ define ('SF', $SUB_FOLDER);
 
 // Включение init.php file
 include (SITE_PATH.'cms'.DS.'includes'.DS.'init.php');
+
 ?>
