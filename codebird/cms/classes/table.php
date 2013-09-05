@@ -81,7 +81,7 @@ class Table
     
     public function save($entity)
     {
-        if(!isset($fields))
+        if(!isset($this->fields))
         {
             $this->buidFieldsSet();
         }
@@ -147,10 +147,30 @@ class Table
 
         if(!isset($entity->$id))
         {
-            return $this->db->lastInsertId();
+            $insert_id = $this->db->lastInsertId();
+
+            if(Event::HasHandlers('OnTableAddEntity'))
+            {
+                $params = array();
+                $params['id'] = $insert_id;
+                $params['object'] = $entity;
+                $params['table'] = $this->table;
+                Event::Execute('OnTableAddEntity', $params);
+            }
+
+            return $insert_id;
         }
         else
         {
+            if(Event::HasHandlers('OnTableSaveEntity'))
+            {
+                $params = array();
+                $params['id'] = $entity->$id;
+                $params['object'] = $entity;
+                $params['table'] = $this->table;
+                Event::Execute('OnTableSaveEntity', $params);
+            }
+
             return $entity->$id;
         }
     }

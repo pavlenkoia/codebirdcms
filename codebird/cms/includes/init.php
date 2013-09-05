@@ -216,4 +216,5 @@ if (!isset($_SERVER['SCRIPT_URL']) && isset($_SERVER['SCRIPT_NAME']))
     $_SERVER['SCRIPT_URL'] = $_SERVER['SCRIPT_NAME'];
 }
 
+include (SITE_PATH.'config'.DS.'init.php');
 ?>

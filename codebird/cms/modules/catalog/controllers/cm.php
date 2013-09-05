@@ -242,6 +242,8 @@ class CatalogController_Cm extends Controller_Base
                 throw new Exception($data->getSectionTable()->errorInfo);
             }
 
+            $section_object = $data->getSectionTable()->getEntity($id);
+
             if($object->section_table)
             {
                 $table_meta_section = $data->getTableMetaSection($object->section_table);
@@ -297,6 +299,13 @@ class CatalogController_Cm extends Controller_Base
             $res['msg'] = 'Добавлено';
 
             val('catalog.cache.clear');
+
+            if(Event::HasHandlers('OnCatalogAddSection'))
+            {
+                $params = array();
+                $params['object'] = $section_object;
+                Event::Execute('OnCatalogAddSection', $params);
+            }
         }
         catch(Exception $e)
         {
@@ -869,9 +878,9 @@ class CatalogController_Cm extends Controller_Base
 
         try
         {
-            if($_FILES['file']['size'] > 1048576)
+            if($_FILES['file']['size'] > 3048576)
             {
-                throw new Exception('Картинка размером больше 1000Кб');
+                throw new Exception('Картинка размером больше 3000Кб');
             }
 
             $id = Utils::getVar('id');
@@ -1464,9 +1473,9 @@ class CatalogController_Cm extends Controller_Base
 
         try
         {
-            if($_FILES['file']['size'] > 1048576)
+            if($_FILES['file']['size'] > 3048576)
             {
-                throw new Exception('Картинка размером больше 1000Кб');
+                throw new Exception('Картинка размером больше 3000Кб');
             }
 
             $id = Utils::getVar('id');
