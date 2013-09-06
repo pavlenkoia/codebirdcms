@@ -878,9 +878,9 @@ class CatalogController_Cm extends Controller_Base
 
         try
         {
-            if($_FILES['file']['size'] > 3048576)
+            if($_FILES['file']['size'] > 3145728)
             {
-                throw new Exception('Картинка размером больше 3000Кб');
+                throw new Exception('Картинка размером больше 3MB');
             }
 
             $id = Utils::getVar('id');
@@ -1473,9 +1473,9 @@ class CatalogController_Cm extends Controller_Base
 
         try
         {
-            if($_FILES['file']['size'] > 3048576)
+            if($_FILES['file']['size'] > 3145728)
             {
-                throw new Exception('Картинка размером больше 3000Кб');
+                throw new Exception('Картинка размером больше 3MB');
             }
 
             $id = Utils::getVar('id');
