@@ -14,7 +14,7 @@ class CatalogController_Forms extends Controller_Base
 
         if(!$section) return;
 
-        $template = $this->createTemplate();        
+        $template = $this->createTemplate();
 
         $template->data = $data;
 
@@ -59,7 +59,7 @@ class CatalogController_Forms extends Controller_Base
         if(!$form) return;
 
         $field_rows = $table->select('select * from position_forms where section_id=:id order by position',
-                array('id'=>$form->id));
+            array('id'=>$form->id));
 
         $error_message = '';
         $success_message = '';
@@ -82,8 +82,10 @@ class CatalogController_Forms extends Controller_Base
             {
                 $email = $form->email;
                 $mails = explode(',',$email);
+
                 foreach($mails as $mail)
                 {
+                    $error_message = '';
 
                     $mailer = new Mailer();
 
@@ -161,7 +163,12 @@ class CatalogController_Forms extends Controller_Base
                         else
                         {
                             $error_message = 'Ошибка, попробуйте отправить снова.';
+                            break;
                         }
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
                 if(isset($form->mod))
