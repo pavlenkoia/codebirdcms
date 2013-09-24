@@ -2,7 +2,7 @@
 // MySQL
 $db_user = "";
 $db_user_pass = "";
-$db_host = "";
+$db_host = "localhost";
 $db_name = "";
 
 // base for header

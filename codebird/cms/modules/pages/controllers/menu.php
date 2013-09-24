@@ -76,5 +76,53 @@ Class PagesController_Menu Extends Controller_Base
 
         $template->render("menu_plugin_cm");
     }
+
+    public function pages()
+    {
+        $template = $this->createTemplate();
+
+        $data = $this->getData();
+
+        $template->data = $data;
+
+        $alias = Utils::getVar('alias');
+        $table = new Table("pages");
+
+        $page = $table->getEntityAlias($alias);
+
+        $result['items'] = array();
+
+        if($page)
+        {
+            $pages = $data->getVisiblePages($page->id);
+            if(count($pages) == 0 && $page->parent_id)
+            {
+                $pages = $data->getVisiblePages($page->parent_id);
+            }
+            foreach($pages as $row)
+            {
+                $item = array();
+
+                $item['page'] = $row;
+
+                $item['href'] = $row['alias'].'.html';
+
+                $item['title'] = $row['title'];
+
+                if($row['alias'] == $alias)
+                {
+                    $item['active'] = true;
+                }
+
+                $result['items'][] = $item;
+            }
+        }
+
+        $template->page = $page;
+
+        $template->result = $result;
+
+        $template->render();
+    }
 }
 ?>
