@@ -1348,7 +1348,7 @@ class CatalogController_Cm extends Controller_Base
             {
                 $str = iconv("CP1251", "UTF-8",$str);
             }
-            $data=split($s, trim($str));
+            $data= explode($s, trim($str));
 
             return $data;
         }else
