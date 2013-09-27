@@ -45,7 +45,8 @@ Class PagesController_Site Extends Controller_Base
                 if(count($objects) > 0)
                 {
                     $page = $objects[0];
-                    $_REQUEST['alias'] = $page->alias;
+                    //$_REQUEST['alias'] = $page->alias;
+                    App::Redirect('/'.$page->alias.'.html');
                 }
             }
 
