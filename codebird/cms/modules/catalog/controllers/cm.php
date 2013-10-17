@@ -304,6 +304,7 @@ class CatalogController_Cm extends Controller_Base
             {
                 $params = array();
                 $params['object'] = $section_object;
+                $params['section'] = $data->getSection($section_object->id);
                 Event::Execute('OnCatalogAddSection', $params);
             }
         }
@@ -584,6 +585,15 @@ class CatalogController_Cm extends Controller_Base
                 val($table_meta['onsave'],array('object'=>$object));
             }
 
+            if(Event::HasHandlers('OnCatalogSavePosition'))
+            {
+                if(!isset($object->id)) $object = $table->getEntity($id);
+                $params = array();
+                $params['object'] = $object;
+                $params['section'] = $data->getSection($object->section_id);
+                Event::Execute('OnCatalogSavePosition', $params);
+            }
+
             $res['success'] = true;
             $res['msg'] = 'Готово';
         }
@@ -735,6 +745,13 @@ class CatalogController_Cm extends Controller_Base
                 throw new Exception($data->getSectionTable()->errorInfo);
             }
 
+            if(Event::HasHandlers('OnCatalogSaveSection'))
+            {
+                $params = array();
+                $params['object'] = $object;
+                Event::Execute('OnCatalogSaveSection', $params);
+            }
+
             $res['success'] = true;
             $res['msg'] = 'Готово';
         }
@@ -857,6 +874,15 @@ class CatalogController_Cm extends Controller_Base
                 {
                     if(!isset($object->id)) $object = $table->getEntity($id);
                     val($table_meta_section['onsave'],array('object'=>$object));
+                }
+
+                if(Event::HasHandlers('OnCatalogSaveTableSection'))
+                {
+                    $object = $table->getEntity($object->id);
+                    $params = array();
+                    $params['object'] = $object;
+                    $params['section'] = $section;
+                    Event::Execute('OnCatalogSaveTableSection', $params);
                 }
             }
 

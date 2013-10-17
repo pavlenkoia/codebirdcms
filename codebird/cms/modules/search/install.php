@@ -173,7 +173,7 @@ create table if not exists sphider_pending (
 
 create table if not exists sphider_query_log (
 	query varchar(255),
-	time timestamp(14),
+	time int,
 	elapsed float(2),
 	results int,
 	key query_key(query)

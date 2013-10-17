@@ -4,14 +4,14 @@ include "config.php";
 include "cms.php";
 $registry = Registry::__instance();
 
-if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+/*if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
 {
     if(Utils::getPost("mod_action"))
     {
         mod(Utils::getPost("mod_action"));
     }
 }
-else
+else*/
 {
     App::StartBuffer();
 
