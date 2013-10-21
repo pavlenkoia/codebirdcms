@@ -63,6 +63,7 @@ class CatalogController_Forms extends Controller_Base
 
         $error_message = '';
         $success_message = '';
+        $res = array();
         if(Utils::getPost('submit_'.$form->id))
         {
             $check = true;
@@ -76,6 +77,7 @@ class CatalogController_Forms extends Controller_Base
                 {
                     $check = false;
                     $error_message = 'Введите верный код с картинки';
+                    $res['errors']['number_'.$form->id] = $error_message;
                 }
             }
             if($check)
@@ -128,6 +130,7 @@ class CatalogController_Forms extends Controller_Base
                             if(!$value || trim($value) == '')
                             {
                                 $error_message .= 'Не заполнено: '.$row['name']."\n";
+                                $res['errors'][$row['nameid']] = $row['name'];
                                 $check = false;
                             }
                         }
@@ -154,16 +157,35 @@ class CatalogController_Forms extends Controller_Base
                     {
                         $mailer->Body = $body;
 
-                        $mailer->AddAddress(trim($mail));
-
-                        if($mailer->Send())
+                        if(trim($mail))
                         {
-                            $success_message = $form->success_message;
+                            $mailer->AddAddress(trim($mail));
                         }
-                        else
+
+                        $cancel = false;
+                        if(Event::HasHandlers('OnBeforeSendForm'))
                         {
-                            $error_message = 'Ошибка, попробуйте отправить снова.';
-                            break;
+                            $params = array();
+                            $params['mailer'] = &$mailer;
+                            $params['alias'] = $alias;
+                            $params['section'] = $section;
+                            $params['form'] = $form;
+                            $params['fields'] = $field_rows;
+                            $params['cancel'] = &$cancel;
+                            Event::Execute('OnBeforeSendForm', $params);
+                        }
+
+                        if(!$cancel)
+                        {
+                            if($mailer->Send())
+                            {
+                                $success_message = $form->success_message;
+                            }
+                            else
+                            {
+                                $error_message = 'Ошибка, попробуйте отправить снова.';
+                                break;
+                            }
                         }
                     }
                     else
@@ -201,6 +223,7 @@ class CatalogController_Forms extends Controller_Base
 
         $template->error_message = $error_message;
         $template->success_message = $success_message;
+        $template->res = $res;
 
         $template->render();
     }
