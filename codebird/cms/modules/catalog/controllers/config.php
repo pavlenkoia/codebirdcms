@@ -315,6 +315,15 @@ class CatalogController_Config extends Controller_Base
             $template->editor_field = $editor['field'];
             $template->editor_type = $editor['type'];
             $template->editor_mode = $editor['mode'];
+
+            if($editor['type'] == 'memo')
+            {
+                $template->editor_editor_height = $editor['editor_height'];
+            }
+            if($editor['type'] == 'selecttext')
+            {
+                $template->editor_select2 = $editor['select'];
+            }
         }
 
         $fields = $data->getFields($table_name);
@@ -396,6 +405,18 @@ class CatalogController_Config extends Controller_Base
             else
             {
                 unset($param_table[$name]['mode']);
+            }
+
+            unset($param_table[$name]['editor_height']);
+            if($type == 'memo')
+            {
+                $param_table[$name]['editor_height'] = Utils::getVar("editor_height");
+            }
+
+            unset($param_table[$name]['select2']);
+            if($type == 'selecttext')
+            {
+                $param_table[$name]['select'] = Utils::getVar("select2");
             }
 
             $data->SetParam($table_id,$param_table);
