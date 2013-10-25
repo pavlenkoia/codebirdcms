@@ -70,7 +70,7 @@ class CatalogController_Show extends Controller_Base
                 $where = $this->args->where;
                 $where = $where ? ' and '.$where.' ' : '';
 
-                $pager = $data->getPositionPagerArray($position_table, $section->id, $page_size, $where);
+                $pager = $data->getPositionPagerArray($position_table, $section->id, $page_size, $this->args->where);
 
                 $order = $this->args->order;
 

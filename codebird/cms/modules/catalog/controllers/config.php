@@ -408,13 +408,13 @@ class CatalogController_Config extends Controller_Base
             }
 
             unset($param_table[$name]['editor_height']);
-            if($type == 'memo')
+            if($type == 'memo' && Utils::getVar("editor_height"))
             {
                 $param_table[$name]['editor_height'] = Utils::getVar("editor_height");
             }
 
             unset($param_table[$name]['select2']);
-            if($type == 'selecttext')
+            if($type == 'selecttext' && Utils::getVar("select2"))
             {
                 $param_table[$name]['select'] = Utils::getVar("select2");
             }
