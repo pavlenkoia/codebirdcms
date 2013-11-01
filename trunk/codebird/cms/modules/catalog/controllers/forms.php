@@ -193,9 +193,15 @@ class CatalogController_Forms extends Controller_Base
                         break;
                     }
                 }
-                if(isset($form->mod))
+                if(Event::HasHandlers('OnAfterSendForm'))
                 {
-                    val($form->mod,array('form_id'=>$form->id));
+                    $params = array();
+                    $params['mailer'] = $mailer;
+                    $params['alias'] = $alias;
+                    $params['section'] = $section;
+                    $params['form'] = $form;
+                    $params['fields'] = $field_rows;
+                    Event::Execute('OnAfterSendForm', $params);
                 }
             }
         }
