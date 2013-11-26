@@ -861,7 +861,7 @@ class CatalogController_Cm extends Controller_Base
                     }
                 }
 
-                $table->save($object);
+                $id = $table->save($object);
 
                 $errorInfo = $table->errorInfo;
 
@@ -1499,9 +1499,14 @@ class CatalogController_Cm extends Controller_Base
 
         try
         {
-            if($_FILES['file']['size'] > 3145728)
+            $file = $_FILES['file']['size'];
+
+            if($file)
             {
-                throw new Exception('Картинка размером больше 3MB');
+                if($_FILES['file']['size'] > 3145728)
+                {
+                    throw new Exception('Картинка размером больше 3MB');
+                }
             }
 
             $id = Utils::getVar('id');
@@ -1561,42 +1566,46 @@ class CatalogController_Cm extends Controller_Base
             $xml = simplexml_load_string($images);
         }
 
-            $ext = '.jpg';
-            switch ($_FILES['file']['type'])
+            if($file)
             {
+                $ext = '.jpg';
+                switch ($_FILES['file']['type'])
+                {
                     case 'image/jpeg':
-                            $ext = '.jpg';
-                            break;
+                        $ext = '.jpg';
+                        break;
 
                     case 'image/bmp':
-                            $ext = '.bmp';
-                            break;
+                        $ext = '.bmp';
+                        break;
 
                     case 'image/png':
-                            $ext = '.png';
-                            break;
+                        $ext = '.png';
+                        break;
 
                     case 'image/jpg':
-                            $ext = '.jpg';
-                            break;
+                        $ext = '.jpg';
+                        break;
 
                     case 'image/gif':
-                            $ext = '.gif';
-                            break;
+                        $ext = '.gif';
+                        break;
 
                     default:
-                            //$ext = '.';
+                        //$ext = '.';
+                }
+
+                if($ext == '.bmp' || $ext == '.')
+                {
+                    throw new Exception('Картинка такого формата не поддерживается');
+                }
+
+                $tmp_name = $_FILES['file']['tmp_name'];
+                $name = 'files/catalog/upload/'.md5(uniqid(rand(0, 1000000))).$ext;
+
+                $f = move_uploaded_file($_FILES['file']['tmp_name'], SITE_PATH.$name);
+
             }
-
-            if($ext == '.bmp' || $ext == '.')
-            {
-                throw new Exception('Картинка такого формата не поддерживается');
-            }
-
-            $tmp_name = $_FILES['file']['tmp_name'];
-            $name = 'files/catalog/upload/'.md5(uniqid(rand(0, 1000000))).$ext;
-
-            $f = move_uploaded_file($_FILES['file']['tmp_name'], SITE_PATH.$name);
 
             /*if($object->$fn && is_file(SITE_PATH.$object->$fn))
             {
@@ -1616,14 +1625,28 @@ class CatalogController_Cm extends Controller_Base
                 {
                     if((string)$image->img == $img)
                     {
-                        unlink(SITE_PATH.(string)$image->img);
-
-                        if(is_file(SITE_PATH.get_cache_pic(SITE_PATH.(string)$image->img,75,75)))
+                        if($file)
                         {
-                            unlink(SITE_PATH.get_cache_pic((string)$image->img,75,75));
+                            unlink(SITE_PATH.(string)$image->img);
+
+                            if(is_file(SITE_PATH.get_cache_pic(SITE_PATH.(string)$image->img,75,75)))
+                            {
+                                unlink(SITE_PATH.get_cache_pic((string)$image->img,75,75));
+                            }
+
+                            $image->img = $name;
                         }
 
-                        $image->img = $name;
+
+                        $title = Utils::getVar('title');
+                        if($image->title)
+                        {
+                            $image->title = $title;
+                        }
+                        else
+                        {
+                            $image->addChild('title',$title);
+                        }
 
                         break;
                         
@@ -1634,6 +1657,11 @@ class CatalogController_Cm extends Controller_Base
             {
                 $image = $xml->addChild('image');
                 $img = $image->addChild('img',$name);
+                if($title = Utils::getVar('title'))
+                {
+                    $image->addChild('title',$title);
+                }
+
             }
 
             $object->$fn = $xml->asXml();
@@ -1642,6 +1670,7 @@ class CatalogController_Cm extends Controller_Base
 
             $res['success'] = true;
             $res['msg'] = 'Картинка загружена';
+
             //$res['src'] = get_cache_pic($name,75,75);
             //$res['id'] = $id;
             $s = '';

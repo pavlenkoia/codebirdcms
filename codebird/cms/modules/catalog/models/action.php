@@ -208,7 +208,7 @@ class CatalogModel_Action extends Model_Base
     /**
      * Получение картинок из поля images
      */
-    public function getImages($images)
+    public function getImages($images, $ext=false)
     {
         if(!$images)
         {
@@ -226,7 +226,15 @@ class CatalogModel_Action extends Model_Base
 
         foreach($xml->image as $image)
         {
-            $res[] = (String)$image->img;
+            if($ext)
+            {
+                $res[] = array('img'=>(String)$image->img,'title'=>(String)$image->title);
+            }
+            else
+            {
+                $res[] = (String)$image->img;
+            }
+
         }
 
         return $res;

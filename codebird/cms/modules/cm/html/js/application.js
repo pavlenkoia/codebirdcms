@@ -282,7 +282,7 @@ var App  = function(){
                         defaults:
                         {
                             anchor: '95%',
-                            allowBlank: false,
+                            /*allowBlank: false,*/
                             msgTarget: 'side'
                         },
                         items:[
@@ -292,6 +292,13 @@ var App  = function(){
                                 emptyText: option.emptyText ? option.emptyText : 'Выберите картинку...',
                                 buttonText: 'Выбрать',
                                 hideLabel: true
+                            },
+                            {
+                                xtype: 'textfield',
+                                name: option.ext_field ? option.ext_field : '',
+                                fieldLabel: 'Подпись',
+                                value: option.ext_value,
+                                hidden: option.ext_field ? false : true
                             },
                             {
                                 xtype: 'hidden',

@@ -28,6 +28,7 @@
                                 targetId: this.id,
                                 id: '<?=$id?>',
                                 url: '/ajax/cm/catalog.cm.uploadimages',
+                                ext_field: 'title',
                                 success: function(result)
                                 {
                                     var paging = grid.getBottomToolbar();
@@ -51,6 +52,8 @@
                                 targetId: this.id,
                                 id: '<?=$id?>/'+s[0].id.replace(/\//g,'\\'),
                                 url: '/ajax/cm/catalog.cm.uploadimages',
+                                ext_field: 'title',
+                                ext_value: s[0].data.title,
                                 success: function(result)
                                 {
                                     var paging = grid.getBottomToolbar();
@@ -135,7 +138,8 @@
                             fields:
                             [
                                 'id',
-                                'img'
+                                'img',
+                                'title'
                             ]
                         })
                     });
@@ -174,7 +178,8 @@
                             columns:
                             [
                                 sm,
-                                { header: 'Фото', dataIndex: 'img'}
+                                { header: 'Фото', dataIndex: 'img'},
+                                { header: 'Подпись', dataIndex: 'title'}
                             ]
                         }),
                         sm: sm,
@@ -192,6 +197,8 @@
                                     targetId: this.id,
                                     id: '<?=$id?>/'+s[0].id.replace(/\//g,'\\'),
                                     url: '/ajax/cm/catalog.cm.uploadimages',
+                                    ext_field: 'title',
+                                    ext_value: s[0].data.title,
                                     success: function(result)
                                     {
                                         var paging = grid.getBottomToolbar();
