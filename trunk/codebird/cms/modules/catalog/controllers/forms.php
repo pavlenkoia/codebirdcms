@@ -231,6 +231,24 @@ class CatalogController_Forms extends Controller_Base
         $template->success_message = $success_message;
         $template->res = $res;
 
+        if(Utils::GetPost('submit_'.$form->id) && Utils::GetPost('ajax_form')==1){
+
+            if($error_message)
+            {
+                $res["result"] = "error";
+                $res['message'] = $error_message;
+            }
+            else
+            {
+                $res["result"] = "success";
+                $res['message'] = $success_message;
+            }
+
+            echo json_encode($res);
+
+            return;
+        }
+
         $template->render();
     }
 }

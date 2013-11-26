@@ -11,6 +11,7 @@
     {
         $res_row = array();
         $res_row['id'] = (string)$image->img;
+        $res_row['title'] = (string)$image->title;
         $res_row['img'] = '<img src="'.get_cache_pic((string)$image->img,75,75).'"/>' /*get_cache_pic($row,75,75)*/;
         $res_rows[] = $res_row;
     }
