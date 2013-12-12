@@ -84,7 +84,7 @@ class CatalogController_Show extends Controller_Base
                         if(!$params[$i]) continue;
                         $row['_url'] .= $params[$i].'/';
                     }
-                    $row['_url'] .= $row['id'].'/';
+                    $row['_url'] .= $row['id'].'.html';
                     $result['items'][] = $row;
                 }
 

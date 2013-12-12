@@ -231,7 +231,19 @@ class Utils
       if(!$orig_ratio)
       {
           $idest = imagecreatetruecolor($width, $height);
-          imagefill($idest, 0, 0, $rgb);
+
+          if($format == 'png')
+          {
+              //Отключаем режим сопряжения цветов
+              imagealphablending($idest, false);
+              //Включаем сохранение альфа канала
+              imagesavealpha($idest, true);
+          }
+
+          if($format != 'png')
+          {
+              imagefill($idest, 0, 0, $rgb);
+          }
 
           $sourceWidth = $size[0];
           $sourceHeight = $size[1];
@@ -266,14 +278,33 @@ class Utils
       else
       {
           $idest = imagecreatetruecolor($new_width , $new_height);
+          if($format == 'png')
+          {
+              //Отключаем режим сопряжения цветов
+              imagealphablending($idest, false);
+              //Включаем сохранение альфа канала
+              imagesavealpha($idest, true);
+          }
           $new_left = 0;
           $new_top = 0;
-          imagefill($idest, 0, 0, $rgb);
+          if($format != 'png')
+          {
+              imagefill($idest, 0, 0, $rgb);
+          }
+
           imagecopyresampled($idest, $isrc, $new_left, $new_top, 0, 0,
                   $new_width, $new_height, $size[0], $size[1]);
       }
 
-      imagejpeg($idest, $dest, $quality);
+      if($format == 'png')
+      {
+          imagepng($idest, $dest);
+      }
+      else
+      {
+          imagejpeg($idest, $dest, $quality);
+      }
+
 
       imagedestroy($isrc);
       imagedestroy($idest);
