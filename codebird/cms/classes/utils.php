@@ -305,7 +305,6 @@ class Utils
           imagejpeg($idest, $dest, $quality);
       }
 
-
       imagedestroy($isrc);
       imagedestroy($idest);
 
