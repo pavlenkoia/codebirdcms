@@ -80,7 +80,7 @@ class CatalogController_Forms extends Controller_Base
                     $res['errors']['number_'.$form->id] = $error_message;
                 }
             }
-            if($check)
+            //if($check)
             {
                 $email = $form->email;
                 $mails = explode(',',$email);
