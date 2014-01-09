@@ -62,6 +62,7 @@ class CatalogController_Forms extends Controller_Base
             array('id'=>$form->id));
 
         $error_message = '';
+        $error_message_captcha = '';
         $success_message = '';
         $res = array();
         if(Utils::getPost('submit_'.$form->id))
@@ -76,8 +77,8 @@ class CatalogController_Forms extends Controller_Base
                 if(!$securimage->check($captcha_code))
                 {
                     $check = false;
-                    $error_message = 'Введите верный код с картинки';
-                    $res['errors']['number_'.$form->id] = $error_message;
+                    $error_message_captcha = 'Введите верный код с картинки';
+                    $res['errors']['number_'.$form->id] = $error_message_captcha;
                 }
             }
             //if($check)
@@ -180,6 +181,7 @@ class CatalogController_Forms extends Controller_Base
                             if($mailer->Send())
                             {
                                 $success_message = $form->success_message;
+                                $is_send = true;
                             }
                             else
                             {
@@ -193,7 +195,7 @@ class CatalogController_Forms extends Controller_Base
                         break;
                     }
                 }
-                if(Event::HasHandlers('OnAfterSendForm'))
+                if($is_send && Event::HasHandlers('OnAfterSendForm'))
                 {
                     $params = array();
                     $params['mailer'] = $mailer;
@@ -233,10 +235,10 @@ class CatalogController_Forms extends Controller_Base
 
         if(Utils::GetPost('submit_'.$form->id) && Utils::GetPost('ajax_form')==1){
 
-            if($error_message)
+            if($error_message || $error_message_captcha)
             {
                 $res["result"] = "error";
-                $res['message'] = $error_message;
+                $res['message'] = $error_message.$error_message_captcha;
             }
             else
             {
