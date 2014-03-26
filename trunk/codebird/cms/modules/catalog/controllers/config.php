@@ -324,6 +324,11 @@ class CatalogController_Config extends Controller_Base
             {
                 $template->editor_select2 = $editor['select'];
             }
+            if($editor['type'] == 'select')
+            {
+                $template->editor_select = $editor['select'];
+                $template->editor_display = $editor['display'];
+            }
         }
 
         $fields = $data->getFields($table_name);
@@ -417,6 +422,17 @@ class CatalogController_Config extends Controller_Base
             if($type == 'selecttext' && Utils::getVar("select2"))
             {
                 $param_table[$name]['select'] = Utils::getVar("select2");
+            }
+
+            unset($param_table[$name]['select']);
+            if($type == 'select' && Utils::getVar("select"))
+            {
+                $param_table[$name]['select'] = Utils::getVar("select");
+            }
+            unset($param_table[$name]['display']);
+            if($type == 'select' && Utils::getVar("display"))
+            {
+                $param_table[$name]['display'] = Utils::getVar("display");
             }
 
             $data->SetParam($table_id,$param_table);
