@@ -323,6 +323,7 @@ class CatalogController_Config extends Controller_Base
             if($editor['type'] == 'selecttext')
             {
                 $template->editor_select2 = $editor['select'];
+                $template->editor_sql = $editor['sql'];
             }
             if($editor['type'] == 'select')
             {
@@ -418,13 +419,17 @@ class CatalogController_Config extends Controller_Base
                 $param_table[$name]['editor_height'] = Utils::getVar("editor_height");
             }
 
-            unset($param_table[$name]['select2']);
+            unset($param_table[$name]['sql']);
+            if($type == 'selecttext' && Utils::getVar("sql"))
+            {
+                $param_table[$name]['sql'] = Utils::getVar("sql");
+            }
+            unset($param_table[$name]['select']);
             if($type == 'selecttext' && Utils::getVar("select2"))
             {
                 $param_table[$name]['select'] = Utils::getVar("select2");
             }
 
-            unset($param_table[$name]['select']);
             if($type == 'select' && Utils::getVar("select"))
             {
                 $param_table[$name]['select'] = Utils::getVar("select");

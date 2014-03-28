@@ -401,7 +401,8 @@
                                                             <?php
                                                                 if(isset($field['sql']))
                                                                 {
-                                                                    $rows = $data->getSectionTable()->select($field['sql']);
+                                                                    $table = new Table('catalog_section');
+                                                                    $rows = $table->select($field['sql']);
                                                                     $res = '';
                                                                     foreach($rows as $row)
                                                                     {
