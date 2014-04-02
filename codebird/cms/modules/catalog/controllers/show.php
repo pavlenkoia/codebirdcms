@@ -23,17 +23,28 @@ class CatalogController_Show extends Controller_Base
 
         $result = array();
 
-        $section = $data->GetSection($name);
+
 
         //$object_level = $this->args->object_level ? $this->args->object_level : 0;
         $object_level = count($params) > 1 ? count($params)-1 : 0;
 
-        $result['section'] = $section;
-
-        if($section && $section->position_table)
+        if(!$this->args->position_table)
         {
-            $tables = $data_config->GetParam('tables');
-            $position_table =  $tables[$section->position_table]['table'];
+            $section = $data->GetSection($name);
+            $result['section'] = $section;
+        }
+
+        if(($section && $section->position_table) || $this->args->position_table)
+        {
+            if($this->args->position_table)
+            {
+                $position_table = $this->args->position_table;
+            }
+            else
+            {
+                $tables = $data_config->GetParam('tables');
+                $position_table =  $tables[$section->position_table]['table'];
+            }
 
             $table = new Table($position_table);
 
@@ -67,14 +78,35 @@ class CatalogController_Show extends Controller_Base
 
                 $page_size = $page_size ? $page_size : 20;
 
+
+
                 $where = $this->args->where;
-                $where = $where ? ' and '.$where.' ' : '';
+
+                if($section)
+                {
+                    $params = array('section_id'=>$section->id);
+                    $where = $where ? ' where section_id=:section_id and '.$where.' ' : ' where section_id=:section_id ';
+                    if($this->args->params && is_array($this->args->params))
+                    {
+                        $params = $params+$this->args->params;
+                    }
+                }
+                else
+                {
+                    if($where)
+                    {
+                        $params = is_array($this->args->params) ? $this->args->params : null;
+                        $where = ' where '.$where;
+                    }
+                }
 
                 $pager = $data->getPositionPagerArray($position_table, $section->id, $page_size, $this->args->where);
 
                 $order = $this->args->order;
 
-                $rows = $table->select('select * from `'.$position_table.'` where section_id=:section_id '.$where.$order.$pager['limit'], array('section_id'=>$section->id));
+                //echo 'select * from `'.$position_table.'` '.$where.$order.$pager['limit'];
+
+                $rows = $table->select('select * from `'.$position_table.'` '.$where.$order.$pager['limit'], $params);
 
                 foreach($rows as $row)
                 {

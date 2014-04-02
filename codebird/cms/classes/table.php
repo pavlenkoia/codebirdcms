@@ -46,6 +46,16 @@ class Table
        }
     }
 
+    public function GetFields()
+    {
+        if(!isset($this->fields))
+        {
+            $this->buidFieldsSet();
+        }
+
+        return $this->fields;
+    }
+
     public function getEntity($id=-1)
     {
         $sql = $this->db->prepare("select * from $this->table where $this->id=:id limit 1");
