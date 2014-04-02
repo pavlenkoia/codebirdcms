@@ -591,6 +591,7 @@ class CatalogController_Cm extends Controller_Base
                 $params = array();
                 $params['object'] = $object;
                 $params['section'] = $data->getSection($object->section_id);
+                $params['table'] = $table_meta['table'];
                 Event::Execute('OnCatalogSavePosition', $params);
             }
 
