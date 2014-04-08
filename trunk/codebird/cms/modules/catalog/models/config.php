@@ -273,6 +273,21 @@ class CatalogModel_Config extends Model_Base
         return $res;
     }
 
+    public function CreateRelTable($table_name, $rel_table_name)
+    {
+        $table = new Table('catalog_section');
+
+        $table->execute('CREATE TABLE IF NOT EXISTS `rel_'.$table_name.'_'.$rel_table_name.'` (
+              `'.$table_name.'_id` int(11) NOT NULL,
+              `'.$rel_table_name.'_id` int(11) NOT NULL,
+              PRIMARY KEY (`'.$table_name.'_id`,`'.$rel_table_name.'_id`)
+            ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;');
+
+        $res = $table->errorInfo;
+
+        return $res;
+    }
+
     public function AddField($table_name, $field_name, $field_type)
     {
         $table = new Table('catalog_section');
@@ -327,6 +342,7 @@ class CatalogModel_Config extends Model_Base
         $res['selecttext'] = 'Текстовая строка с выпадающим списком';
         $res['labeltext'] = 'Нередактируемая текстовая строка';
         $res['images'] = 'Картинки';
+        $res['rel'] = 'Связанный элемент';
 
         return $res;
     }

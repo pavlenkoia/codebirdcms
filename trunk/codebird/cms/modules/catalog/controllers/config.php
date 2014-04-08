@@ -330,6 +330,11 @@ class CatalogController_Config extends Controller_Base
                 $template->editor_select = $editor['select'];
                 $template->editor_display = $editor['display'];
             }
+            if($editor['type'] == 'rel')
+            {
+                $template->editor_sql_rel = $editor['sql_rel'];
+                $template->editor_table_rel = $editor['table_rel'];
+            }
         }
 
         $fields = $data->getFields($table_name);
@@ -379,6 +384,21 @@ class CatalogController_Config extends Controller_Base
         $editor_name = Utils::getVar("editor_name");
 
         $param_table = $data->GetParam($table_id);
+
+        $tables = $data->GetParam('tables_section');
+        if($tables[$table_id])
+        {
+            $table = $tables[$table_id];
+        }
+        else
+        {
+            $tables = $data->GetParam('tables');
+            if($tables[$table_id])
+            {
+                $table = $tables[$table_id];
+            }
+        }
+        //var_dump($table);die;
 
         $field = Utils::getVar("field");
         $title = Utils::getVar("title");
@@ -438,6 +458,18 @@ class CatalogController_Config extends Controller_Base
             if($type == 'select' && Utils::getVar("display"))
             {
                 $param_table[$name]['display'] = Utils::getVar("display");
+            }
+
+            unset($param_table[$name]['sql_rel']);
+            if($type == 'rel' && Utils::getVar("sql_rel"))
+            {
+                $param_table[$name]['sql_rel'] = Utils::getVar("sql_rel");
+            }
+            unset($param_table[$name]['table_rel']);
+            if($type == 'rel' && Utils::getVar("table_rel"))
+            {
+                $param_table[$name]['table_rel'] = Utils::getVar("table_rel");
+                $data->CreateRelTable($table['table'], Utils::getVar("table_rel"));
             }
 
             $data->SetParam($table_id,$param_table);

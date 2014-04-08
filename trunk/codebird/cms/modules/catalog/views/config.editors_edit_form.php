@@ -150,6 +150,10 @@
                             var is_selecttext = (editor_name == 'selecttext');
                             cb.ownerCt.getComponent('select2').setVisible(is_selecttext);
                             cb.ownerCt.getComponent('sql').setVisible(is_selecttext);
+
+                            var is_rel = (editor_name == 'rel');
+                            cb.ownerCt.getComponent('sql_rel').setVisible(is_rel);
+                            cb.ownerCt.getComponent('table_rel').setVisible(is_rel);
                         }
                     }
                 },
@@ -191,6 +195,22 @@
                     itemId: 'sql',
                     hidden: <?=$editor_type=='selecttext'?'false':'true'?>,
                     value: <?=escapeJSON($editor_sql)?>
+                },
+                {
+                    fieldLabel: 'Связанная таблица',
+                    name: 'table_rel',
+                    anchor: '95%',
+                    itemId: 'table_rel',
+                    hidden: <?=$editor_type=='rel'?'false':'true'?>,
+                    value: <?=escapeJSON($editor_table_rel)?>
+                },
+                {
+                    fieldLabel: 'SQL запрос для связанной таблицы (возвращаемые поля id и display)',
+                    name: 'sql_rel',
+                    anchor: '95%',
+                    itemId: 'sql_rel',
+                    hidden: <?=$editor_type=='rel'?'false':'true'?>,
+                    value: <?=escapeJSON($editor_sql_rel)?>
                 }
             ]
         }
