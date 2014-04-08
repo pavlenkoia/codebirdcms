@@ -525,6 +525,8 @@ class CatalogController_Cm extends Controller_Base
 
                 if($field['type'] == "file") continue;
 
+                if($field['type'] == "rel") continue;
+
                 if(!$field['edit']) continue;
                 
                 $fn = $field['field'];
@@ -577,7 +579,23 @@ class CatalogController_Cm extends Controller_Base
             {
                 throw new Exception($errorInfo);
             }
-          
+
+            foreach($fields as $field)
+            {
+                if($field['type'] == 'rel')
+                {
+                    $fn = $field['field'];
+
+                    $rel_id = Utils::getVar($fn.'_id');
+                    $rel_rel = Utils::getVar($fn.'_rel');
+                    if($rel_rel != 'no')
+                    {
+                        $this->rel_save($rel_id.$id,$rel_rel);
+                    }
+
+                }
+
+            }
 
             if(isset($table_meta['onsave']) && $table_meta['onsave'])
             {
@@ -1878,6 +1896,252 @@ class CatalogController_Cm extends Controller_Base
 
 
         $this->setContent(json_encode($res));
+    }
+
+
+    public function rel_form()
+    {
+        $template = $this->createTemplate();
+
+        $template->page_size = 20;
+
+        $template->id = Utils::getVar('id');
+
+        $template->title = Utils::getVar('title');
+
+        $template->rel = Utils::getVar('rel');
+
+        $template->render();
+    }
+
+    public function rel_records()
+    {
+        $id = Utils::getVar('id');
+
+        $ids = explode("/", $id);
+
+        $section_id = $ids[0];
+        $type_id = $ids[1];
+        $field_id = $ids[2];
+        $id = $ids[3];
+
+        $data = $this->getData();
+
+        $section = $data->getSection($section_id);
+
+        if(!$section)
+        {
+            throw new Exception('Объект уже удален');
+        }
+
+        if($type_id == 'position')
+        {
+            $table_id = $section->position_table;
+            $table_meta = $data->getTableMeta($table_id);
+        }
+        else
+        {
+            $table_id = $section->section_table;
+            $table_meta = $data->getTableMetaSection($table_id);
+        }
+
+        if($table_meta == null)
+        {
+            throw new Exception('Не найдена исходная таблица');
+        }
+
+        $table = new Table($table_meta['table']);
+
+        $object = $table->getEntity($id);
+
+        $fields = $table_meta['fields'];
+        $field = $fields[$field_id];
+
+        $rows = $table->select($field['sql_rel']);
+
+        $rel = Utils::getVar('rel');
+        $rel = is_array($rel)? array_diff($rel,array('')) : $rel;
+        if(is_array($rel) && count($rel))
+        {
+
+        }
+        else
+        {
+            $rel_rows = $table->select('select * from `rel_'.$table_meta['table'].'_'.$field['table_rel'].'` where '.$table_meta['table'].'_id=:id',array(
+                    'id'=>$object->id
+                ));
+            $rel = array();
+            foreach($rel_rows as $row)
+            {
+                $rel[] = $row[$field['table_rel'].'_id'];
+            }
+        }
+
+
+
+        $res = array();
+        $res_rows = array();
+
+        foreach($rows as $row)
+        {
+            $res_row = array();
+
+            $res_row['checked'] = in_array($row['id'],$rel) ? 1 : 0;
+
+            $res_row['id'] = $row['id'];
+            $res_row['title'] = $row['display'];
+            $res_rows[] = $res_row;
+
+        }
+
+        $res['success'] = true;
+        $res['results'] = count($rows);
+        $res['rows'] = $res_rows;
+
+        $this->setContent(json_encode($res));
+    }
+
+    public function get_rel()
+    {
+        $id = Utils::getVar('id');
+
+        $ids = explode("/", $id);
+
+        $section_id = $ids[0];
+        $type_id = $ids[1];
+        $field_id = $ids[2];
+        $id = $ids[3];
+
+        $data = $this->getData();
+
+        $section = $data->getSection($section_id);
+
+        if(!$section)
+        {
+            throw new Exception('Объект уже удален');
+        }
+
+        if($type_id == 'position')
+        {
+            $table_id = $section->position_table;
+            $table_meta = $data->getTableMeta($table_id);
+        }
+        else
+        {
+            $table_id = $section->section_table;
+            $table_meta = $data->getTableMetaSection($table_id);
+        }
+
+        if($table_meta == null)
+        {
+            throw new Exception('Не найдена исходная таблица');
+        }
+
+        $table = new Table($table_meta['table']);
+
+        $object = $table->getEntity($id);
+
+        $fields = $table_meta['fields'];
+        $field = $fields[$field_id];
+
+        $rows = $table->select($field['sql_rel']);
+
+        $rel = Utils::getVar('rel');
+        $rel = is_array($rel)? array_diff($rel,array('')) : $rel;
+        if(is_array($rel) && count($rel))
+        {
+
+        }
+        else
+        {
+            $rel_rows = $table->select('select * from `rel_'.$table_meta['table'].'_'.$field['table_rel'].'` where '.$table_meta['table'].'_id=:id',array(
+                    'id'=>$object->id
+                ));
+            $rel = array();
+            foreach($rel_rows as $row)
+            {
+                $rel[] = $row[$field['table_rel'].'_id'];
+            }
+        }
+
+
+        $res = array();
+        $res_rows = array();
+
+        foreach($rows as $row)
+        {
+            $res_row = array();
+            if(in_array($row['id'],$rel))
+            {
+                $res_row['id'] = $row['id'];
+                $res_row['title'] = $row['display'];
+                $res_rows[] = $res_row;
+            }
+        }
+
+        $res['success'] = true;
+        $res['results'] = count($res_rows);
+        $res['rows'] = $res_rows;
+
+        $this->setContent(json_encode($res));
+    }
+
+    private function rel_save($pos_id, $pos_rel)
+    {
+        $ids = explode("/", $pos_id);
+
+        $section_id = $ids[0];
+        $type_id = $ids[1];
+        $field_id = $ids[2];
+        $id = $ids[3];
+
+        $data = $this->getData();
+
+        $section = $data->getSection($section_id);
+
+        if(!$section)
+        {
+            throw new Exception('Объект уже удален');
+        }
+
+        if($type_id == 'position')
+        {
+            $table_id = $section->position_table;
+            $table_meta = $data->getTableMeta($table_id);
+        }
+        else
+        {
+            $table_id = $section->section_table;
+            $table_meta = $data->getTableMetaSection($table_id);
+        }
+
+        if($table_meta == null)
+        {
+            throw new Exception('Не найдена исходная таблица');
+        }
+
+        $table = new Table($table_meta['table']);
+
+        $object = $table->getEntity($id);
+
+        $fields = $table_meta['fields'];
+        $field = $fields[$field_id];
+
+        $table->execute('delete from `rel_'.$table_meta['table'].'_'.$field['table_rel'].'` where '.$table_meta['table'].'_id=:id',array(
+                'id'=>$object->id
+            )
+        );
+        $sql = 'insert into `rel_'.$table_meta['table'].'_'.$field['table_rel'].'`('.$table_meta['table'].'_id,'.$field['table_rel'].'_id) values(:id1,:id2)';
+
+        $rel = explode(',',$pos_rel);
+        foreach($rel as $r)
+        {
+            $table->execute($sql, array(
+                    'id1'=>$object->id,
+                    'id2'=>$r
+                )
+            );
+        }
     }
 
 }

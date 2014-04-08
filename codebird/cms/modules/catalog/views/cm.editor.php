@@ -735,6 +735,92 @@
                                                         }
                                                     }
                                                     <?php break;
+                                                case "rel" :?>
+                                                    ,{
+                                                        xtype: 'panel',
+                                                        fieldLabel: '<?php echo $field['title']?>',
+                                                        items:
+                                                        [
+                                                            {
+                                                                xtype: 'hidden',
+                                                                name: '<?=$field['field']?>_id',
+                                                                value: '<?=$section->id?>/position/<?=$name?>/'
+                                                            },
+                                                            {
+                                                                xtype: 'hidden',
+                                                                name: '<?=$field['field']?>_rel',
+                                                                itemId: 'value_rel',
+                                                                value: 'no'
+                                                            },
+                                                            {
+                                                                xtype: 'displayfield',
+                                                                value: '',
+                                                                itemId: 'display_rel',
+                                                                fn_get_rel : function(cmp,rel)
+                                                                {
+                                                                    Ext.Ajax.request({
+                                                                        url : '/ajax/cm/catalog.cm.get_rel',
+                                                                        method: 'POST',
+                                                                        params:
+                                                                        {
+                                                                            id: '<?=$section->id?>/position/<?=$name?>/'+form.getForm().findField('id').getValue(),
+                                                                            'rel[]': rel
+                                                                        },
+                                                                        success : function (response) {
+                                                                            var res = response.responseJSON;
+                                                                            if(res.success){
+                                                                                var rows = res.rows;
+                                                                                var display_rel = '<ul>';
+                                                                                for(var i=0; i < rows.length; i++)
+                                                                                {
+                                                                                    display_rel += '<li><i>'+rows[i].title+'</i></li>';
+                                                                                }
+                                                                                cmp.setValue(display_rel+'</ul>');
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                },
+                                                                listeners:
+                                                                {
+                                                                    render: function(cmp)
+                                                                    {
+                                                                        cmp.fn_get_rel(cmp,'')
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                xtype: 'button',
+                                                                text: 'Выбрать',
+                                                                style: {marginTop: '10px'},
+                                                                handler: function(btn)
+                                                                {
+                                                                    var value_rel = btn.ownerCt.getComponent('value_rel').rel;
+                                                                    Ext.Ajax.request({
+                                                                        url : '/ajax/cm/catalog.cm.rel_form',
+                                                                        method: 'POST',
+                                                                        params:
+                                                                        {
+                                                                            title : '<?=$field['title']?>',
+                                                                            id: '<?=$section->id?>/position/<?=$name?>/'+form.getForm().findField('id').getValue(),
+                                                                            'rel[]': value_rel=='no'?'':value_rel
+                                                                        },
+                                                                        success : function (response) {
+                                                                            var win = new Ext.Window(response.responseJSON);
+                                                                            win.addListener('close',function(cmp){
+                                                                                if(cmp.result){
+                                                                                    btn.ownerCt.getComponent('value_rel').setValue(cmp.result);
+                                                                                    btn.ownerCt.getComponent('value_rel').rel = cmp.result;
+                                                                                    btn.ownerCt.getComponent('display_rel').fn_get_rel(btn.ownerCt.getComponent('display_rel'),cmp.result);
+                                                                                }
+                                                                            });
+                                                                            win.show();
+                                                                        }
+                                                                    });
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                <?
                                             }
                                         }
                                         ?>

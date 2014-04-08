@@ -371,7 +371,11 @@
                                     ]
                                 }
                             }
-                            <?php break;
+                            <?break;?>
+
+                            <?case 'rel': ?>
+
+                            <?break;
                     }
                 }
                 ?>
