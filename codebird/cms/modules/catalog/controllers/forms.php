@@ -138,7 +138,7 @@ class CatalogController_Forms extends Controller_Base
 
                         if($row['valid_email'] == 1 && !$res['errors'][$row['nameid']])
                         {
-                            if(!filter_var(trim($value), FILTER_VALIDATE_EMAIL))
+                            if(trim($value) && !filter_var(trim($value), FILTER_VALIDATE_EMAIL))
                             {
                                 $error_message .= 'Не верный: '.$row['name']."\n";
                                 $res['errors'][$row['nameid']] = $row['name'];
