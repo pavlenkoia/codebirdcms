@@ -76,7 +76,7 @@ class CatalogController_Show extends Controller_Base
                     }
                 }
 
-                $page_size = $page_size ? $page_size : 20;
+                $page_size = $page_size ? $page_size : 50;
 
 
 
