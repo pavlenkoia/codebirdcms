@@ -56,6 +56,56 @@ class GsearchController_Show extends Controller_Base
 
         $template->render();
     }
+
+    public function result_ajax()
+    {
+        if($results = Utils::getVar('results'))
+        {
+            $result = ($results);
+            $template = $this->createTemplate();
+
+            $template->page_alias = Utils::getVar('page_alias');
+
+            $template->searchquery = Utils::getVar('q') ? Utils::getVar('q') : null;
+
+            $template->ajax_result = true;
+
+            if($result && $result['responseStatus'] == 200)
+            {
+                $template->searchresult = $result;
+
+                $template->results = $result['responseData']['results'];
+
+                $template->resultCount = isset($result['responseData']['cursor']['estimatedResultCount']) ? $result['responseData']['cursor']['estimatedResultCount'] : 0;
+
+                $template->pages = $result['responseData']['cursor']['pages'];
+
+                $template->currentPageIndex = $result['responseData']['cursor']['currentPageIndex'];
+            }
+            else
+            {
+                $template->searchresult = null;
+            }
+
+            $template->render();
+        }
+        else
+        {
+            $searchquery = Utils::getVar('q') ? Utils::getVar('q') : null;
+
+            $data = $this->getData();
+
+            $apiUrl = $data->getApiUrl($searchquery);
+
+            $template = $this->createTemplate();
+
+            $template->apiUrl = $apiUrl;
+
+            $template->searchquery = $searchquery;
+
+            $template->render();
+        }
+    }
 }
 
 ?>
