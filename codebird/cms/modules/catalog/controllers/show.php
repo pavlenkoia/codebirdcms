@@ -100,7 +100,17 @@ class CatalogController_Show extends Controller_Base
                     }
                 }
 
+
+                if($this->args->no_page)
+                {
+                    $page = $_GET['page'];
+                    $_GET['page'] = null;
+                }
                 $pager = $data->getPositionPagerArray($position_table, $section->id, $page_size, $this->args->where);
+                if($this->args->no_page)
+                {
+                    $_GET['page'] = $page;
+                }
 
                 $order = $this->args->order;
 
