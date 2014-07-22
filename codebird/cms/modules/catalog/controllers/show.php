@@ -34,6 +34,39 @@ class CatalogController_Show extends Controller_Base
             $result['section'] = $section;
         }
 
+        if($result['section'])
+        {
+            $tables = $data_config->GetParam('tables_section');
+            $section_table_name =  $tables[$result['section']->section_table]['table'];
+
+            $section_table = new Table($section_table_name);
+            $section_data = $section_table->getEntity($result['section']->id);
+            if($section_data)
+            {
+                $result['section_data'] = array($section_data);
+            }
+
+            // seo заголовки
+            if($this->args->head_title || $this->args->meta_description || $this->args->meta_keywords)
+            {
+                if($section_data = $result['section_data'])
+                {
+                    if($this->args->head_title && $section_data[$this->args->head_title])
+                    {
+                        App::SetProperty('title', $section_data[$this->args->head_title]);
+                    }
+                    if($this->args->meta_description && $section_data[$this->args->meta_description])
+                    {
+                        App::SetProperty('description', $section_data[$this->args->meta_description]);
+                    }
+                    if($this->args->meta_keywords && $section_data[$this->args->meta_keywords])
+                    {
+                        App::SetProperty('keywords', $section_data[$this->args->meta_keywords]);
+                    }
+                }
+            }
+        }
+
         if(($section && $section->position_table) || $this->args->position_table)
         {
             if($this->args->position_table)
@@ -58,12 +91,30 @@ class CatalogController_Show extends Controller_Base
             if($object && $object->section_id == $section->id)
             {
                 $result['object'] = (array)$object;
+
+                // seo заголовки
+                if($this->args->head_title && $result['object'][$this->args->head_title])
+                {
+                    App::SetProperty('title', $result['object'][$this->args->head_title]);
+                }
+                if($this->args->meta_description && $result['object'][$this->args->meta_description])
+                {
+                    App::SetProperty('description', $result['object'][$this->args->meta_description]);
+                }
+                if($this->args->meta_keywords && $result['object'][$this->args->meta_keywords])
+                {
+                    App::SetProperty('keywords', $result['object'][$this->args->meta_keywords]);
+                }
             }
             else
             {
                 $page_size = $this->args->page_size;
 
-                if(!$page_size && $section->section_table )
+                if(!$page_size && $result['section_data']['page_size'])
+                {
+                    $page_size = $result['section_data']['page_size'];
+                }
+                /*if(!$page_size && $section->section_table )
                 {
                     $tables = $data_config->GetParam('tables_section');
                     $section_table_name =  $tables[$section->section_table]['table'];
@@ -74,7 +125,7 @@ class CatalogController_Show extends Controller_Base
                     {
                         $page_size = $section_data->page_size;
                     }
-                }
+                }*/
 
                 $page_size = $page_size ? $page_size : 50;
 
