@@ -43,7 +43,7 @@ class CatalogController_Show extends Controller_Base
             $section_data = $section_table->getEntity($result['section']->id);
             if($section_data)
             {
-                $result['section_data'] = array($section_data);
+                $result['section_data'] = (array)$section_data;
             }
 
             // seo заголовки
