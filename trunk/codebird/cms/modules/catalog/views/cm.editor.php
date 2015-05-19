@@ -452,48 +452,74 @@
                                                             handler: function(btn)
                                                             {
                                                                 var images = option.action == 'edit' ? sels[0].get('<?php echo $field['field']?>') : '';
-                                                                Ext.Ajax.request({
-                                                                    url : '/ajax/cm/catalog.cm.images_form',
-                                                                    method: 'POST',
-                                                                    params:
-                                                                    {
-                                                                        title : '<?php echo $field['title']?>',
-                                                                        id: '<?php echo $section->id?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue(),
-                                                                        images: images
-                                                                    },
-                                                                    success : function (response) {
-                                                                        var win = new Ext.Window(response.responseJSON);
-                                                                        win.addListener('close',function(cmp){
-                                                                            Ext.Ajax.request(
-                                                                                {
-                                                                                    url : '/ajax/cm/catalog.cm.getimages',
-                                                                                    method: 'POST',
-                                                                                    params:
-                                                                                    {
-                                                                                        id: '<?php echo $section->id?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue()
-                                                                                    },
-                                                                                    success : function (response)
-                                                                                    { 
-                                                                                        var obj = response.responseJSON;
-                                                                                        if(obj.success)
-                                                                                        {
-                                                                                            var id_f = form.getForm().findField('id');
-                                                                                            var st = obj.msg;
-                                                                                            var t = new Ext.Template(st);
-                                                                                            t.compile();
-                                                                                            t.overwrite(btn.ownerCt.getComponent(0).id);
+                                                                var new_id = form.getForm().findField('id').getValue();
+                                                                if(new_id == 0){
+                                                                    Ext.Ajax.request({
+                                                                        url : '/ajax/cm/catalog.cm.new_position',
+                                                                        method: 'POST',
+                                                                        params:{
+                                                                            section_id: '<?=$section->id?>',
+                                                                            position: '<?=$name?>'
+                                                                        },
+                                                                        success : function (response) {
+                                                                            var obj = response.responseJSON;
+                                                                            if(obj.success) {
+                                                                                var id_f = form.getForm().findField('id');
+                                                                                id_f.setValue(obj.id);
+                                                                                images_form();
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }else{
+                                                                    images_form();
+                                                                }
 
-                                                                                        }
-                                                                                        else
+                                                                function images_form(){
+
+                                                                    Ext.Ajax.request({
+                                                                        url : '/ajax/cm/catalog.cm.images_form',
+                                                                        method: 'POST',
+                                                                        params:
+                                                                        {
+                                                                            title : '<?php echo $field['title']?>',
+                                                                            id: '<?php echo $section->id?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue(),
+                                                                            images: images
+                                                                        },
+                                                                        success : function (response) {
+                                                                            var win = new Ext.Window(response.responseJSON);
+                                                                            win.addListener('close',function(cmp){
+
+                                                                                Ext.Ajax.request(
+                                                                                    {
+                                                                                        url : '/ajax/cm/catalog.cm.getimages',
+                                                                                        method: 'POST',
+                                                                                        params:
                                                                                         {
-                                                                                            Ext.MessageBox.alert('Ошибка', obj.msg);
+                                                                                            id: '<?php echo $section->id?>/position/<?php echo $name?>/'+form.getForm().findField('id').getValue()
+                                                                                        },
+                                                                                        success : function (response)
+                                                                                        {
+                                                                                            var obj = response.responseJSON;
+                                                                                            if(obj.success)
+                                                                                            {
+                                                                                                var id_f = form.getForm().findField('id');
+                                                                                                var st = obj.msg;
+                                                                                                var t = new Ext.Template(st);
+                                                                                                t.compile();
+                                                                                                t.overwrite(btn.ownerCt.getComponent(0).id);
+
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                Ext.MessageBox.alert('Ошибка', obj.msg);
+                                                                                            }
                                                                                         }
-                                                                                    }
-                                                                                });
-                                                                        });
-                                                                        win.show();
-                                                                    }
-                                                                });
+                                                                                    });
+                                                                            });
+                                                                            win.show();
+                                                                        }
+                                                                    });
+                                                                }
                                                             }
                                                         }
                                                     ]
