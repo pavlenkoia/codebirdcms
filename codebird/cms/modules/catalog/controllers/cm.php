@@ -1564,6 +1564,14 @@ class CatalogController_Cm extends Controller_Base
 
         $table = new Table($table_meta['table']);
 
+        if($id == 0 && $type_id == 'position')
+        {
+            $object = $table->getEntity();
+            $object->section_id = $section_id;
+            $id = $table->save($object);
+            if($table->errorInfo)  throw new Exception($table->errorInfo);
+        }
+
         $object = $table->getEntity($id);
 
         $fields = $table_meta['fields'];
@@ -1691,7 +1699,7 @@ class CatalogController_Cm extends Controller_Base
             $res['msg'] = 'Картинка загружена';
 
             //$res['src'] = get_cache_pic($name,75,75);
-            //$res['id'] = $id;
+            $res['id'] = $id;
             $s = '';
             foreach($xml->image as $image)
             {
@@ -2142,6 +2150,40 @@ class CatalogController_Cm extends Controller_Base
                 )
             );
         }
+    }
+
+    public function new_position()
+    {
+        $section_id = Utils::getVar('section_id');
+
+        $data = $this->getData();
+
+        $section = $data->getSection($section_id);
+
+        if(!$section)
+        {
+            throw new Exception('Объект уже удален');
+        }
+
+        $table_id = $section->position_table;
+        $table_meta = $data->getTableMeta($table_id);
+
+        if($table_meta == null)
+        {
+            throw new Exception('Не найдена исходная таблица');
+        }
+
+        $table = new Table($table_meta['table']);
+
+        $object = $table->getEntity();
+        $object->section_id = $section_id;
+        $id = $table->save($object);
+        if($table->errorInfo)  throw new Exception($table->errorInfo);
+
+        $res['success'] = true;
+        $res['id'] = $id;
+
+        $this->setContent(json_encode($res));
     }
 
 }
