@@ -1,0 +1,36 @@
+<?php
+/**
+ *
+ */
+
+class CatalogController_Section extends Controller_Base
+{
+
+    private function show($name, $args)
+    {
+        $data = $this->getData();
+
+        $section = $data->getSectionTable()->getEntityAlias($name);
+
+        if(!$section)
+        {
+            $section = $data->getSectionTable()->getEntity($name);
+        }
+
+        $this->setContent($section);
+	
+    }
+
+    public function __call($name, $args)
+    {
+       $this->show($name, $args);
+    }
+
+    public function index()
+    {
+        
+    }
+
+}
+
+?>
